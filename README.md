@@ -17,4 +17,4 @@ guidelines on how to contribute to the project.
 * Activate virtualenv: `source venv/bin/activate`
 * Install requirements: `pip install -r requirements/base.txt`
 * In a terminal window, start the Flask server: `python run.py`
-* Confirm that the Flask server and AIPscan application are up and running at [`localhost:5000`][usage-1] in your browser
+* Confirm that the Flask server and AIPscan application are up and running at `localhost:5000` in your browser

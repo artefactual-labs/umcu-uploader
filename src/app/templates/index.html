@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -7,112 +7,142 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="icon" href="favicon.ico">
     <title>Metadata</title>
-    <link href="css/app.ca4296de.css" rel="preload" as="style">
-    <link href="js/app.5e9b6fa2.js" rel="preload" as="script">
-    <link href="js/chunk-vendors.eacb2f8f.js" rel="preload" as="script">
-    <link href="css/app.ca4296de.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link href="css/styles.css" rel="stylesheet">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <div class="mx-3 container">
-        <h1>Metadata form</h1>
-        <p>Please enter the package metadata (top-level metadata) in the form below. Mandatory fields are indicated with
-            an asterisk <span class="text-danger">*</span>.</p>
-        <p>Add one author per author field. Use the [+] button to add extra authors. The same for keywords.</p>
-        <p>The field "type of research" is mandatory, since it determines the retention period.</p>
-        <p>When you are finished filling out the form, use the [Download] button to save the metadata as a file
-            metadata.json.</p>
-    </div>
-    <div id="app">
-        <form class="form-horizontal">
-            <div class="form-row"><label for="title" class="col-form-label col-lg-2"> Title *
-                </label>
-                <div class="col-lg-10"><input id="title" name="title" type="text" required="required" aria-required="true"
-                        class="form-control">
-                </div>
-            </div>
-            <fieldset class="mb-2">
-                <div class="form-row"><label for="authorName#0" class="col-form-label col-lg-2"> Author name * <button
-                            type="button" class="btn py-0 my-0 px-1 btn-primary btn-sm">
-                                </label>
-                    <div class="col-lg-10">
-<input id="authorName#0" name="authorName#0" type="text" required="required"
-                            aria-required="true" class="form-control is-invalid" aria-invalid="true">
+    <header class="container-fluid d-flex mb-5 mt-3">
+        <img src="../static/umculogo.png" class="w-25 h-25 float-start" alt="umcu logo">
+        <div class="container row my-3">
+            <p class="text-muted mt-1">Jane Doe</p>
+            <p class="text-muted">Neurosciences</p>
+        </div>
+    </header>
 
-
-
-                    </div>
-                </div>
-            </fieldset>
-            <div class="form-row"><label for="dsDescriptionValue" class="col-form-label col-lg-2"> Description *
-                </label>
-                <div class="col-lg-10"><textarea id="dsDescriptionValue" name="dsDescriptionValue" required="required" rows="3"
-                        aria-required="true" class="form-control" wrap="soft"></textarea>
-                </div>
+    <section class="container">
+        <h1 class="text-start my-3">Required Information
+            <span class="text-warning">*</span>
+        </h1>
+        <form>
+            <div class="mb-3">
+                <label for="umcu-division" class="form-label">UMCU Division</label>
+                <select class="form-select" aria-label="Default select example">
+                    <option>Anesthesiology, Intensive Care and Emergency Medicine</option>
+                    <option>Cancer Center</option>
+                    <option>Education Center</option>
+                    <option>Heart and Lungs</option>
+                    <option>Imaging</option>
+                    <option>Internal Medicine and Dermatology</option>
+                    <option>Julius Center for Health Sciences and Primary Care</option>
+                    <option>Laboratories, Pharmacy & Biomedical Genetics</option>
+                    <option>Neurosciences</option>
+                    <option>Pediatrics</option>
+                    <option>Surgical Specialties</option>
+                    <option>Women and Babies</option>
+                    <!-- changed Woman and Baby to woman and baby but not sure if this is required -->
+                </select>
+                <!-- <div id="umcu-divisionHelp" class="form-text">Please input the umcu-division for the document here.
+                </div> -->
             </div>
-            <div class="form-row"><label for="language" class="col-form-label col-lg-2"> Language
-                </label>
-                <div class="col-lg-4"><input id="language" name="language" type="text" readonly="readonly"
-                        class="form-control">
-                </div><label for="dateOfDeposit" class="col-form-label col-lg-2"> Deposit date *
-                </label>
-                <div class="col-lg-4"><input id="dateOfDeposit" name="dateOfDeposit" type="date" required="required"
-                        aria-required="true" class="form-control">
-                    
+            <div class="mb-3">
+                <label for="author" class="form-label">Author(s)</label>
+                <div class="input-group mb-3">
+                    <input placeholder="Please input the name of the research document's author here." title="author" type="text" class="form-control" id="author-name"
+                        aria-describedby="authorHelp">
+                    <button class="btn btn-outline-info" type="button" id="add-author" aria-describedby="add an author">
+                    <span class="">+</span>
+                    </button>
                 </div>
+                <!-- <div id="authorHelp" class="form-text">Please input the name of the research document's author here.
+                </div> -->
             </div>
-            <div class="form-row"><label for="typeOfResearch" class="col-form-label col-lg-2"> Type of research *
-                </label>
-                <div class="col-lg-10"><select id="typeOfResearch" name="typeOfResearch" required="required" aria-required="true"
-                        class="custom-select" type="date">
-                        <option value="30">advanced therapeutic medicinal products</option>
-                        <option value="25">investigational medicinal products</option>
-                        <option value="15">other WMO</option>
-                        <option value="15">non-WMO</option>
-                        <option value="10">fundamental/pre-clinical</option>
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input placeholder="Please input the name of the research document's title here." title="title" type="text" class="form-control" id="titlename" aria-describedby="titleHelp">
+                <!-- add css to only show the element below on hover or as a tooltip -->
+                <!-- <div id="titleHelp" class="form-text">Please input the name of the research document's title here.</div>
+            </div> -->
+            <div class="mb-3">
+                <label for="contact" class="form-label">Contact</label>
+                <input placeholder="Please input the contact information for the research document(s) here." title="contact" type="text" class="form-control" id="contactname" aria-describedby="contactHelp">
+                <!-- <div id="contactHelp" class="form-text">Please input the name of the research document's contact here.
+                </div> -->
+            </div>
+            <div class="mb-3">
+                <label for="Descripton" class="form-label">Descripton</label>
+                <textarea placeholder="Please describe the research document here. e.g. There are few facts about the role of obedience when committing acts against one’s personal conscience (1961). 
+                Most theories suggest that only very disturbed people are capable of administering pain to an ordinary citizen if they are ordered to do so. 
+                Our experiment tested people's obedience to authority. " title="Descripton" class="form-control" id="Descriptonname"
+                    aria-describedby="DescriptonHelp"></textarea>
+                <!-- <div id="DescriptonHelp" class="form-text">Please input the name of the research document's Descripton
+                    here.
+                </div> -->
+            </div>
+            <div class="mb-3">
+                <label for="subject" class="form-label">Subject</label>
+                <input placeholder="Please input the subject of the research document(s) here." title="subject" type="text" class="form-control" id="subjectname" aria-describedby="subjectHelp">
+                <!-- <div id="subjectHelp" class="form-text">Please input the subject of the research document(s) here.
+                </div> -->
+            </div>
+            <div class="mb-3">
+                <label for="deposit-date" class="form-label">Deposit date</label>
+                <input title="deposit-date" type="date" class="form-control" id="deposit-datename"
+                    aria-describedby="deposit-dateHelp">
+                <!-- <div id="deposit-dateHelp" class="form-text">Please choose the date of the research document's deposit
+                    here.
+                </div> -->
+                <!-- makes sure the current date gets set as the default for this not sure why this would ever change at all or be an option but either way
+                we can set the date with js later -->
+            </div>
+            <div class="mb-3">
+                <label for="research-type" class="form-label">Research Type</label>
+                <select class="form-select" aria-label="research-type">
+                    <option>Basic</option>
+                    <option>Therapeutic</option>
+                    <option>Medication</option>
+                </select>
+                <!-- <div id="research-typeHelp" class="form-text">Please choose the type of the research document here.
+                </div> -->
+            </div>
+            <div class="mb-3">
+                <label for="research-end-date" class="form-label">Research End Date</label>
+                <input title="research-end-date" type="date" class="form-control" id="research-end-datename"
+                    aria-describedby="research-end-dateHelp">
+                <!-- <div id="research-end-dateHelp" class="form-text">Please choose the date of the research document's
+                    research end
+                    here.
+                </div> -->
+                <div class="mb-3">
+                    <label for="package-type" class="form-label">Package Type</label>
+                    <select class="form-select" aria-label="package-type">
+                        <option>Replication</option>
+                        <option>Final</option>
                     </select>
+                    <!-- <div id="package-typeHelp" class="form-text">Please choose the type of the Package document here.
+                    </div> -->
                 </div>
-            </div>
-            <div class="form-row"><label for="timePeriodCoveredStart" class="col-form-label col-lg-2"> Study period
-                    start
-                </label>
-                <div class="col-lg-4"><input id="timePeriodCoveredStart" name="timePeriodCoveredStart" type="text"
-                        class="form-control">
-                </div><label for="timePeriodCoveredEnd" class="col-form-label col-lg-2"> Study period end
-                </label>
-                <div class="col-lg-4"><input id="timePeriodCoveredEnd" name="timePeriodCoveredEnd" type="text"
-                        class="form-control">
+                <div class="mb-3">
+                    <label for="access-permission" class="form-label">Access Permissions</label>
+                    <select class="form-select" aria-label="access-permission">
+                        <option>Other</option>
+                        <option>TBA</option>
+                    </select>
+                    <!-- <div id="access-permissionHelp" class="form-text">Please choose the access permisions of the
+                        research document here.
+                    </div> -->
                 </div>
-            </div>
-            <fieldset class="mt-2">
-                <div class="form-row"><label for="keywordValue#0" class="col-form-label col-lg-2"> Keyword term *
-                       </label>
-                    <div class="col-lg-10">
-<input id="keywordValue#0" name="keywordValue#0" type="text" required="required"
-                            aria-required="true" class="form-control is-invalid" aria-invalid="true">
-
-
-
-                    </div>
+                <div class="text-end m-3">
+                    <button type="submit" class="btn btn-success">Next >></button>
                 </div>
-            </fieldset>
-            <fieldset class="mt-2">
-                <div class="form-row"><label for="datasetId#0" class="col-form-label col-lg-2"> Related datasets </label>
-                    <div class="col-lg-10">
-<input id="datasetId#0" name="datasetId#0" type="text" class="form-control">
 
-
-
-                    </div>
-                </div>
-            </fieldset>
-            <div role="group" class="mt-4 btn-group"></div>
         </form>
-        <p class="mt-3 text-warning">Please enter all required fields! Title is required. Author name is required.
-            Description is required. Keyword term is required. Related datasets is required. </p>
-    </div>
-    <script src="js/chunk-vendors.eacb2f8f.js"></script>
-    <script src="js/app.5e9b6fa2.js"></script>
+    </section>
 </body>
 
 </html>
