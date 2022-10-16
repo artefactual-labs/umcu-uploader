@@ -1,1 +1,3 @@
+python-magic
 Flask
+Flask-API
