@@ -14,7 +14,7 @@
       <p>File count: {{ transfer_file_count }}</p>
       <p>Total size of files: {{ transfer_total_file_size|filesizeformat }}</p>
 
-      <p><a href="/files">File permissions</a></p>
+      <p><a href="/files">File permissions</a> <a href="/files/preview">(Preview metadata)</a></p>
     {% endif %}
 
     {% if not transfer_preset: %}

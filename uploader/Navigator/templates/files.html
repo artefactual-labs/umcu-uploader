@@ -3,28 +3,51 @@
 {% block content %}
 
   <div class="container mt-5">
-  <h2>Files {{ currdir }}</h2> </br>
 
-  {%- if back_path|length -%}
-    <a href="{{ back_path }}">
-      Back
-    </a>
-  {%- endif %}
+    <h2>Files {{ currdir }}</h2> </br>
 
-  <table class="table">
-    {% for entry in entries %}
-      <tr>
-        <td>
-          <a href="{{ (request.path + '/' if request.path != '/' else '') + entry.name }}">
-            {{ entry.name }}
-          </a>
-        </td>
-        <td>
-          {{ entry.size|filesizeformat }}
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
+    {%- if back_path|length -%}
+      <a href="{{ back_path }}">
+        <i class='fas fa-folder'></i> Back
+      </a>
+    {%- endif %}
+
+    <form action="{{ request.path }}" method="POST">
+    <table class="table">
+      {% for entry in entries %}
+        <tr>
+          <td>
+            {% if entry.is_dir %}
+              <a href="{{ request.path }}{{ '/' if req_path else '' }}{{ entry.name }}">
+                <i class='fas fa-folder'></i>
+                {{ entry.name }}
+              </a>
+            {% else %}
+              {{ entry.name }}
+            {% endif %}
+          </td>
+          <td>
+            {{ entry.size|filesizeformat }}
+          </td>
+          <td>
+            {{ entry.mimetype }}
+          </td>
+          <td>
+            {% if not (req_path == '' and entry.name == permissions_filename) %}
+            <select name="perm_{{ entry.path_md5 }}">
+              <option value="" {% if entry.permission == "" %}selected{% endif %}></option>
+              <option value="public" {% if entry.permission == "public" %}selected{% endif %}>Public</option>
+              <option value="restricted" {% if entry.permission == "restricted" %}selected{% endif %}>Restricted</option>
+              <option value="private" {% if entry.permission == "private" %}selected{% endif %}>Private</option>
+            </select>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+
+    <input type="submit" class="btn btn-primary"/>
+    </form>
   </div>
 
 {% endblock %}
