@@ -1,0 +1,4 @@
+[submodule "uploader/static/vendor/Font-Awesome"]
+	path = uploader/static/vendor/Font-Awesome
+	url = https://github.com/FortAwesome/Font-Awesome.git
+	branch = 5.x
