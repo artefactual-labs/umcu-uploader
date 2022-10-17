@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <section class="container">
+
+    {%- if message|length -%}
+      <div class="alert alert-primary" role="alert">
+        {{ message }}
+      </div>
+    {%- endif %}
+
+    <h1>Transfer</h1>
+
+    {%- if transfer_directory|length -%}
+      <p>Current transfer directory: {{ transfer_directory }}</p>
+
+      <p><a href="/files">Set file permissions</a></p>
+    {%- endif %}
+
+    <form action="/transfer" method="POST">
+      <div class="mb-3">
+        <label for="transfer_directory" class="form-label">Set transfer directory</label>
+        <input name="transfer_directory"/>
+      </div>
+
+      <div class="mb-3">
+        <input type="submit"/>
+      </div>
+    </form>
+  </section>
+
+{% endblock %}
