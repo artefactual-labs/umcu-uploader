@@ -4,30 +4,31 @@
 
   <section class="container">
 
-    {%- if message|length -%}
-      <div class="alert alert-primary" role="alert">
-        {{ message }}
-      </div>
-    {%- endif %}
-
     <h1>Transfer</h1>
 
-    {%- if transfer_directory|length -%}
-      <p>Current transfer directory: {{ transfer_directory }}</p>
+    {% if transfer_directory|length: %}
+      {% if not transfer_preset: %}
+        <p>Current transfer directory: {{ transfer_directory }}</p>
+      {% endif %}
 
-      <p><a href="/files">Set file permissions</a></p>
-    {%- endif %}
+      <p>File count: {{ transfer_file_count }}</p>
+      <p>Total size of files: {{ transfer_total_file_size|filesizeformat }}</p>
 
-    <form action="/transfer" method="POST">
-      <div class="mb-3">
-        <label for="transfer_directory" class="form-label">Set transfer directory</label>
-        <input name="transfer_directory"/>
-      </div>
+      <p><a href="/files">File permissions</a></p>
+    {% endif %}
 
-      <div class="mb-3">
-        <input type="submit"/>
-      </div>
-    </form>
+    {% if not transfer_preset: %}
+      <form action="{{ url_for('transfer.update') }}" method="POST">
+        <div class="mb-3">
+          <label for="transfer_directory" class="form-label">Set transfer directory</label>
+          <input name="transfer_directory"/>
+        </div>
+
+        <div class="mb-3">
+          <input type="submit" value="Submit"/>
+        </div>
+      </form>
+    {% endif %}
   </section>
 
 {% endblock %}
