@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from lib2to3.pgen2.pgen import DFAState
-import os
+
 import json
-from typing import List
-from flask import Blueprint, render_template, request, jsonify, redirect
+from flask import Blueprint, render_template, request
 
 metadata = Blueprint("metadata", __name__, template_folder="templates")
 
