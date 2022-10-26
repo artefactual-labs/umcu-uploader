@@ -20,8 +20,8 @@ def create_app(config_name="default"):
 
         # Define navigation bar
         navbar = NavBar()
-        navbar.add("Transfer", "transfer.index")
         navbar.add("File Permissions", "navigator.index")
+        navbar.add("Research Data", "transfer.index")
 
         # Inject navigation bar into templates
         @app.context_processor
