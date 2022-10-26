@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <div class="container mt-5">
+
+    <h2>Research Data Upload</h2>
+
+    {% if transfer_directory|length: %}
+      <table>
+        <tr>
+          <td>File count: </td>
+          <td>{{ transfer_file_count }}</td>
+        </tr>
+        <tr>
+          <td>Total size of files: </td>
+          <td>{{ transfer_total_file_size|filesizeformat }}</td>
+        </tr>
+      </table>
+      <br/>
+
+      <p><a href="/files/preview">Preview file permission metadata</a></p>
+    {% endif %}
+  </div>
+
+{% endblock %}
