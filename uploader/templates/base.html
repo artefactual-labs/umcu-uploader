@@ -16,21 +16,21 @@
 
   <div class="m-4">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a href="#" class="navbar-brand">UMC Uploader</a>
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarCollapse">
-                <div class="navbar-nav">
-                  {% for item in navbar.items %}
-                    {% if item.is_visible(): %}
-                      <a class="nav-link {{ 'active' if item.get_url() == request.path else '' }}" href="{{ item.get_url() }}">{{ item.label }}</a>
-                    {% endif %}
-                  {% endfor %}
-                </div>
-            </div>
+      <div class="container-fluid">
+        <a href="#" class="navbar-brand">UMC Uploader</a>
+        <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <div class="navbar-nav">
+            {% for item in navbar.items %}
+              {% if item.is_visible(): %}
+                <a class="nav-link {{ 'active' if item.get_url() == request.path else '' }}" href="{{ item.get_url() }}">{{ item.label }}</a>
+              {% endif %}
+            {% endfor %}
+          </div>
         </div>
+      </div>
     </nav>
   </div>
 
