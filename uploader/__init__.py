@@ -14,16 +14,20 @@ def create_app(config_name="default"):
     with app.app_context():
         from uploader.Transfer.views import transfer
         from uploader.Navigator.views import navigator
+        from uploader.Upload.views import upload
         from uploader.Metadata.views import metadata
 
         app.register_blueprint(transfer)
         app.register_blueprint(navigator, url_prefix="/files")
         app.register_blueprint(metadata, url_prefix="/metadata")
+        app.register_blueprint(upload, url_prefix="/upload")
 
         # Define navigation bar
         navbar = NavBar()
-        navbar.add("Transfer", "transfer.index")
+        navbar.add("Select Research Data", "transfer.index")
+        navbar.add("Metadata", "metadata.index")
         navbar.add("File Permissions", "navigator.index")
+        navbar.add("Upload", "upload.index")
 
         # Inject navigation bar into templates
         @app.context_processor

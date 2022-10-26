@@ -11,11 +11,14 @@ def directory_count_and_size(directory):
 
         for file in files:
             filename = os.path.join(root_dir, file)
-            size += os.path.getsize(filename)
+
+            # Skip symlinks
+            if os.path.isfile(filename):
+                size += os.path.getsize(filename)
 
     return count, size
 
-def get_transfer_directory():
+def get_transfer_directory(send_flash=False):
     transfer_dir = ""
 
     if "transfer_directory" in session:
@@ -23,7 +26,9 @@ def get_transfer_directory():
 
     if transfer_directory_set_in_config():
         transfer_dir = current_app.config["TRANSFER_DIRECTORY"]
-        flash(f"Using transfer at {transfer_dir}", "warning")
+
+        if send_flash:
+            flash(f"Using research data at {transfer_dir}", "warning")
 
     return transfer_dir
 

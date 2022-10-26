@@ -15,7 +15,7 @@ navigator = Blueprint("navigator", __name__, template_folder="templates")
 @navigator.route('/', defaults={'req_path': ''}, methods=["GET", "POST"])
 @navigator.route('/<path:req_path>', methods=["GET", "POST"])
 def index(req_path):
-    transfer_dir = helpers.get_transfer_directory()
+    transfer_dir = helpers.get_transfer_directory(True)
 
     # Joining the transfer directory and the requested path
     abs_path = os.path.join(transfer_dir, req_path)

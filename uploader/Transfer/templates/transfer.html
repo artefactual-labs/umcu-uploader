@@ -2,33 +2,30 @@
 
 {% block content %}
 
-  <section class="container">
+  <div class="container mt-5">
 
-    <h1>Transfer</h1>
-
-    {% if transfer_directory|length: %}
-      {% if not transfer_preset: %}
-        <p>Current transfer directory: {{ transfer_directory }}</p>
-      {% endif %}
-
-      <p>File count: {{ transfer_file_count }}</p>
-      <p>Total size of files: {{ transfer_total_file_size|filesizeformat }}</p>
-
-      <p><a href="/files">File permissions</a> <a href="/files/preview">(Preview metadata)</a></p>
-    {% endif %}
+    <h2>Select Research Data</h2>
 
     {% if not transfer_preset: %}
+      <p>
+        Current research data directory:<br/>
+        <code>{{ transfer_directory }}</code>
+      </p>
+
       <form action="{{ url_for('transfer.update') }}" method="POST">
         <div class="mb-3">
-          <label for="transfer_directory" class="form-label">Set transfer directory</label>
+          <label for="transfer_directory" class="form-label">Change directory:</label>
           <input name="transfer_directory"/>
         </div>
 
         <div class="mb-3">
-          <input type="submit" value="Submit"/>
+          <input type="submit" value="Set Directory" class="btn btn-primary"/>
         </div>
       </form>
+    {% else %}
+      <p>Research data directory set by environment variable.</p>
     {% endif %}
-  </section>
+
+  </div>
 
 {% endblock %}
