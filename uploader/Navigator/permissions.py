@@ -6,41 +6,61 @@ import os
 PERMISSION_METADATA_FILENAME = "permissions.json"
 
 
-def read_permissions(permission_file_path):
-    # Read permissions from JSON if applicable
-    try:
-        with open(permission_file_path) as data:
-            permissions = json.load(data)
-    except FileNotFoundError:
-        permissions = {}
+class FilePermissions:
+    filepath = ""  # Path to permissions JSON file
+    permissions = {}  # Permissions data
 
-    return permissions
+    def __init__(self, filepath=None):
+        self.filepath = filepath
 
+    def load(self):
+        # Read permissions from JSON if applicable
+        try:
+            with open(self.filepath) as data:
+                self.permissions = json.load(data)
+        except FileNotFoundError:
+            self.permissions = {}
 
-def set_permission(permission_file_path, entry_path, permission):
-    permissions = read_permissions(permission_file_path)
+    def copy_from_dict(self, permissions):
+        self.permissions = permissions.copy()
 
-    permissions[entry_path] = permission
+    def save(self):
+        # Write permissions to JSON
+        file = open(self.filepath, "w")
+        file.write(json.dumps(self.permissions))
+        file.close()
 
-    # Write permissions to JSON
-    file = open(permission_file_path, "w")
-    file.write(json.dumps(permissions))
-    file.close()
+    def set(self, entry_path, permission):
+        # Remove any blank permissions
+        if permission == "" and entry_path in self.permissions:
+            del self.permissions[entry_path]
+        elif permission != "" and permission is not None:
+            self.permissions[entry_path] = permission
 
+    def get(self, entry_path):
+        if entry_path in self.permissions:
+            return self.permissions[entry_path]
 
-def write_permissions_to_csv(transfer_dir, destination_csv_file_path):
-    permission_filepath = os.path.join(transfer_dir, PERMISSION_METADATA_FILENAME)
-    permissions = read_permissions(permission_filepath)
+        return None
 
-    with open(destination_csv_file_path, 'w', newline='') as csvfile:
-        fieldnames = ["filename", "dc.rights"]
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    # Write permissions to an Archivematica metadata CSV file
+    def write_permissions_to_csv(self, transfer_dir, destination_csv_file_path):
+        permission_filepath = os.path.join(transfer_dir, PERMISSION_METADATA_FILENAME)
 
-        # Write header
-        writer.writeheader()
+        with open(destination_csv_file_path, "w", newline="") as csvfile:
+            fieldnames = ["filename", "dc.rights"]
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-        # Write rows in order
-        for filename in sorted(permissions.keys()):
-            if permissions[filename] != "":
-                filename_fixed = filename.replace(transfer_dir, "objects")
-                writer.writerow({"filename": filename_fixed, "dc.rights": permissions[filename]})
+            # Write header
+            writer.writeheader()
+
+            # Write rows in order
+            for filename in sorted(self.permissions.keys()):
+                if self.permissions[filename] != "":
+                    filename_fixed = filename.replace(transfer_dir, "objects")
+                    writer.writerow(
+                        {
+                            "filename": filename_fixed,
+                            "dc.rights": self.permissions[filename].capitalize(),
+                        }
+                    )
