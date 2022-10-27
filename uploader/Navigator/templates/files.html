@@ -34,12 +34,18 @@
           </td>
           <td>
             {% if not (req_path == '' and entry.name == permissions_filename) %}
-            <select name="perm_{{ entry.path_md5 }}">
-              <option value="" {% if entry.permission == "" %}selected{% endif %}></option>
-              <option value="public" {% if entry.permission == "public" %}selected{% endif %}>Public</option>
-              <option value="restricted" {% if entry.permission == "restricted" %}selected{% endif %}>Restricted</option>
-              <option value="private" {% if entry.permission == "private" %}selected{% endif %}>Private</option>
-            </select>
+              {% if not inherited_permission: %}
+                <select name="perm_{{ entry.path_md5 }}">
+                  <option value="" {% if entry.permission == "" %}selected{% endif %}></option>
+                  <option value="public" {% if entry.permission == "public" %}selected{% endif %}>Public</option>
+                  <option value="restricted" {% if entry.permission == "restricted" %}selected{% endif %}>Restricted</option>
+                  <option value="private" {% if entry.permission == "private" %}selected{% endif %}>Private</option>
+                </select>
+              {% else %}
+                <select disabled>
+                  <option>{{ inherited_permission|capitalize }} (inherited)</option>
+                </select>
+              {% endif %}
             {% endif %}
           </td>
         </tr>
