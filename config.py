@@ -5,8 +5,10 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "you-will-never-guess")
 
     TRANSFER_DIRECTORY = os.getenv("TRANSFER_DIRECTORY")
-
-    DEBUG = False
+    if os.getenv("DEBUG") == "True":
+        DEBUG = True
+    else:
+        DEBUG = False
     TESTING = False
 
 CONFIGS = {"default": Config}
