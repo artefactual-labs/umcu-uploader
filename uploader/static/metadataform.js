@@ -16,7 +16,7 @@ const addAuthorNameInput = () => {
   authorDiv.append(authorNameInput);
   authorNameInputGroup.append(authorDiv);
   authorNameInput.name =
-  "author" +"-"+ (authorNameInputGroup.childElementCount);
+    "author" + "-" + (authorNameInputGroup.childElementCount - 1);
   let authorNameInputCount = authorNameInputGroup.childElementCount;
   // add this behavior as a listener to the input group for author name
   if (authorNameInputCount > 1) {
@@ -59,7 +59,8 @@ const addKeywordInput = () => {
   keywordInput.className = "form-control";
   keywordDiv.append(keywordInput);
   keywordInputGroup.append(keywordDiv);
-  keywordInput.name = "keyword" + (keywordInputGroup.childElementCount - 1);
+  keywordInput.name =
+    "keyword" + "-" + (keywordInputGroup.childElementCount - 1);
 
   let keywordInputCount = keywordInputGroup.childElementCount;
   // add this behavior as a listener to the input group for keywords
@@ -106,20 +107,21 @@ const addContactInput = () => {
   const contactNameInput = document.createElement("input");
   contactNameInput.title = "contact-name";
   contactNameInput.type = "text";
-  contactNameInput.name = "contact-name";
   contactNameInput.className = "form-control";
 
   const contactEmailInput = document.createElement("input");
   contactEmailInput.title = "contact";
   contactEmailInput.type = "text";
-  contactEmailInput.name =
-    "contact-email" + (contactInputGroup.childElementCount - 1);
   contactEmailInput.className = "form-control";
   contactDiv.append(contactNameSpan);
   contactDiv.append(contactNameInput);
   contactDiv.append(contactEmailSpan);
   contactDiv.append(contactEmailInput);
   contactInputGroup.append(contactDiv);
+  contactNameInput.name =
+    "datasetContactName" + "-" + (contactInputGroup.childElementCount - 1);
+  contactEmailInput.name =
+    "datasetContactEmail" + "-" + (contactInputGroup.childElementCount - 1);
 
   let contactInputCount = contactInputGroup.childElementCount;
   // add this behavior as a listener to the input group for contact
@@ -169,12 +171,13 @@ const addRelatedPublicationInput = () => {
   const relatedPublicationInput = document.createElement("input");
   relatedPublicationInput.title = "related-publication";
   relatedPublicationInput.type = "text";
-  relatedPublicationInput.name =
-    "related-publication" +
-    (relatedPublicationInputGroup.childElementCount - 1);
   relatedPublicationInput.className = "form-control";
   relatedPublicationDiv.append(relatedPublicationInput);
   relatedPublicationInputGroup.append(relatedPublicationDiv);
+  relatedPublicationInput.name =
+    "related-publication" +
+    "-" +
+    (relatedPublicationInputGroup.childElementCount - 1);
 
   let relatedPublicationInputCount =
     relatedPublicationInputGroup.childElementCount;
@@ -219,11 +222,11 @@ const addContributorInput = () => {
   const ContributorInput = document.createElement("input");
   ContributorInput.title = "contributor";
   ContributorInput.type = "text";
-  ContributorInput.name =
-    "contributor" + (ContributorInputGroup.childElementCount - 1);
   ContributorInput.className = "form-control";
   ContributorDiv.append(ContributorInput);
   ContributorInputGroup.append(ContributorDiv);
+  ContributorInput.name =
+    "contributor" + "-" + (ContributorInputGroup.childElementCount - 1);
 
   let ContributorInputCount = ContributorInputGroup.childElementCount;
   // add this behavior as a listener to the input group for related publication
@@ -257,10 +260,11 @@ const addSoftwareInput = () => {
   const SoftwareInput = document.createElement("input");
   SoftwareInput.title = "Software";
   SoftwareInput.type = "text";
-  SoftwareInput.name = "software" + (SoftwareInputGroup.childElementCount - 1);
   SoftwareInput.className = "form-control";
   SoftwareDiv.append(SoftwareInput);
   SoftwareInputGroup.append(SoftwareDiv);
+  SoftwareInput.name =
+    "software" + "-" + (SoftwareInputGroup.childElementCount - 1);
 
   let SoftwareInputCount = SoftwareInputGroup.childElementCount;
   // add this behavior as a listener to the input group for related publication
@@ -294,10 +298,11 @@ const addLanguageInput = () => {
   const LanguageInput = document.createElement("input");
   LanguageInput.title = "Language";
   LanguageInput.type = "text";
-  LanguageInput.name = "language" + (LanguageInputGroup.childElementCount - 1);
   LanguageInput.className = "form-control";
   LanguageDiv.append(LanguageInput);
   LanguageInputGroup.append(LanguageDiv);
+  LanguageInput.name =
+    "language" + "-" + (LanguageInputGroup.childElementCount - 1);
 
   let LanguageInputCount = LanguageInputGroup.childElementCount;
   // add this behavior as a listener to the input group for related publication
