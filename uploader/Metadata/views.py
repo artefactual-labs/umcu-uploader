@@ -2,6 +2,7 @@
 
 from lib2to3.pgen2.pgen import DFAState
 import os
+import json
 from typing import List
 from flask import Blueprint, render_template, request, jsonify, redirect
 
@@ -14,9 +15,9 @@ def index(req_path):
         form_data = request.form
         # convert form data to dataverse json api format
         # https://guides.dataverse.org/en/latest/_downloads/4e04c8120d51efab20e480c6427f139c/dataset-create-new-all-default-fields.json
-        description_value = form_data.get('dsDescription')
-        title_value = form_data.get('title')
-        licence_value = form_data.get('licenceType')
+        description_value = form_data['dsDescription']
+        title_value = form_data['title']
+        licence_value = form_data['licenceType']
         author_values_temp = [
             y for x, y in form_data.items() if x.startswith('author')]
         author_values = [{
@@ -76,7 +77,7 @@ def index(req_path):
         data_type_values = [
             y for x, y in form_data.items() if x.startswith('dataType')]
         depositorName_value = 'test'
-
+        licence_description_value = 'null'
         dv_metadata = {"datasetVersion": {"metadataBlocks": {"citation": {'displayName': "Citation Metadata",
                                                                           "fields": [{'typeName': 'publication', 'value': publication_values, 'multiple': 'true', 'typeClass': 'compound'},
                                                                                      {'typeName': 'author', 'typeClass': 'compound', 'value': author_values},
@@ -128,6 +129,9 @@ def index(req_path):
                                                              }
                                           },
                        "licence": {"name": licence_value},
-                       'value': description_value}
+                       'value': licence_description_value}
+        with open('./dv_metadata.json', 'w') as dv_metadata_file:
+            json.dump(dv_metadata, dv_metadata_file, indent=4)
+            
         return dv_metadata
     return render_template('metadata.html')
