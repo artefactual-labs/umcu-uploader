@@ -12,7 +12,7 @@
                                     "typeName": "publicationCitation",
                                     "multiple": "false",
                                     "typeClass": "primitive",
-                                    "value": "afsdfsadfsad"
+                                    "value": ""
                                 }
                             }
                         ],
@@ -28,7 +28,7 @@
                                     "typeName": "authorName",
                                     "multiple": "false",
                                     "typeClass": "primitive",
-                                    "value": "sdfasdf"
+                                    "value": "dsfsd"
                                 }
                             }
                         ]
@@ -43,7 +43,7 @@
                                     "typeName": "keywordValue",
                                     "multiple": "false",
                                     "typeClass": "primitive",
-                                    "value": "sdfsf"
+                                    "value": ""
                                 }
                             },
                             {
@@ -51,7 +51,7 @@
                                     "typeName": "keywordValue",
                                     "multiple": "false",
                                     "typeClass": "primitive",
-                                    "value": "dsaffasd"
+                                    "value": ""
                                 }
                             },
                             {
@@ -59,7 +59,7 @@
                                     "typeName": "keywordValue",
                                     "multiple": "false",
                                     "typeClass": "primitive",
-                                    "value": "dfasdf"
+                                    "value": ""
                                 }
                             }
                         ]
@@ -78,7 +78,7 @@
                     {
                         "typeName": "title",
                         "typeClass": "primitive",
-                        "value": "sdfasdf"
+                        "value": "fdsfa"
                     },
                     {
                         "typeName": "dsDescription",
@@ -87,7 +87,7 @@
                             "dsDescriptionValue": {
                                 "typeName": "dsDescriptionValue",
                                 "typeClass": "primitive",
-                                "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop pu"
+                                "value": "sdafsdafsdfdaf"
                             }
                         }
                     },
@@ -100,7 +100,7 @@
                                     "typeName": "datasetContactName",
                                     "multiple": "false",
                                     "typeClass": "primitive",
-                                    "value": "asdfdsaf"
+                                    "value": ""
                                 }
                             }
                         ]
@@ -113,7 +113,7 @@
                                     "typeName": "datasetContactEmail",
                                     "multiple": "false",
                                     "typeClass": "primitive",
-                                    "value": "sdaf@sdjkfasdf.com"
+                                    "value": "sadsdf@gmail.com"
                                 }
                             },
                             {
@@ -121,7 +121,7 @@
                                     "typeName": "datasetContactName",
                                     "multiple": "false",
                                     "typeClass": "primitive",
-                                    "value": "sadfs"
+                                    "value": "sdafd"
                                 }
                             }
                         ]
@@ -131,7 +131,7 @@
                         "typeClass": "controlledVocabulary",
                         "multiple": "true",
                         "value": [
-                            "sdfa"
+                            ""
                         ]
                     },
                     {
@@ -144,7 +144,7 @@
                                     "typeName": "softwareName",
                                     "multiple": "false",
                                     "typeClass": "primitive",
-                                    "value": "sdf"
+                                    "value": ""
                                 }
                             }
                         ]
@@ -152,7 +152,7 @@
                     {
                         "typeName": "dateOfDeposit",
                         "typeClass": "primitive",
-                        "value": "2022-11-09"
+                        "value": "2022-11-14"
                     },
                     {
                         "typeName": "timePeriodCovered",
@@ -164,13 +164,13 @@
                                     "typeName": "timePeriodCoveredStart",
                                     "multiple": "false",
                                     "typeClass": "primitive",
-                                    "value": "2022-11-07"
+                                    "value": ""
                                 },
                                 "timePeriodCoveredEnd": {
                                     "typeName": "timePeriodCoveredEnd",
                                     "multiple": "false",
                                     "typeClass": "primitive",
-                                    "value": "2022-11-15"
+                                    "value": ""
                                 }
                             }
                         ]

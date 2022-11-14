@@ -1,0 +1,16 @@
+HTTP/1.1 100 Continue
+
+HTTP/1.1 401 Unauthorized
+Date: Thu, 10 Nov 2022 19:52:09 GMT
+Server: Apache
+X-XSS-Protection: 1; mode=block
+X-XSS-Protection: 1; mode=block
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS
+Access-Control-Allow-Headers: Accept, Content-Type, X-Dataverse-Key
+Content-Type: application/json;charset=UTF-8
+Content-Length: 105
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Robots-Tag: noindex, nofollow
+
+{"status":"ERROR","message":"cause was null! User @rtumcu is not permitted to perform requested action."}

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-
-from lib2to3.pgen2.pgen import DFAState
-import os
-import json
-from typing import List
 from flask import Blueprint, render_template, request, jsonify, redirect
+from json import dump, dumps
+import requests
+from os import getenv
+
+api_token = getenv('API_TOKEN')
+server_url = 'https://demo.dataverse.nl/'
 
 metadata = Blueprint("metadata", __name__, template_folder="templates")
 
@@ -130,8 +131,11 @@ def index(req_path):
                                           },
                        "licence": {"name": licence_value},
                        'value': licence_description_value}
-        with open('./dv_metadata.json', 'w') as dv_metadata_file:
-            json.dump(dv_metadata, dv_metadata_file, indent=4)
-            
-        return dv_metadata
+        # with open('./data/dv_metadata.json', 'w') as dv_metadata_file:
+        #     dump(dv_metadata, dv_metadata_file, indent=4)
+        dv_metadata = dumps(dv_metadata)
+        r = requests.post(server_url+'api/dataverses/UMCU/datasets',headers=api_token, data=dv_metadata)
+        return r.json()
+        # redirect you to the dataset on dataverse
+        # return redirect(server_url)
     return render_template('metadata.html')

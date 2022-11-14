@@ -1,0 +1,112 @@
+{
+    "status": "OK",
+    "data": [
+        {
+            "type": "dataverse",
+            "id": 4,
+            "title": "Utrecht University"
+        },
+        {
+            "type": "dataverse",
+            "id": 5,
+            "title": "4TU"
+        },
+        {
+            "type": "dataverse",
+            "id": 6,
+            "title": "Maastricht University"
+        },
+        {
+            "type": "dataverse",
+            "id": 7,
+            "title": "DANS"
+        },
+        {
+            "type": "dataverse",
+            "id": 8,
+            "title": "University of Groningen"
+        },
+        {
+            "type": "dataverse",
+            "id": 9,
+            "title": "Tilburg University"
+        },
+        {
+            "type": "dataverse",
+            "id": 10,
+            "title": "Leiden University"
+        },
+        {
+            "type": "dataverse",
+            "id": 11,
+            "title": "Vrije Universiteit Amsterdam"
+        },
+        {
+            "type": "dataverse",
+            "id": 12,
+            "title": "NIOO-KNAW"
+        },
+        {
+            "type": "dataverse",
+            "id": 13,
+            "title": "TRIMBOS instituut"
+        },
+        {
+            "type": "dataverse",
+            "id": 14,
+            "title": "PThU"
+        },
+        {
+            "type": "dataverse",
+            "id": 15,
+            "title": "Rijksdienst voor het Cultureel Erfgoed"
+        },
+        {
+            "type": "dataverse",
+            "id": 16,
+            "title": "Fontys Hogescholen"
+        },
+        {
+            "type": "dataverse",
+            "id": 18,
+            "title": "AVANS Hogeschool"
+        },
+        {
+            "type": "dataverse",
+            "id": 19,
+            "title": "Hanzehogeschool"
+        },
+        {
+            "type": "dataverse",
+            "id": 20,
+            "title": "Hogeschool Rotterdam"
+        },
+        {
+            "type": "dataverse",
+            "id": 21,
+            "title": "UMC Utrecht"
+        },
+        {
+            "type": "dataverse",
+            "id": 23,
+            "title": "General Test dataverse"
+        },
+        {
+            "type": "dataverse",
+            "id": 366,
+            "title": "Erasmus MC"
+        },
+        {
+            "id": 345,
+            "identifier": "test-HVCXQN",
+            "persistentUrl": "https://doi.org/10.80227/test-HVCXQN",
+            "protocol": "doi",
+            "authority": "10.80227",
+            "publisher": "DataverseNL - DEMO",
+            "publicationDate": "2022-08-08",
+            "storageIdentifier": "file://10.80227/test-HVCXQN",
+            "metadataLanguage": "undefined",
+            "type": "dataset"
+        }
+    ]
+}

@@ -1,0 +1,65 @@
+{
+    "status": "OK",
+    "data": [
+        {
+            "type": "dataverse",
+            "id": 34,
+            "title": "Imaging"
+        },
+        {
+            "type": "dataverse",
+            "id": 35,
+            "title": "Cancer Center"
+        },
+        {
+            "type": "dataverse",
+            "id": 36,
+            "title": "Education Center"
+        },
+        {
+            "type": "dataverse",
+            "id": 37,
+            "title": "Neurosciences"
+        },
+        {
+            "type": "dataverse",
+            "id": 38,
+            "title": "Heart and Lungs"
+        },
+        {
+            "type": "dataverse",
+            "id": 39,
+            "title": "Surgical Specialties"
+        },
+        {
+            "type": "dataverse",
+            "id": 40,
+            "title": "Internal Medicine and Dermatology"
+        },
+        {
+            "type": "dataverse",
+            "id": 41,
+            "title": "Julius Center for Health Sciences and Primary Care"
+        },
+        {
+            "type": "dataverse",
+            "id": 42,
+            "title": "Pediatrics"
+        },
+        {
+            "type": "dataverse",
+            "id": 43,
+            "title": "Laboratories, Pharmacy & Biomedical Genetics"
+        },
+        {
+            "type": "dataverse",
+            "id": 44,
+            "title": "Woman and Baby"
+        },
+        {
+            "type": "dataverse",
+            "id": 45,
+            "title": "Anesthesiology, Intensive Care and Emergency Medicine"
+        }
+    ]
+}
