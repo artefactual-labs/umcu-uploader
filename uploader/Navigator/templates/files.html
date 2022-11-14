@@ -41,7 +41,7 @@
             {{ entry.mimetype }}
           </td>
           <td>
-            {% if not (req_path == '' and entry.name == permissions_filename) and not entry.is_dir: %}
+            {% if entry.settable: %}
               <select name="perm_{{ entry.path_md5 }}">
                 <option value="" {% if entry.permission == "" %}selected{% endif %}></option>
                 <option value="public" {% if entry.permission == "public" %}selected{% endif %}>Public</option>

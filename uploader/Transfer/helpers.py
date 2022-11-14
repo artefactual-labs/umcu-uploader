@@ -1,4 +1,5 @@
 import os
+import tempfile
 
 from flask import current_app, flash, session
 
@@ -18,19 +19,31 @@ def directory_count_and_size(directory):
 
     return count, size
 
-def get_transfer_directory(send_flash=False):
+def get_data_directory():
+    if data_directory_set_in_config():
+        return current_app.config["DATA_DIRECTORY"]
+
+    return tempfile.gettempdir()
+
+def get_transfer_directory():
     transfer_dir = ""
 
     if "transfer_directory" in session:
         transfer_dir = session["transfer_directory"]
 
-    if transfer_directory_set_in_config():
-        transfer_dir = current_app.config["TRANSFER_DIRECTORY"]
-
-        if send_flash:
-            flash(f"Using research data at {transfer_dir}", "warning")
-
     return transfer_dir
 
-def transfer_directory_set_in_config():
-    return "TRANSFER_DIRECTORY" in current_app.config and current_app.config["TRANSFER_DIRECTORY"] is not None
+def data_directory_set_in_config():
+    return "DATA_DIRECTORY" in current_app.config and current_app.config["DATA_DIRECTORY"] is not None
+
+def get_all_filepaths_in_directory(directory, trim_root=True):
+    files = []
+
+    for root, _, dir_files in os.walk(directory, topdown=False):
+        for name in dir_files:
+            if trim_root:
+                files.append(os.path.join(root.replace(directory, ''), name))
+            else:
+                files.append(os.path.join(root, name))
+
+    return files

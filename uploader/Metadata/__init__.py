@@ -1,0 +1,1 @@
+DATAVERSE_METADATA_FILENAME = "dv_metadata.json"

@@ -16,7 +16,7 @@ class NavBarItem:
 
     def is_visible(self):
         transfer_directory = helpers.get_transfer_directory()
-        return self.route != "navigator.index" or transfer_directory
+        return self.route == "transfer.index" or transfer_directory
 
 
 class NavBar:

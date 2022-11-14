@@ -2,7 +2,11 @@
 
 
 import json
-from flask import Blueprint, render_template, request
+import os
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+
+from uploader.Metadata import DATAVERSE_METADATA_FILENAME
+from uploader.Transfer import helpers
 
 metadata = Blueprint("metadata", __name__, template_folder="templates")
 
@@ -236,8 +240,16 @@ def index(req_path):
             "licence": {"name": licence_value},
             "value": licence_description_value,
         }
-        with open("./dv_metadata.json", "w") as dv_metadata_file:
+
+        filepath = os.path.join(helpers.get_transfer_directory(), DATAVERSE_METADATA_FILENAME)
+        with open(filepath, "w") as dv_metadata_file:
             json.dump(dv_metadata, dv_metadata_file, indent=4)
 
-        return dv_metadata
+        flash("Metadata saved.", "primary")
+        return redirect(url_for('metadata.updated'))
+
     return render_template("metadata.html")
+
+@metadata.route("/updated", methods=["GET"])
+def updated():
+    return render_template("done.html")
