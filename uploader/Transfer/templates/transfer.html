@@ -4,27 +4,29 @@
 
   <div class="container mt-5">
 
-    <h2>Select Research Data</h2>
+    {% if transfer_directory: %}
+      <h2>Update Research Data</h2>
 
-    {% if not transfer_preset: %}
-      <p>
-        Current research data directory:<br/>
-        <code>{{ transfer_directory }}</code>
-      </p>
+      <table>
+        <tr>
+          <td>File count: </td>
+          <td><code>{{ transfer_file_count }}</code> <span class="text-muted small">(including generated metadata)</span></td>
+        </tr>
+        <tr>
+          <td>Total size of files: </td>
+          <td><code>{{ transfer_total_file_size|filesizeformat }}</code></td>
+        </tr>
+      </table>
 
-      <form action="{{ url_for('transfer.update') }}" method="POST">
-        <div class="mb-3">
-          <label for="transfer_directory" class="form-label">Change directory:</label>
-          <input name="transfer_directory"/>
-        </div>
-
-        <div class="mb-3">
-          <input type="submit" value="Set Directory" class="btn btn-primary"/>
-        </div>
-      </form>
     {% else %}
-      <p>Research data directory set by environment variable.</p>
+      <h2>Upload Research Data</h2>
     {% endif %}
+
+    </br>
+    <form action="{{ url_for('transfer.upload') }}" method="POST" enctype="multipart/form-data">
+      <input name="files" type="file" webkitdirectory directory />
+      <input type=submit value="Upload" class="btn btn-primary"/>
+    </form>
 
   </div>
 

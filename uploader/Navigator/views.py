@@ -7,6 +7,7 @@ import tempfile
 from flask import Blueprint, redirect, abort, render_template, session, send_file, request, flash, current_app, url_for
 import magic
 
+from uploader.Metadata import DATAVERSE_METADATA_FILENAME
 from uploader.Navigator import permissions
 from uploader.Transfer import helpers
 
@@ -15,7 +16,7 @@ navigator = Blueprint("navigator", __name__, template_folder="templates")
 @navigator.route('/', defaults={'req_path': ''}, methods=["GET", "POST"])
 @navigator.route('/<path:req_path>', methods=["GET", "POST"])
 def index(req_path):
-    transfer_dir = helpers.get_transfer_directory(True)
+    transfer_dir = helpers.get_transfer_directory()
 
     # Joining the transfer directory and the requested path
     abs_path = os.path.join(transfer_dir, req_path)
@@ -36,10 +37,7 @@ def index(req_path):
         if req_path:
             return redirect(url_for('navigator.index', expand=1))
 
-        files = []
-        for root, _, transfer_files in os.walk(abs_path, topdown=False):
-            for name in transfer_files:
-                files.append(os.path.join(root.replace(abs_path, ''), name))
+        files = helpers.get_all_filepaths_in_directory(abs_path)
     else:
         files = os.listdir(abs_path)
 
@@ -73,8 +71,19 @@ def index(req_path):
             "name": file,
             "size": os.path.getsize(entry_path),
             "is_dir": os.path.isdir(entry_path),
+            "settable": True,
             "path_md5": hashlib.md5(entry_path.encode('utf-8')).hexdigest()
         }
+
+        # Apply rules for preventing permission setting
+        if req_path == "" and file == permissions.PERMISSION_METADATA_FILENAME:
+            entry['settable'] = False
+
+        if req_path == "" and file == DATAVERSE_METADATA_FILENAME:
+            entry['settable'] = False
+
+        if os.path.isdir(entry_path):
+            entry['settable'] = False
 
         if not entry["is_dir"]:
             entry["mimetype"] = magic.from_file(entry_path, mime = True)
@@ -84,7 +93,7 @@ def index(req_path):
 
         entries.append(entry)
 
-    return render_template('files.html', entries=entries, req_path=req_path, back_path=back_path, permissions_filename=permissions.PERMISSION_METADATA_FILENAME)
+    return render_template('files.html', entries=entries, req_path=req_path, back_path=back_path)
 
 @navigator.route('/preview', methods=["GET"])
 def preview():

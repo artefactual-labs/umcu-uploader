@@ -4,22 +4,28 @@
 
   <div class="container mt-5">
 
-    <h2>Research Data Upload</h2>
+    <h2>Import Into Archivematica</h2>
 
     {% if transfer_directory|length: %}
       <table>
         <tr>
           <td>File count: </td>
-          <td>{{ transfer_file_count }}</td>
+          <td><code>{{ transfer_file_count }}</code> <span class="text-muted small">(including generated metadata)</span></td>
         </tr>
         <tr>
           <td>Total size of files: </td>
-          <td>{{ transfer_total_file_size|filesizeformat }}</td>
+          <td><code>{{ transfer_total_file_size|filesizeformat }}</code></td>
         </tr>
       </table>
       <br/>
 
       <p><a href="/files/preview">Preview file permission metadata</a></p>
+
+      <form action="{{ url_for('upload.send') }}" method="POST">
+        <input name="transfer_name" placeholder="Transfer name" />
+        <input type="submit" value="Import" class="btn btn-primary"/>
+      </form>
+
     {% else %}
       <p>No research data directory specified yet.</p>
     {% endif %}

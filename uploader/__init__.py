@@ -24,10 +24,10 @@ def create_app(config_name="default"):
 
         # Define navigation bar
         navbar = NavBar()
-        navbar.add("Select Research Data", "transfer.index")
+        navbar.add("Upload Research Data", "transfer.index")
         navbar.add("Metadata", "metadata.index")
         navbar.add("File Permissions", "navigator.index")
-        navbar.add("Upload", "upload.index")
+        navbar.add("Archivematica", "upload.index")
 
         # Inject navigation bar into templates
         @app.context_processor
