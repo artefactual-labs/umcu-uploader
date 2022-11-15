@@ -1,0 +1,82 @@
+{
+    "datasetVersion": {
+        "metadataBlocks": {
+            "citation": {
+                "displayName": "Citation Metadata",
+                "fields": [
+                    {
+                        "typeName": "title",
+                        "value": "title",
+                        "typeClass": "primitive",
+                        "multiple": false
+                    },
+                    {
+                        "typeName": "author",
+                        "value": [
+                            {
+                                "authorName": {
+                                    "typeName": "authorName",
+                                    "value": "authorname",
+                                    "typeClass": "primitive",
+                                    "multiple": false
+                                },
+                                "authorAffiliation": {
+                                    "typeName": "authorAffiliation",
+                                    "value": "authoraffiliation",
+                                    "typeClass": "primitive",
+                                    "multiple": false
+                                }
+                            }
+                        ],
+                        "typeClass": "compound",
+                        "multiple": true
+                    },
+                    {
+                        "typeName": "datasetContact",
+                        "value": [
+                            {
+                                "datasetContactEmail": {
+                                    "typeName": "datasetContactEmail",
+                                    "value": "contactemail@example.com",
+                                    "typeClass": "primitive",
+                                    "multiple": false
+                                },
+                                "datasetContactName": {
+                                    "typeName": "datasetContactName",
+                                    "value": "contactname",
+                                    "typeClass": "primitive",
+                                    "multiple": false
+                                }
+                            }
+                        ],
+                        "typeClass": "compound",
+                        "multiple": true
+                    },
+                    {
+                        "typeName": "dsDescription",
+                        "multiple": true,
+                        "typeClass": "compound",
+                        "value": [
+                            {
+                                "dsDescriptionValue": {
+                                    "typeName": "dsDescriptionValue",
+                                    "multiple": false,
+                                    "typeClass": "primitive",
+                                    "value": "description"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "subject",
+                        "value": [
+                            "Medicine, Health and Life Sciences"
+                        ],
+                        "typeClass": "controlledVocabulary",
+                        "multiple": true
+                    }
+                ]
+            }
+        }
+    }
+}
