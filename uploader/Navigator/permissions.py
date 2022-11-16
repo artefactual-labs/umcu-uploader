@@ -32,7 +32,7 @@ def write_permissions_to_csv(transfer_dir, destination_csv_file_path):
     permission_filepath = os.path.join(transfer_dir, PERMISSION_METADATA_FILENAME)
     permissions = read_permissions(permission_filepath)
 
-    with open(destination_csv_file_path, 'w', newline='') as csvfile:
+    with open(destination_csv_file_path, "w", newline="") as csvfile:
         fieldnames = ["filename", "dc.rights"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
@@ -43,4 +43,6 @@ def write_permissions_to_csv(transfer_dir, destination_csv_file_path):
         for filename in sorted(permissions.keys()):
             if permissions[filename] != "":
                 filename_fixed = filename.replace(transfer_dir, "objects")
-                writer.writerow({"filename": filename_fixed, "dc.rights": permissions[filename]})
+                writer.writerow(
+                    {"filename": filename_fixed, "dc.rights": permissions[filename]}
+                )

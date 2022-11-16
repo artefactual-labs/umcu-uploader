@@ -2,6 +2,7 @@ import os
 
 from flask import current_app, flash, session
 
+
 def directory_count_and_size(directory):
     count = 0
     size = 0
@@ -18,6 +19,7 @@ def directory_count_and_size(directory):
 
     return count, size
 
+
 def get_transfer_directory(send_flash=False):
     transfer_dir = ""
 
@@ -32,5 +34,9 @@ def get_transfer_directory(send_flash=False):
 
     return transfer_dir
 
+
 def transfer_directory_set_in_config():
-    return "TRANSFER_DIRECTORY" in current_app.config and current_app.config["TRANSFER_DIRECTORY"] is not None
+    return (
+        "TRANSFER_DIRECTORY" in current_app.config
+        and current_app.config["TRANSFER_DIRECTORY"] is not None
+    )

@@ -4,8 +4,8 @@ from uploader.Transfer import helpers
 
 
 class NavBarItem:
-    label = "" # Navigation link text
-    route = "" # Route ("transfer.index" for example)
+    label = ""  # Navigation link text
+    route = ""  # Route ("transfer.index" for example)
 
     def __init__(self, label, route):
         self.label = label
