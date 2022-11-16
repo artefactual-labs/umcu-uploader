@@ -1,0 +1,200 @@
+{
+    "datasetVersion": {
+        "metadataBlocks": {
+            "citation": {
+                "displayName": "Citation Metadata",
+                "fields": [
+                    {
+                        "typeName": "publication",
+                        "value": [
+                            {
+                                "publicationCitation": {
+                                    "typeName": "publicationCitation",
+                                    "multiple": "false",
+                                    "typeClass": "primitive",
+                                    "value": "afsdfsadfsad"
+                                }
+                            }
+                        ],
+                        "multiple": "true",
+                        "typeClass": "compound"
+                    },
+                    {
+                        "typeName": "author",
+                        "typeClass": "compound",
+                        "value": [
+                            {
+                                "authorName": {
+                                    "typeName": "authorName",
+                                    "multiple": "false",
+                                    "typeClass": "primitive",
+                                    "value": "sdfasdf"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "keyword",
+                        "typeClass": "conmpound",
+                        "multiple": "true",
+                        "value": [
+                            {
+                                "keywordValue": {
+                                    "typeName": "keywordValue",
+                                    "multiple": "false",
+                                    "typeClass": "primitive",
+                                    "value": "sdfsf"
+                                }
+                            },
+                            {
+                                "keywordValue": {
+                                    "typeName": "keywordValue",
+                                    "multiple": "false",
+                                    "typeClass": "primitive",
+                                    "value": "dsaffasd"
+                                }
+                            },
+                            {
+                                "keywordValue": {
+                                    "typeName": "keywordValue",
+                                    "multiple": "false",
+                                    "typeClass": "primitive",
+                                    "value": "dfasdf"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "subject",
+                        "typeClass": "true",
+                        "value": {
+                            "subject": {
+                                "typeName": "subject",
+                                "typeClass": "primitive",
+                                "value": "Medicine, Health and Life Sciences"
+                            }
+                        }
+                    },
+                    {
+                        "typeName": "title",
+                        "typeClass": "primitive",
+                        "value": "sdfasdf"
+                    },
+                    {
+                        "typeName": "dsDescription",
+                        "typeClass": "compound",
+                        "value": {
+                            "dsDescriptionValue": {
+                                "typeName": "dsDescriptionValue",
+                                "typeClass": "primitive",
+                                "value": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop pu"
+                            }
+                        }
+                    },
+                    {
+                        "typeName": "contributor",
+                        "typeClass": "compound",
+                        "value": [
+                            {
+                                "datasetContactName": {
+                                    "typeName": "datasetContactName",
+                                    "multiple": "false",
+                                    "typeClass": "primitive",
+                                    "value": "asdfdsaf"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "datasetContact",
+                        "value": [
+                            {
+                                "datasetContactEmail": {
+                                    "typeName": "datasetContactEmail",
+                                    "multiple": "false",
+                                    "typeClass": "primitive",
+                                    "value": "sdaf@sdjkfasdf.com"
+                                }
+                            },
+                            {
+                                "datasetContactName": {
+                                    "typeName": "datasetContactName",
+                                    "multiple": "false",
+                                    "typeClass": "primitive",
+                                    "value": "sadfs"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "language",
+                        "typeClass": "controlledVocabulary",
+                        "multiple": "true",
+                        "value": [
+                            "sdfa"
+                        ]
+                    },
+                    {
+                        "typeName": "software",
+                        "multiple": "true",
+                        "typeClass": "primitive",
+                        "value": [
+                            {
+                                "softwareName": {
+                                    "typeName": "softwareName",
+                                    "multiple": "false",
+                                    "typeClass": "primitive",
+                                    "value": "sdf"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "dateOfDeposit",
+                        "typeClass": "primitive",
+                        "value": "2022-11-09"
+                    },
+                    {
+                        "typeName": "timePeriodCovered",
+                        "typeClass": "compound",
+                        "multiple": "true",
+                        "value": [
+                            {
+                                "timePeriodCoveredStart": {
+                                    "typeName": "timePeriodCoveredStart",
+                                    "multiple": "false",
+                                    "typeClass": "primitive",
+                                    "value": "2022-11-07"
+                                },
+                                "timePeriodCoveredEnd": {
+                                    "typeName": "timePeriodCoveredEnd",
+                                    "multiple": "false",
+                                    "typeClass": "primitive",
+                                    "value": "2022-11-15"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "kindOfData",
+                        "multiple": "true",
+                        "typeClass": "primitive",
+                        "value": [
+                            "CSV"
+                        ]
+                    },
+                    {
+                        "typeName": "depositor",
+                        "multiple": "false",
+                        "typeClass": "primitive",
+                        "value": "test"
+                    }
+                ]
+            }
+        }
+    },
+    "licence": {
+        "name": "Open, CC-BY or CC-0"
+    },
+    "value": "null"
+}
