@@ -36,7 +36,7 @@ def update():
 
     return "Unsuitable form data submitted", status.HTTP_400_BAD_REQUEST
 
-UPLOAD_FOLDER = '/path/to/the/uploads'
+UPLOAD_FOLDER = '/tmp/upload'
 #ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
@@ -55,8 +55,8 @@ def upload():
     if file.filename == '':
         flash('No selected file')
         return redirect(url_for('transfer.index'))
-    #if file and allowed_file(file.filename):
     if file:
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return redirect(url_for('download_file', name=filename))
+        with open(os.path.join(UPLOAD_FOLDER, filename), 'w') as f:
+            flash('file has been uploaded')
+            return redirect(url_for('transfer.index'))
