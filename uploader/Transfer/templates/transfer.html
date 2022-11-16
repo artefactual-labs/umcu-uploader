@@ -22,6 +22,11 @@
           <input type="submit" value="Set Directory" class="btn btn-primary"/>
         </div>
       </form>
+
+      <form action="{{ url_for('transfer.upload') }}" method="POST" enctype="multipart/form-data">
+        <input type=file name=file>
+        <input type=submit value="Upload" class="btn btn-primary"/>
+      </form>
     {% else %}
       <p>Research data directory set by environment variable.</p>
     {% endif %}
