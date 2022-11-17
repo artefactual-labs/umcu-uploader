@@ -4,6 +4,14 @@
 
   <div class="container mt-5">
 
+    <div class="float-end">
+      {% if request.args.get('expand'): %}
+        <a href="{{ url_for('navigator.index') }}" class="btn btn-secondary">Contract</a>
+      {% else %}
+        <a href="{{ url_for('navigator.index') }}?expand=1" class="btn btn-secondary">Expand</a>
+      {% endif %}
+    </div>
+
     <h2>File Permissions</h2> </br>
 
     {%- if back_path|length -%}
@@ -12,7 +20,7 @@
       </a>
     {%- endif %}
 
-    <form action="{{ request.path }}" method="POST">
+    <form action="{{ request.path }}{{ '?expand=1' if request.args.get('expand') }}" method="POST">
     <table class="table">
       {% for entry in entries %}
         <tr>
