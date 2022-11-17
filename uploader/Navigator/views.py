@@ -4,7 +4,7 @@ import hashlib
 import os
 import tempfile 
 
-from flask import Blueprint, redirect, abort, render_template, session, send_file, request, flash, current_app
+from flask import Blueprint, redirect, abort, render_template, session, send_file, request, flash, current_app, url_for
 import magic
 
 from uploader.Navigator import permissions
@@ -30,8 +30,18 @@ def index(req_path):
         back_path = "/files/" + "/".join(req_path.split("/")[0:-1])
         back_path = back_path.rstrip("/")
 
-    # Get directory contents
-    files = os.listdir(abs_path)
+    # Get directory contents (expanded or per-directory)
+    if request.args.get("expand") is not None:
+        # Expanded view shouldn't take place in a transfer subdirectory
+        if req_path:
+            return redirect(url_for('navigator.index', expand=1))
+
+        files = []
+        for root, _, transfer_files in os.walk(abs_path, topdown=False):
+            for name in transfer_files:
+                files.append(os.path.join(root.replace(abs_path, ''), name))
+    else:
+        files = os.listdir(abs_path)
 
     # Get permissions
     permission_file_path = os.path.join(transfer_dir, permissions.PERMISSION_METADATA_FILENAME)
