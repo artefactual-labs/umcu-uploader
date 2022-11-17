@@ -3,3 +3,4 @@ Flask-API
 natsort
 pysqlite3
 pyaml
+black
