@@ -1,4 +1,4 @@
-python-magic
 Flask
 Flask-API
+natsort
 pysqlite3

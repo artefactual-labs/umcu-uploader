@@ -5,7 +5,7 @@ import os
 import tempfile 
 
 from flask import Blueprint, redirect, abort, render_template, session, send_file, request, flash, current_app, url_for
-import magic
+from natsort import natsorted
 
 from uploader.Metadata import DATAVERSE_METADATA_FILENAME
 from uploader.Navigator import permissions
@@ -37,9 +37,9 @@ def index(req_path):
         if req_path:
             return redirect(url_for('navigator.index', expand=1))
 
-        files = helpers.get_all_filepaths_in_directory(abs_path)
+        files = natsorted(helpers.get_all_filepaths_in_directory(abs_path))
     else:
-        files = os.listdir(abs_path)
+        files = natsorted(os.listdir(abs_path))
 
     # Get permissions
     permission_file_path = os.path.join(transfer_dir, permissions.PERMISSION_METADATA_FILENAME)
@@ -84,9 +84,6 @@ def index(req_path):
 
         if os.path.isdir(entry_path):
             entry['settable'] = False
-
-        if not entry["is_dir"]:
-            entry["mimetype"] = magic.from_file(entry_path, mime = True)
 
         if perms.get(entry_path) is not None:
             entry["permission"] = perms.get(entry_path)
