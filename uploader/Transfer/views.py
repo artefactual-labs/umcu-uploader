@@ -44,7 +44,16 @@ def upload():
 
         # An empty directory sent won't have a filename
         if filename != "":
-            filepath = os.path.join(transfer_dir, filename)
+            # Create subdirectory or subdirectories if need be
+            rel_subdir = os.path.dirname(file.filename)
+            subdir = os.path.join(transfer_dir, rel_subdir)
+
+            if not os.path.isdir(subdir):
+                os.makedirs(subdir)
+
+            # Assemble filepath to write to
+            filename = secure_filename(os.path.basename(file.filename))
+            filepath = os.path.join(subdir, filename)
 
             with open(filepath, 'wb') as f:
                 f.write(file.read())
