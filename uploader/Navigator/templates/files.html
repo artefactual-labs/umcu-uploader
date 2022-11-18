@@ -38,9 +38,6 @@
             {{ entry.size|filesizeformat }}
           </td>
           <td>
-            {{ entry.mimetype }}
-          </td>
-          <td>
             {% if entry.settable: %}
               <select name="perm_{{ entry.path_md5 }}">
                 <option value="" {% if entry.permission == "" %}selected{% endif %}></option>
