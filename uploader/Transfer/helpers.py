@@ -47,3 +47,14 @@ def get_all_filepaths_in_directory(directory, trim_root=True):
                 files.append(os.path.join(root, name))
 
     return files
+
+def potential_dir_name(directory_path):
+    potential_path = directory_path
+    padding_counter = 1
+
+    while os.path.exists(potential_path):
+        potential_path = directory_path + '_' + str(padding_counter)
+
+        padding_counter += 1
+
+    return potential_path
