@@ -253,6 +253,3 @@ def index(req_path):
         return redirect(url_for("metadata.updated"))
 
     return render_template("metadata.html")
-    # redirect you to the dataset on dataverse
-    # return redirect(server_url)
-    return render_template("metadata.html")
