@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, render_template, request, jsonify, redirect
-from json import dump, dumps
-import requests
+from flask import Blueprint, render_template, request, url_for, redirect, flash
 from string import Template
-from os import getenv
+import json 
+import os
+from uploader.Transfer import helpers
+from uploader.Metadata import DATAVERSE_METADATA_FILENAME
 
-api_token = getenv("API_TOKEN")
-server_url = "https://demo.dataverse.nl/"
+
 
 metadata = Blueprint("metadata", __name__, template_folder="templates")
 
@@ -126,19 +126,22 @@ def index(req_path):
         licence_description_value = "null"
         dv_metadata = {
             "datasetVersion": {
+                "licence": licence_value,
+                "termsOfUse": licence_description_value,
                 "metadataBlocks": {
                     "citation": {
                         "displayName": "Citation Metadata",
                         "fields": [
                             {
                                 "typeName": "publication",
-                                "value": publication_values,
                                 "multiple": True,
                                 "typeClass": "compound",
+                                "value": publication_values,
                             },
                             {
                                 "typeName": "author",
                                 "typeClass": "compound",
+                                "multiple": True,
                                 "value": author_values,
                             },
                             {
@@ -162,21 +165,26 @@ def index(req_path):
                             {
                                 "typeName": "dsDescription",
                                 "typeClass": "compound",
+                                "multiple": True,
                                 "value": {
                                     "dsDescriptionValue": {
                                         "typeName": "dsDescriptionValue",
+                                        "multiple": False,
                                         "typeClass": "primitive",
                                         "value": description_value,
-                                    }
+                                    },
                                 },
                             },
                             {
                                 "typeName": "contributor",
                                 "typeClass": "compound",
+                                "multiple": True,
                                 "value": contributor_values,
                             },
                             {
                                 "typeName": "datasetContact",
+                                "multiple": True,
+                                "typeClass": "compound",
                                 "value": [*contactEmail_values, *contactName_values],
                             },
                             {
@@ -188,12 +196,13 @@ def index(req_path):
                             {
                                 "typeName": "software",
                                 "multiple": True,
-                                "typeClass": "primitive",
+                                "typeClass": "compound",
                                 "value": software_values,
                             },
                             {
                                 "typeName": "dateOfDeposit",
                                 "typeClass": "primitive",
+                                "multiple": False,
                                 "value": date_of_deposit_value,
                             },
                             {
@@ -214,7 +223,7 @@ def index(req_path):
                                             "typeClass": "primitive",
                                             "value": date_end_value,
                                         },
-                                    }
+                                    },
                                 ],
                             },
                             {
@@ -230,19 +239,20 @@ def index(req_path):
                                 "value": depositorName_value,
                             },
                         ],
-                    }
-                }
+                    },
+                },
             },
-            "licence": {"name": licence_value},
-            "value": licence_description_value,
         }
-        with open("./data/dv_metadata.json", "w") as dv_metadata_file:
-            dump(dv_metadata, dv_metadata_file, indent=4)
-        api_url = Template("$server_url/api/dataverses/$/datasets")
-        r = requests.post(
-            api_url, headers={"X-Dataverse-key": api_token}, data=dumps(dv_metadata)
+        filepath = os.path.join(
+            helpers.get_transfer_directory(), DATAVERSE_METADATA_FILENAME
         )
-        return r.json()
-        # redirect you to the dataset on dataverse
-        # return redirect(server_url)
+        with open(filepath, "w") as dv_metadata_file:
+            json.dump(dv_metadata, dv_metadata_file, indent=4)
+
+        flash("Metadata saved.", "primary")
+        return redirect(url_for("metadata.updated"))
+
+    return render_template("metadata.html")
+    # redirect you to the dataset on dataverse
+    # return redirect(server_url)
     return render_template("metadata.html")
