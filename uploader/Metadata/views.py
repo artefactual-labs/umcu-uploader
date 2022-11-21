@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-
-
 import json
 import os
-from flask import Blueprint, render_template, request, flash, redirect, url_for
-
-from uploader.Metadata import DATAVERSE_METADATA_FILENAME
+from flask import Blueprint, render_template, request, url_for, redirect, flash
 from uploader.Transfer import helpers
+from uploader.Metadata import DATAVERSE_METADATA_FILENAME
 
 metadata = Blueprint("metadata", __name__, template_folder="templates")
 
@@ -25,14 +22,14 @@ def index(req_path):
             {
                 "authorName": {
                     "typeName": "authorName",
-                    "multiple": "false",
+                    "multiple": False,
                     "typeClass": "primitive",
                     "value": x,
                 }
             }
             for x in author_values_temp
         ]
-        subject_value = "Medicine, Health and Life Sciences"
+        subject_value = ["Medicine, Health and Life Sciences"]
         keyword_values_temp = [
             y for x, y in form_data.items() if x.startswith("keyword")
         ]
@@ -40,7 +37,7 @@ def index(req_path):
             {
                 "keywordValue": {
                     "typeName": "keywordValue",
-                    "multiple": "false",
+                    "multiple": False,
                     "typeClass": "primitive",
                     "value": x,
                 }
@@ -54,7 +51,7 @@ def index(req_path):
             {
                 "publicationCitation": {
                     "typeName": "publicationCitation",
-                    "multiple": "false",
+                    "multiple": False,
                     "typeClass": "primitive",
                     "value": x,
                 }
@@ -68,7 +65,7 @@ def index(req_path):
             {
                 "datasetContactName": {
                     "typeName": "datasetContactName",
-                    "multiple": "false",
+                    "multiple": False,
                     "typeClass": "primitive",
                     "value": x,
                 }
@@ -82,28 +79,33 @@ def index(req_path):
             {
                 "datasetContactEmail": {
                     "typeName": "datasetContactEmail",
-                    "multiple": "false",
+                    "multiple": False,
                     "typeClass": "primitive",
                     "value": x,
                 }
             }
             for x in contactEmail_values_temp
         ]
+        contact_values = []
+        for index, item in enumerate(contactName_values):
+            contact = item
+            contact.update(contactEmail_values[index])
+            contact_values.append(contact)
+        print("contact values",contact_values)
         contributor_values_temp = [
             y for x, y in form_data.items() if x.startswith("contributor")
         ]
         contributor_values = [
             {
-                "datasetContactName": {
-                    "typeName": "datasetContactName",
-                    "multiple": "false",
+                "contributorName": {
+                    "typeName": "contributorName",
+                    "multiple": False,
                     "typeClass": "primitive",
                     "value": x,
                 }
             }
             for x in contributor_values_temp
         ]
-        language_values = [y for x, y in form_data.items() if x.startswith("language")]
         software_values_temp = [
             y for x, y in form_data.items() if x.startswith("software")
         ]
@@ -111,7 +113,7 @@ def index(req_path):
             {
                 "softwareName": {
                     "typeName": "softwareName",
-                    "multiple": "false",
+                    "multiple": False,
                     "typeClass": "primitive",
                     "value": software,
                 }
@@ -126,127 +128,125 @@ def index(req_path):
         licence_description_value = "null"
         dv_metadata = {
             "datasetVersion": {
+                "licence": licence_value,
+                "termsOfUse": licence_description_value,
                 "metadataBlocks": {
                     "citation": {
                         "displayName": "Citation Metadata",
                         "fields": [
                             {
                                 "typeName": "publication",
-                                "value": publication_values,
-                                "multiple": "true",
+                                "multiple": True,
                                 "typeClass": "compound",
+                                "value": publication_values,
                             },
                             {
                                 "typeName": "author",
                                 "typeClass": "compound",
+                                "multiple": True,
                                 "value": author_values,
                             },
                             {
                                 "typeName": "keyword",
-                                "typeClass": "conmpound",
-                                "multiple": "true",
+                                "typeClass": "compound",
+                                "multiple": True,
                                 "value": keyword_values,
                             },
                             {
                                 "typeName": "subject",
-                                "typeClass": "true",
-                                "value": {
-                                    "subject": {
-                                        "typeName": "subject",
-                                        "typeClass": "primitive",
-                                        "value": subject_value,
-                                    }
-                                },
+                                "typeClass": "controlledVocabulary",
+                                "multiple": True,
+                                "value": subject_value,
                             },
                             {
                                 "typeName": "title",
+                                "multiple": False,
                                 "typeClass": "primitive",
                                 "value": title_value,
                             },
                             {
                                 "typeName": "dsDescription",
                                 "typeClass": "compound",
-                                "value": {
+                                "multiple": True,
+                                "value": [{
                                     "dsDescriptionValue": {
                                         "typeName": "dsDescriptionValue",
+                                        "multiple": False,
                                         "typeClass": "primitive",
                                         "value": description_value,
-                                    }
-                                },
+                                    },
+                                }],
                             },
                             {
                                 "typeName": "contributor",
                                 "typeClass": "compound",
+                                "multiple": True,
                                 "value": contributor_values,
                             },
                             {
                                 "typeName": "datasetContact",
-                                "value": [*contactEmail_values, *contactName_values],
-                            },
-                            {
-                                "typeName": "language",
-                                "typeClass": "controlledVocabulary",
-                                "multiple": "true",
-                                "value": language_values,
+                                "multiple": True,
+                                "typeClass": "compound",
+                                "value": contact_values,
                             },
                             {
                                 "typeName": "software",
-                                "multiple": "true",
-                                "typeClass": "primitive",
+                                "multiple": True,
+                                "typeClass": "compound",
                                 "value": software_values,
                             },
                             {
                                 "typeName": "dateOfDeposit",
                                 "typeClass": "primitive",
+                                "multiple": False,
                                 "value": date_of_deposit_value,
                             },
                             {
                                 "typeName": "timePeriodCovered",
                                 "typeClass": "compound",
-                                "multiple": "true",
+                                "multiple": True,
                                 "value": [
                                     {
                                         "timePeriodCoveredStart": {
                                             "typeName": "timePeriodCoveredStart",
-                                            "multiple": "false",
+                                            "multiple": False,
                                             "typeClass": "primitive",
                                             "value": date_start_value,
                                         },
                                         "timePeriodCoveredEnd": {
                                             "typeName": "timePeriodCoveredEnd",
-                                            "multiple": "false",
+                                            "multiple": False,
                                             "typeClass": "primitive",
                                             "value": date_end_value,
                                         },
-                                    }
+                                    },
                                 ],
                             },
                             {
                                 "typeName": "kindOfData",
-                                "multiple": "true",
+                                "multiple": True,
                                 "typeClass": "primitive",
                                 "value": data_type_values,
                             },
                             {
                                 "typeName": "depositor",
-                                "multiple": "false",
+                                "multiple": False,
                                 "typeClass": "primitive",
                                 "value": depositorName_value,
                             },
                         ],
-                    }
-                }
+                    },
+                },
             },
-            "licence": {"name": licence_value},
-            "value": licence_description_value,
         }
-
-        filepath = os.path.join(helpers.get_transfer_directory(), DATAVERSE_METADATA_FILENAME)
+        filepath = os.path.join(
+            helpers.get_transfer_directory(), DATAVERSE_METADATA_FILENAME
+        )
         with open(filepath, "w") as dv_metadata_file:
             json.dump(dv_metadata, dv_metadata_file, indent=4)
 
         flash("Metadata saved.", "primary")
-        return redirect(url_for('metadata.updated'))
+        return redirect(url_for("metadata.updated"))
 
     return render_template("metadata.html")
 
