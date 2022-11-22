@@ -21,10 +21,25 @@
 
       <p><a href="/files/preview">Preview file permission metadata</a></p>
 
-      <form action="{{ url_for('upload.send') }}" method="POST">
-        <input name="transfer_name" placeholder="Transfer name" />
-        <input type="submit" value="Import" class="btn btn-primary"/>
-      </form>
+      {% if transfer_source_dir or division_options|length > 0: %}
+        <form action="{{ url_for('upload.index') }}" method="POST">
+          {% if not transfer_source_dir and division_options|length > 0: %}
+            <div>
+              <select name="division_id">
+                <option value="">[choose division]</option>
+                {% for division in division_options: %}
+                  <option value="{{division["id"]}}" {{ "selected" if request.form['division_id'] == division["id"] }}>{{division["name"]}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endif %}
+
+          <input name="transfer_name" value="{{transfer_name}}" placeholder="Transfer name" />
+          <input type="submit" value="Import" class="btn btn-primary"/>
+        </form>
+      {% else %}
+        <b>No transfer source directory available.</b>
+      {% endif %}
 
     {% else %}
       <p>No research data directory specified yet.</p>
