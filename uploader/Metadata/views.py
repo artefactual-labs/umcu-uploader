@@ -158,6 +158,12 @@ def index(req_path):
                                 "multiple": True,
                                 "value": subject_value,
                             },
+                             {
+                                "typeName": "language",
+                                "typeClass": "controlledVocabulary",
+                                "multiple": True,
+                                "value": ["English"],
+                            },
                             {
                                 "typeName": "title",
                                 "multiple": False,
