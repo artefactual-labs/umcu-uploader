@@ -55,7 +55,10 @@ def index(req_path):
             if form_field_name in request.form:
                 permission = request.form[form_field_name]
 
-                perms.set(entry_path, permission)
+                if os.path.isdir(entry_path) and permission != "":
+                    perms.set_descendant_perms(entry_path, permission)
+                else:
+                    perms.set(entry_path, permission)
 
         perms.save()
 
@@ -80,9 +83,6 @@ def index(req_path):
             entry['settable'] = False
 
         if req_path == "" and file == DATAVERSE_METADATA_FILENAME:
-            entry['settable'] = False
-
-        if os.path.isdir(entry_path):
             entry['settable'] = False
 
         if not entry["is_dir"]:
