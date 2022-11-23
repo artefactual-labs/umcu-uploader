@@ -2,6 +2,8 @@ import csv
 import json
 import os
 
+from uploader.Transfer import helpers
+
 
 PERMISSION_METADATA_FILENAME = "permissions.json"
 
@@ -42,6 +44,14 @@ class FilePermissions:
             return self.permissions[entry_path]
 
         return None
+
+    # Set permissions for all descendants of an entry
+    def set_descendant_perms(self, entry_path, permission):
+        files = helpers.get_all_filepaths_in_directory(entry_path, False)
+
+        for filepath in files:
+            if filepath.startswith(entry_path + "/"):
+                self.set(filepath, permission)
 
     # Write permissions to an Archivematica metadata CSV file
     def write_permissions_to_csv(self, transfer_dir, destination_csv_file_path):
