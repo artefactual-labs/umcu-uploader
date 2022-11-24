@@ -9,6 +9,7 @@ from flask import (
     request,
     redirect,
     flash,
+    session
 )
 from flask_api import status
 
@@ -30,6 +31,7 @@ def index():
         "transfer_directory": transfer_dir,
         "transfer_file_count": transfer_file_count,
         "transfer_total_file_size": transfer_total_file_size,
+        "transfer_name": session["transfer_name"],
         "request": request
     }
 

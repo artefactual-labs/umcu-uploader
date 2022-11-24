@@ -19,7 +19,16 @@ def index():
         transfer_dir
     )
 
-    return render_template('transfer.html', transfer_directory=transfer_dir, transfer_file_count=transfer_file_count, transfer_total_file_size=transfer_total_file_size)
+    context = {
+        "transfer_dir": transfer_dir,
+        "transfer_file_count": transfer_file_count,
+        "transfer_total_file_size": transfer_total_file_size
+    }
+
+    if "transfer_name" in session:
+        context["transfer_name"] = session["transfer_name"]
+
+    return render_template('transfer.html', **context)
 
 @transfer.route('/upload', methods=['POST'])
 def upload():
@@ -60,7 +69,7 @@ def upload():
         filename = secure_filename(os.path.basename(file.filename))
         filepath = os.path.join(subdir, filename)
 
-        # Write to file and set permissions
+        # Write to file
         with open(filepath, 'wb') as f:
             f.write(file.read())
 
@@ -76,6 +85,7 @@ def upload():
 
     # Change transfer directory
     session["transfer_directory"] = transfer_dir
+    session["transfer_name"] = top_level_directory
     session.modified = True
 
     flash("Files have been uploaded", "primary")
