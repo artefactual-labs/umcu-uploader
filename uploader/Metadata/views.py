@@ -126,6 +126,21 @@ def index(req_path):
         data_type_values = [y for x, y in form_data.items() if x.startswith("dataType")]
         depositorName_value = "test"
         licence_description_value = "null"
+        # ------------------
+        FORM = {
+            "datarangeStart": date_end_value,
+            "datarangeEnd": date_end_value,
+            "dataType": data_type_values,
+            "license": licence_value,
+            "contributor": contributor_values_temp,
+            "depositor": depositorName_value,
+            "author": author_values_temp,
+            "keywords": keyword_values_temp,
+            "title": title_value,
+            "subject": subject_value,
+            "publication": publication_values_temp,
+        }
+        # ------------------
         dv_metadata = {
             "datasetVersion": {
                 "licence": licence_value,
