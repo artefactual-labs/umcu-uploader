@@ -5,6 +5,8 @@ import os
 from uploader.Transfer import helpers
 
 
+from uploader.Metadata import arc_metadata
+from uploader.Metadata import Formdata
 PERMISSION_METADATA_FILENAME = "permissions.json"
 
 
@@ -19,18 +21,18 @@ class FilePermissions:
         # Read permissions from JSON if applicable
         try:
             with open(self.filepath) as data:
-                self.permissions = json.load(data)
-        except FileNotFoundError:
-            self.permissions = {}
+                # TODO: send permissions to the create archivematica metadata function
+                self.permissions = arc_metadata.create_archivematica_metadata(data)
+        except FileNotFoundError():       
+                self.permissions = {}
 
     def copy_from_dict(self, permissions):
         self.permissions = permissions.copy()
 
     def save(self):
         # Write permissions to JSON
-        file = open(self.filepath, "w")
-        file.write(json.dumps(self.permissions))
-        file.close()
+        with open(self.filepath, "w") as file:
+            file.write(arc_metadata.create_archivematica_metadata(self.permissions))
 
     def set(self, entry_path, permission):
         # Remove any blank permissions
