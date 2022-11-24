@@ -4,10 +4,16 @@
 
   <div class="container mt-5">
 
-    {% if transfer_directory: %}
+    {% if transfer_dir: %}
       <h2>Update Research Data</h2>
 
       <table>
+        {% if transfer_name: %}
+          <tr>
+            <td>Transfer name: </td>
+            <td><code>{{ transfer_name }}</code></td>
+          </tr>
+        {% endif %}
         <tr>
           <td>File count: </td>
           <td><code>{{ transfer_file_count }}</code> <span class="text-muted small">(including generated metadata)</span></td>
