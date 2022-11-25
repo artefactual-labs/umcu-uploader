@@ -108,29 +108,12 @@ def parse_form_data(form_data_raw):
     )
 
 
-def dv_json(form_data):
-    [
-        subject_value,
-        title_value,
-        description_value,
-        licence_value,
-        licence_description,
-        depositorName_value,
-        date_of_deposit_value,
-        date_start_value,
-        date_end_value,
-        data_type_values,
-        author_values,
-        contributor_values,
-        publication_values,
-        contact_values,
-        software_values,
-        keyword_values,
-    ] = form_data
+def dv_json(f):
+    
     dv_metadata = {
         "datasetVersion": {
-            "licence": licence_value,
-            "termsOfUse": licence_description,
+            "licence": f.licence_value,
+            "termsOfUse": f.licence_description,
             "metadataBlocks": {
                 "citation": {
                     "displayName": "Citation Metadata",
@@ -139,25 +122,25 @@ def dv_json(form_data):
                             "typeName": "publication",
                             "multiple": True,
                             "typeClass": "compound",
-                            "value": publication_values,
+                            "value": f.publication_values,
                         },
                         {
                             "typeName": "author",
                             "typeClass": "compound",
                             "multiple": True,
-                            "value": author_values,
+                            "value": f.author_values,
                         },
                         {
                             "typeName": "keyword",
                             "typeClass": "compound",
                             "multiple": True,
-                            "value": keyword_values,
+                            "value": f.keyword_values,
                         },
                         {
                             "typeName": "subject",
                             "typeClass": "controlledVocabulary",
                             "multiple": True,
-                            "value": subject_value,
+                            "value": f.subject_value,
                         },
                         {
                             "typeName": "language",
@@ -169,7 +152,7 @@ def dv_json(form_data):
                             "typeName": "title",
                             "multiple": False,
                             "typeClass": "primitive",
-                            "value": title_value,
+                            "value": f.title_value,
                         },
                         {
                             "typeName": "dsDescription",
@@ -181,7 +164,7 @@ def dv_json(form_data):
                                         "typeName": "dsDescriptionValue",
                                         "multiple": False,
                                         "typeClass": "primitive",
-                                        "value": description_value,
+                                        "value": f.description_value,
                                     },
                                 }
                             ],
@@ -190,25 +173,25 @@ def dv_json(form_data):
                             "typeName": "contributor",
                             "typeClass": "compound",
                             "multiple": True,
-                            "value": contributor_values,
+                            "value": f.contributor_values,
                         },
                         {
                             "typeName": "datasetContact",
                             "multiple": True,
                             "typeClass": "compound",
-                            "value": contact_values,
+                            "value": f.contact_values,
                         },
                         {
                             "typeName": "software",
                             "multiple": True,
                             "typeClass": "compound",
-                            "value": software_values,
+                            "value": f.software_values,
                         },
                         {
                             "typeName": "dateOfDeposit",
                             "typeClass": "primitive",
                             "multiple": False,
-                            "value": date_of_deposit_value,
+                            "value": f.date_of_deposit_value,
                         },
                         {
                             "typeName": "timePeriodCovered",
@@ -220,13 +203,13 @@ def dv_json(form_data):
                                         "typeName": "timePeriodCoveredStart",
                                         "multiple": False,
                                         "typeClass": "primitive",
-                                        "value": date_start_value,
+                                        "value": f.date_start_value,
                                     },
                                     "timePeriodCoveredEnd": {
                                         "typeName": "timePeriodCoveredEnd",
                                         "multiple": False,
                                         "typeClass": "primitive",
-                                        "value": date_end_value,
+                                        "value": f.date_end_value,
                                     },
                                 },
                             ],
@@ -235,13 +218,13 @@ def dv_json(form_data):
                             "typeName": "kindOfData",
                             "multiple": True,
                             "typeClass": "primitive",
-                            "value": data_type_values,
+                            "value": f.data_type_values,
                         },
                         {
                             "typeName": "depositor",
                             "multiple": False,
                             "typeClass": "primitive",
-                            "value": depositorName_value,
+                            "value": f.depositorName_value,
                         },
                     ],
                 },

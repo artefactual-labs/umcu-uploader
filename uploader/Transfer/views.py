@@ -79,9 +79,7 @@ def upload():
 
     for file in helpers.get_all_filepaths_in_directory(transfer_dir, False):
         entry_path = os.path.join(transfer_dir, file)
-        perms.set(entry_path, "private")
-
-    perms.save()
+        perms[entry_path] = "private"
 
     # Change transfer directory
     session["transfer_directory"] = transfer_dir
