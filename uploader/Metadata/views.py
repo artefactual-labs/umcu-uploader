@@ -40,29 +40,59 @@ def index(req_path):
         keyword_values_raw = [
             y for x, y in form_data.items() if x.startswith("keyword")
         ]
-        dv_parsed_formdata = dataverse_metadata.parse_form_data(
-            [
-                author_values_raw,
-                contactName_values_raw,
-                contributor_values_raw,
-                publication_values_raw,
-                contactEmail_values_raw,
-                software_values_raw,
-                keyword_values_raw,
-            ]
-        )
 
-        dataverse_metadata.dv_json(
-            [ depositorName_value,
-        description_value,
-        title_value,
-        licence_value,
-        licence_description, depositorName_value,
-        date_of_deposit_value,
-        date_start_value,
-        date_end_value,
-        data_type_values, *dv_parsed_formdata]
-        )
+        # ------------------
+        FORM = {
+            "datarangeStart": date_start_value,
+            "datarangeEnd": date_end_value,
+            "dataType": data_type_values,
+            "dateOfDeposit": date_of_deposit_value,
+            "license": licence_value,
+            "contributor": contributor_values_raw,
+            "depositor": depositorName_value,
+            "author": author_values_raw,
+            "keywords": keyword_values_raw,
+            "title": title_value,
+            "subject": subject_value,
+            "publication": publication_values_raw,
+            "contactName": contactName_values_raw,
+            "contactEmail": contactEmail_values_raw,
+            "software": software_values_raw,
+            "description": description_value,
+        }
+        # ------------------
+        dv_parsed_formdata = dataverse_metadata.parse_form_data(FORM)
+        [
+            author_values,
+            keyword_values,
+            publication_values,
+            contact_values,
+            contributor_values,
+            software_values,
+        ] = dv_parsed_formdata
+        dv_form = {
+            "datarangeStart": date_start_value,
+            "datarangeEnd": date_end_value,
+            "dataType": data_type_values,
+            "dateOfDeposit": date_of_deposit_value,
+            "license": licence_value,
+            "contributor": contributor_values,
+            "depositor": depositorName_value,
+            "author": author_values,
+            "keywords": keyword_values,
+            "title": title_value,
+            "subject": subject_value,
+            "publication": publication_values,
+            "contact": contact_values,
+            "software": software_values,
+            "description": description_value,
+            "licenceDescription": licence_description,
+        }
+
+        dataverse_metadata.dv_json(dv_form)
+
+        # TODO: add error handling
+        #
         flash("Metadata saved.", "primary")
         return redirect(url_for("metadata.updated"))
 

@@ -8,8 +8,10 @@ from flask import Blueprint, redirect, abort, render_template, session, send_fil
 import magic
 
 from uploader.Metadata import DATAVERSE_METADATA_FILENAME
-from uploader.Navigator import permissions
+from uploader.Metadata import arc_metadata
 from uploader.Transfer import helpers
+
+ARC_METADATA_FILENAME = "arc_metadata.json"
 
 navigator = Blueprint("navigator", __name__, template_folder="templates")
 
@@ -42,9 +44,8 @@ def index(req_path):
         files = os.listdir(abs_path)
 
     # Get permissions
-    permission_file_path = os.path.join(transfer_dir, permissions.PERMISSION_METADATA_FILENAME)
-    perms = permissions.FilePermissions(permission_file_path)
-    perms.load()
+    perms = 
+    
 
     # Update permissions data, if sent
     if request.method == 'POST':
@@ -76,7 +77,7 @@ def index(req_path):
         }
 
         # Apply rules for preventing permission setting
-        if req_path == "" and file == permissions.PERMISSION_METADATA_FILENAME:
+        if req_path == "":
             entry['settable'] = False
 
         if req_path == "" and file == DATAVERSE_METADATA_FILENAME:
