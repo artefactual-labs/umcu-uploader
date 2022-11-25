@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import tempfile
-import zipfile
 
 from flask import Blueprint, render_template, request, session, flash, redirect, url_for
 from flask_api import status
@@ -30,31 +28,41 @@ def upload():
         flash("No file part", "danger")
         return redirect(url_for('transfer.index'))
 
-    # Create unique directory
-    data_dir = helpers.get_data_directory()
-    unique_directory = tempfile.mkdtemp(prefix="research", dir=data_dir)
-    transfer_dir = os.path.join(data_dir, unique_directory)
-
-    # Save files
+    # Abort if no file have been uploaded
     files = request.files.getlist("files")
 
+    # Parse top-level dircetory from first file uploaded
+    top_level_directory = os.path.split(files[0].filename)[0]
+
+    # Create unique directory
+    data_dir = helpers.get_data_directory()
+    transfer_dir = helpers.potential_dir_name(os.path.join(data_dir, top_level_directory))
+    os.mkdir(transfer_dir)
+
+    # Cycle through file data, create necessary subdirectories, and save files
     filecount = 0
     for file in files:
         filename = secure_filename(file.filename)
 
         # An empty directory sent won't have a filename
-        if filename != "":
-            filepath = os.path.join(transfer_dir, filename)
+        if filename == "":
+            flash("No files were uploaded", "danger")
+            return redirect(url_for('transfer.index'))
 
-            with open(filepath, 'wb') as f:
-                f.write(file.read())
+        # Create subdirectory (or subdirectories if need be) and set permissions
+        rel_subdir = os.path.dirname(file.filename)[len(top_level_directory) + 1:]
+        subdir = os.path.join(transfer_dir, rel_subdir)
 
-            filecount += 1
+        if not os.path.isdir(subdir):
+            os.makedirs(subdir)
 
-    # Abort if noting was actually uploaded
-    if not filecount:
-        flash("No files were uploaded", "danger")
-        return redirect(url_for('transfer.index'))
+        # Assemble filepath to write to
+        filename = secure_filename(os.path.basename(file.filename))
+        filepath = os.path.join(subdir, filename)
+
+        # Write to file and set permissions
+        with open(filepath, 'wb') as f:
+            f.write(file.read())
 
     # Set default permissions
     permission_file_path = os.path.join(transfer_dir, permissions.PERMISSION_METADATA_FILENAME)
