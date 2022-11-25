@@ -15,7 +15,7 @@
         <p class="text-start my-3 fs-1" id="required-information">Required Information
             <span class="text-warning">*</span>
         </p>
-        <form action="/metadata" method="post">
+        <form action="{{ url_for('metadata.index') }}" method="post">
             <div class="mb-3">
                 <label for="umcu-division" class="form-label">UMCU Division</label>
                 <select required name="umcuDivision" class="form-select" aria-label="select division">

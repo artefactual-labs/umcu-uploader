@@ -31,9 +31,12 @@ def index():
         "transfer_directory": transfer_dir,
         "transfer_file_count": transfer_file_count,
         "transfer_total_file_size": transfer_total_file_size,
-        "transfer_name": session["transfer_name"],
         "request": request
     }
+
+    # Set transfer name from session, if available
+    if "transfer_name" in session:
+        context["transfer_name"] = session["transfer_name"]
 
     # Assemble division options and add to template context
     division_options = []
@@ -48,7 +51,11 @@ def index():
     # Handle form submission
     if request.method == 'POST':
         context["transfer_name"] = request.form["transfer_name"]
-        division_id = request.form["division_id"]
+
+        # Get division ID from form data, if available
+        division_id = ""
+        if "division_id" in request.form:
+            division_id = request.form["division_id"]
 
         # Make sure necessary values have been provided
         if context["transfer_name"] == "":
