@@ -28,7 +28,7 @@ def index(req_path):
     # Assemble back link path
     back_path = ""
     if req_path != "":
-        back_path = "/files/" + "/".join(req_path.split("/")[0:-1])
+        back_path = url_for('navigator.index') + "/" + "/".join(req_path.split("/")[0:-1])
         back_path = back_path.rstrip("/")
 
     # Get directory contents (expanded or per-directory)

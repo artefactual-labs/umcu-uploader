@@ -20,13 +20,13 @@
       </a>
     {%- endif %}
 
-    <form action="{{ request.path }}{{ '?expand=1' if request.args.get('expand') }}" method="POST">
+    <form action="{{ url_for('navigator.index') }}{{ req_path }}{{ '?expand=1' if request.args.get('expand') }}" method="POST">
     <table class="table">
       {% for entry in entries %}
         <tr>
           <td>
             {% if entry.is_dir %}
-              <a href="{{ request.path }}{{ '/' if req_path else '' }}{{ entry.name }}">
+              <a href="{{ url_for('navigator.index') }}{{ req_path }}{{ '/' if req_path else '' }}{{ entry.name }}">
                 <i class='fas fa-folder'></i>
                 {{ entry.name }}
               </a>
