@@ -5,24 +5,127 @@ from uploader.Metadata import DATAVERSE_METADATA_FILENAME
 from uploader.Transfer import helpers
 
 
-def dv_json(form_data):
+def parse_form_data(form_data_raw):
     [
-        depositorName_value,
-        description_value,
-        title_value,
-        licence_value,
-        licence_description,
+        author_values_raw,
+        contactName_values_raw,
+        contributor_values_raw,
+        publication_values_raw,
+        contactEmail_values_raw,
+        software_values_raw,
+        keyword_values_raw,
+    ] = form_data_raw
+    author_values = [
+        {
+            "authorName": {
+                "typeName": "authorName",
+                "multiple": False,
+                "typeClass": "primitive",
+                "value": x,
+            }
+        }
+        for x in author_values_raw
+    ]
+    keyword_values = [
+        {
+            "keywordValue": {
+                "typeName": "keywordValue",
+                "multiple": False,
+                "typeClass": "primitive",
+                "value": x,
+            }
+        }
+        for x in keyword_values_raw
+    ]
+    publication_values = [
+        {
+            "publicationCitation": {
+                "typeName": "publicationCitation",
+                "multiple": False,
+                "typeClass": "primitive",
+                "value": x,
+            }
+        }
+        for x in publication_values_raw
+    ]
+    contactName_values = [
+        {
+            "datasetContactName": {
+                "typeName": "datasetContactName",
+                "multiple": False,
+                "typeClass": "primitive",
+                "value": x,
+            }
+        }
+        for x in contactName_values_raw
+    ]
+    contactEmail_values = [
+        {
+            "datasetContactEmail": {
+                "typeName": "datasetContactEmail",
+                "multiple": False,
+                "typeClass": "primitive",
+                "value": x,
+            }
+        }
+        for x in contactEmail_values_raw
+    ]
+    contact_values = []
+    for index, item in enumerate(contactName_values):
+        contact = item
+        contact.update(contactEmail_values[index])
+        contact_values.append(contact)
+    contributor_values = [
+        {
+            "contributorName": {
+                "typeName": "contributorName",
+                "multiple": False,
+                "typeClass": "primitive",
+                "value": x,
+            }
+        }
+        for x in contributor_values_raw
+    ]
+    software_values = [
+        {
+            "softwareName": {
+                "typeName": "softwareName",
+                "multiple": False,
+                "typeClass": "primitive",
+                "value": software,
+            }
+        }
+        for software in software_values_raw
+    ]
+    # return all values
+    return (
         author_values,
-        subject_value,
         keyword_values,
         publication_values,
         contact_values,
         contributor_values,
         software_values,
+    )
+
+
+def dv_json(form_data):
+    [
+        subject_value,
+        title_value,
+        description_value,
+        licence_value,
+        licence_description,
+        depositorName_value,
         date_of_deposit_value,
         date_start_value,
         date_end_value,
         data_type_values,
+        author_values,
+        contributor_values,
+        publication_values,
+        contact_values,
+        software_values,
+        keyword_values,
     ] = form_data
     dv_metadata = {
         "datasetVersion": {
