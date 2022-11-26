@@ -25,7 +25,7 @@
         <form action="{{ url_for('upload.index') }}" method="POST">
           {% if not transfer_source_dir and division_options|length > 0: %}
             <div>
-              <select name="division_id">
+              <select title="division_id" name="division_id">
                 <option value="">[choose division]</option>
                 {% for division in division_options: %}
                   <option value="{{division["id"]}}" {{ "selected" if request.form['division_id'] == division["id"] }}>{{division["name"]}}</option>
