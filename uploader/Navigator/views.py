@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import hashlib
+import json
 import os
 import tempfile 
 
@@ -11,7 +12,7 @@ from uploader.Metadata import DATAVERSE_METADATA_FILENAME
 from uploader.Metadata import arc_metadata
 from uploader.Transfer import helpers
 
-ARC_METADATA_FILENAME = "arc_metadata.json"
+PERMS = {}
 
 navigator = Blueprint("navigator", __name__, template_folder="templates")
 
@@ -43,10 +44,6 @@ def index(req_path):
     else:
         files = os.listdir(abs_path)
 
-    # Get permissions
-    perms = 
-    
-
     # Update permissions data, if sent
     if request.method == 'POST':
         for file in files:
@@ -56,9 +53,7 @@ def index(req_path):
             if form_field_name in request.form:
                 permission = request.form[form_field_name]
 
-                perms.set(entry_path, permission)
-
-        perms.save()
+                PERMS[entry_path] = permission
 
         flash("Updated.", "primary")
         redirect(request.path)
@@ -77,10 +72,7 @@ def index(req_path):
         }
 
         # Apply rules for preventing permission setting
-        if req_path == "":
-            entry['settable'] = False
-
-        if req_path == "" and file == DATAVERSE_METADATA_FILENAME:
+        if req_path == "" and (file == DATAVERSE_METADATA_FILENAME | file == arc.metadata.METADATA_FILENAME):
             entry['settable'] = False
 
         if os.path.isdir(entry_path):
@@ -89,8 +81,8 @@ def index(req_path):
         if not entry["is_dir"]:
             entry["mimetype"] = magic.from_file(entry_path, mime = True)
 
-        if perms.get(entry_path) is not None:
-            entry["permission"] = perms.get(entry_path)
+        if PERMS[entry_path] is not None:
+            entry["permission"] = PERMS[entry_path]
 
         entries.append(entry)
 
@@ -98,16 +90,8 @@ def index(req_path):
 
 @navigator.route('/preview', methods=["GET"])
 def preview():
-    transfer_dir = helpers.get_transfer_directory()
-    csv_tempfile = tempfile.NamedTemporaryFile()
-
-    # Get permissions
-    permission_file_path = os.path.join(transfer_dir, permissions.PERMISSION_METADATA_FILENAME)
-    perms = permissions.FilePermissions(permission_file_path)
-    perms.load()
-
-    # Write permissions as CSV
-    perms.write_permissions_to_csv(transfer_dir, csv_tempfile.name)
-
-    # Trigger CSV download
-    return send_file(csv_tempfile.name, as_attachment=True, mimetype="text/csv", download_name="metadata.csv")
+    JSON_tempfile = tempfile.NamedTemporaryFile()
+    with open(JSON_tempfile.name, 'w') as f:
+        json.dump(PERMS, f, indent=4)
+    # Trigger JSON download
+    return send_file(JSON_tempfile.name, as_attachment=True, mimetype="application/json", download_name="metadata.json")

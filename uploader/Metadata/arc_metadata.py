@@ -2,9 +2,9 @@ import os
 import json
 
 from uploader.Metadata.views import FORM
-ARCHIVEMATICA_METADATA_FILEPATH = os.path.join(os.path.dirname('metadata'), "metadata.json")
+METADATA_FILEPATH = os.path.join(os.path.dirname('metadata'), "metadata.json")
 
-def create_archivematica_metadata(permissions):
+def create_metadata(permissions):
     """create archivematica metadata file"""
     server = "https://dataverse.nl/"
     if os.getenv("DEBUG") == "True":
