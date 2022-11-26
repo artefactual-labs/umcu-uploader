@@ -4,112 +4,88 @@ import os
 from uploader.Metadata import DATAVERSE_METADATA_FILENAME
 from uploader.Transfer import helpers
 
+def create_values (values, template):
+    "takes a list of values and a template and creates a list of dicts"
+    dv_value = [template[k].update({"value": v}) for (k, v) in values.items()]
+    return dv_value
 
-def parse_form_data(form_data_raw):
-    [
-        author_values_raw,
-        contactName_values_raw,
-        contributor_values_raw,
-        publication_values_raw,
-        contactEmail_values_raw,
-        software_values_raw,
-        keyword_values_raw,
-    ] = form_data_raw
-    author_values = [
-        {
+
+def parse_form_data(f):
+    author_values = create_values(f.author, {
             "authorName": {
                 "typeName": "authorName",
                 "multiple": False,
                 "typeClass": "primitive",
-                "value": x,
+                "value": "",
             }
-        }
-        for x in author_values_raw
-    ]
-    keyword_values = [
-        {
-            "keywordValue": {
-                "typeName": "keywordValue",
-                "multiple": False,
-                "typeClass": "primitive",
-                "value": x,
-            }
-        }
-        for x in keyword_values_raw
-    ]
-    publication_values = [
-        {
-            "publicationCitation": {
-                "typeName": "publicationCitation",
-                "multiple": False,
-                "typeClass": "primitive",
-                "value": x,
-            }
-        }
-        for x in publication_values_raw
-    ]
-    contactName_values = [
-        {
+        })
+    contactName_values = create_values(f.contactName, {
             "datasetContactName": {
                 "typeName": "datasetContactName",
                 "multiple": False,
                 "typeClass": "primitive",
-                "value": x,
+                "value": "",
             }
-        }
-        for x in contactName_values_raw
-    ]
-    contactEmail_values = [
-        {
+        })
+    contributor_values = create_values(f.contributor, {
+            "contributorName": {
+                "typeName": "contributorName",
+                "multiple": False,
+                "typeClass": "primitive",
+                "value": "",
+            }
+        })
+    publication_values = create_values(f.publication,  {
+            "publicationCitation": {
+                "typeName": "publicationCitation",
+                "multiple": False,
+                "typeClass": "primitive",
+                "value": "",
+            }
+        })
+    contactEmail_values = create_values(f.contactEmail,  {
             "datasetContactEmail": {
                 "typeName": "datasetContactEmail",
                 "multiple": False,
                 "typeClass": "primitive",
-                "value": x,
+                "value": "",
             }
-        }
-        for x in contactEmail_values_raw
-    ]
+        })
+    software_values = create_values(f.software,  {
+            "softwareName": {
+                "typeName": "softwareName",
+                "multiple": False,
+                "typeClass": "primitive",
+                "value": "",
+            }
+        })
+    keyword_values = create_values(f.keyword, {
+            "keywordValue": {
+                "typeName": "keywordValue",
+                "multiple": False,
+                "typeClass": "primitive",
+                "value": "",
+            }
+        })
+ 
     contact_values = []
     for index, item in enumerate(contactName_values):
         contact = item
         contact.update(contactEmail_values[index])
         contact_values.append(contact)
-    contributor_values = [
-        {
-            "contributorName": {
-                "typeName": "contributorName",
-                "multiple": False,
-                "typeClass": "primitive",
-                "value": x,
-            }
-        }
-        for x in contributor_values_raw
-    ]
-    software_values = [
-        {
-            "softwareName": {
-                "typeName": "softwareName",
-                "multiple": False,
-                "typeClass": "primitive",
-                "value": software,
-            }
-        }
-        for software in software_values_raw
-    ]
     # return all values
-    return (
+    return [
         author_values,
         keyword_values,
         publication_values,
         contact_values,
         contributor_values,
         software_values,
-    )
+    ]
+    
 
 
 def dv_json(f):
-    
     dv_metadata = {
         "datasetVersion": {
             "licence": f.licence_value,
