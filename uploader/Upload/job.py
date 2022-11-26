@@ -111,6 +111,7 @@ class CreateTransferJob(Job):
 
         # Get file permission metadata, if it exists, and write it as a
         # metadata.csv file to the metadata directory
+        # TODO: THis needs to be updated to use the permissions object
         permission_file_path = os.path.join(self.params["destination"], permissions.PERMISSION_METADATA_FILENAME)
 
         if os.path.isfile(permission_file_path):
