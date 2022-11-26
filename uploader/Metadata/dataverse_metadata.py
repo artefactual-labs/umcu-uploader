@@ -4,70 +4,92 @@ import os
 from uploader.Metadata import DATAVERSE_METADATA_FILENAME
 from uploader.Transfer import helpers
 
-def create_values (values, template):
+
+def create_values(values, template):
     "takes a list of values and a template and creates a list of dicts"
     dv_value = [template[k].update({"value": v}) for (k, v) in values.items()]
     return dv_value
 
 
 def parse_form_data(f):
-    author_values = create_values(f.author, {
+    author_values = create_values(
+        f.author,
+        {
             "authorName": {
                 "typeName": "authorName",
                 "multiple": False,
                 "typeClass": "primitive",
                 "value": "",
             }
-        })
-    contactName_values = create_values(f.contactName, {
+        },
+    )
+    contactName_values = create_values(
+        f.contactName,
+        {
             "datasetContactName": {
                 "typeName": "datasetContactName",
                 "multiple": False,
                 "typeClass": "primitive",
                 "value": "",
             }
-        })
-    contributor_values = create_values(f.contributor, {
+        },
+    )
+    contributor_values = create_values(
+        f.contributor,
+        {
             "contributorName": {
                 "typeName": "contributorName",
                 "multiple": False,
                 "typeClass": "primitive",
                 "value": "",
             }
-        })
-    publication_values = create_values(f.publication,  {
+        },
+    )
+    publication_values = create_values(
+        f.publication,
+        {
             "publicationCitation": {
                 "typeName": "publicationCitation",
                 "multiple": False,
                 "typeClass": "primitive",
                 "value": "",
             }
-        })
-    contactEmail_values = create_values(f.contactEmail,  {
+        },
+    )
+    contactEmail_values = create_values(
+        f.contactEmail,
+        {
             "datasetContactEmail": {
                 "typeName": "datasetContactEmail",
                 "multiple": False,
                 "typeClass": "primitive",
                 "value": "",
             }
-        })
-    software_values = create_values(f.software,  {
+        },
+    )
+    software_values = create_values(
+        f.software,
+        {
             "softwareName": {
                 "typeName": "softwareName",
                 "multiple": False,
                 "typeClass": "primitive",
                 "value": "",
             }
-        })
-    keyword_values = create_values(f.keyword, {
+        },
+    )
+    keyword_values = create_values(
+        f.keyword,
+        {
             "keywordValue": {
                 "typeName": "keywordValue",
                 "multiple": False,
                 "typeClass": "primitive",
                 "value": "",
             }
-        })
- 
+        },
+    )
+
     contact_values = []
     for index, item in enumerate(contactName_values):
         contact = item
@@ -82,7 +104,6 @@ def parse_form_data(f):
         contributor_values,
         software_values,
     ]
-    
 
 
 def dv_json(f):

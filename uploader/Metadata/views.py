@@ -42,7 +42,7 @@ def index(req_path):
         ]
 
         # ------------------
-        FORM = {
+        form = {
             "datarangeStart": date_start_value,
             "datarangeEnd": date_end_value,
             "dataType": data_type_values,
@@ -61,7 +61,7 @@ def index(req_path):
             "description": description_value,
         }
         # ------------------
-        dv_parsed_formdata = dataverse_metadata.parse_form_data(FORM)
+        dv_parsed_formdata = dataverse_metadata.parse_form_data(form)
         [
             author_values,
             keyword_values,

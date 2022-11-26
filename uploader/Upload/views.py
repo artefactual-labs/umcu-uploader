@@ -5,9 +5,7 @@ from flask import (
     Blueprint,
     current_app,
     render_template,
-    url_for,
     request,
-    redirect,
     flash,
 )
 from flask_api import status
@@ -30,13 +28,13 @@ def index():
         "transfer_directory": transfer_dir,
         "transfer_file_count": transfer_file_count,
         "transfer_total_file_size": transfer_total_file_size,
-        "request": request
+        "request": request,
     }
 
     # Assemble division options and add to template context
     division_options = []
-    for division_id in current_app.config['DIVISIONS'].keys():
-        division = current_app.config['DIVISIONS'][division_id]
+    for division_id in current_app.config["DIVISIONS"].keys():
+        division = current_app.config["DIVISIONS"][division_id]
         division_options.append({"id": division_id, "name": division["name"]})
 
     context["division_options"] = division_options
@@ -44,7 +42,7 @@ def index():
     context["transfer_source_dir"] = current_app.config["TRANSFER_SOURCE_DIRECTORY"]
 
     # Handle form submission
-    if request.method == 'POST':
+    if request.method == "POST":
         context["transfer_name"] = request.form["transfer_name"]
         division_id = request.form["division_id"]
 
@@ -59,14 +57,18 @@ def index():
 
         # Perform copy, asynchronously, to transfer source directory
         if not context["transfer_source_dir"]:
-            context["transfer_source_dir"] = current_app.config['DIVISIONS'][division_id]['transfer_source_directory']
+            context["transfer_source_dir"] = current_app.config["DIVISIONS"][
+                division_id
+            ]["transfer_source_directory"]
 
         if not os.path.isdir(context["transfer_source_dir"]):
             context["transfer_source_dir"] = None
 
             flash("Unable to transfer source directory as it doesn't exist.", "danger")
         else:
-            destination_dir = os.path.join(context["transfer_source_dir"], context["transfer_name"])
+            destination_dir = os.path.join(
+                context["transfer_source_dir"], context["transfer_name"]
+            )
 
             u = job.CreateTransferJob()
             u.params({"source": transfer_dir, "destination": destination_dir})
@@ -74,7 +76,4 @@ def index():
 
             flash("Copy to transfer source directory started.", "primary")
 
-    return render_template(
-        "upload.html",
-        **context
-    )
+    return render_template("upload.html", **context)
