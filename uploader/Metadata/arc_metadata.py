@@ -1,7 +1,7 @@
 import os
 import json
 
-METADATA_FILEPATH = os.path.join(os.path.dirname("metadata"), "metadata.json")
+METADATA_FILENAME =  "metadata.json"
 
 
 def create_metadata(form, permissions):
@@ -9,31 +9,27 @@ def create_metadata(form, permissions):
     server = "https://dataverse.nl/"
     if os.getenv("DEBUG") == "True":
         server = "https://demo.dataverse.nl/"
-    if form is None:
+    if form is None | permissions is None:
         # TODO: better error here.
-        raise TypeError("Expected form to be set, got None")
+        raise TypeError("Expected form and permissions to be set,\ngot form: %s \n\npermissions: %s" % (form, permissions))
     root: str = "objects/"
     metadata = {
         "filename": root,
         "dc.title": form.title,
         "dc.creator": form.author,
         "dc.description": form.description,
-        "dc.subject": form.subject,
+        "dc.subject": form.keywords.append(form.subject),
         "dc.publisher": server + form.division,
-        "dc.dateSubmitted": form.date,
+        "dc.dateSubmitted": form.dateOfDeposit,
         "dc.language": "English",
-        "dc.coverage": form.startDate + ", " + form.endDate,
-        "dc.temporal": form.startDate
-        - form.retention[0]
-        + ", "
-        + form.endDate
-        - form.retention[1],
+        "dc.coverage": form.daterangeStart + ", " + form.daterangeEnd,
+        f"dc.temporal": f"{form.retention[0]}, {form.retention[1]}",
         "dc.rights": form.license,
         "dc.type": form.kindOfData,
-        "dc.isReferencedBy": form.publicationCitation,
+        "dc.isReferencedBy": form.publication,
         "other.researchType": form.researchType,
         "other.depositor": form.depositor,
-        "other.depositor": form.depositor,
+        "other.contributor": form.contributor,
     }
     permissions = [
         {
@@ -43,6 +39,6 @@ def create_metadata(form, permissions):
         for filename in permissions.keys()
     ]
 
-    with open("metadata.json", "w") as f:
+    with open(METADATA_FILENAME, "w") as f:
         json.dump(metadata, f, indent=4)
     return None

@@ -7,7 +7,7 @@ from uploader.Transfer import helpers
 
 def create_values(values, template):
     "takes a list of values and a template and creates a list of dicts"
-    dv_value = [template[k].update({"value": v}) for (k, v) in values.items()]
+    dv_value = [template[template.keys()[0]].update({"value": v}) for v in values]
     return dv_value
 
 
@@ -79,7 +79,7 @@ def parse_form_data(f):
         },
     )
     keyword_values = create_values(
-        f.keyword,
+        f.keywords,
         {
             "keywordValue": {
                 "typeName": "keywordValue",
@@ -109,7 +109,7 @@ def parse_form_data(f):
 def dv_json(f):
     dv_metadata = {
         "datasetVersion": {
-            "licence": f.licence_value,
+            "licence": f.licence,
             "termsOfUse": f.licence_description,
             "metadataBlocks": {
                 "citation": {
@@ -119,25 +119,25 @@ def dv_json(f):
                             "typeName": "publication",
                             "multiple": True,
                             "typeClass": "compound",
-                            "value": f.publication_values,
+                            "value": f.publications,
                         },
                         {
                             "typeName": "author",
                             "typeClass": "compound",
                             "multiple": True,
-                            "value": f.author_values,
+                            "value": f.authors,
                         },
                         {
                             "typeName": "keyword",
                             "typeClass": "compound",
                             "multiple": True,
-                            "value": f.keyword_values,
+                            "value": f.keywords,
                         },
                         {
                             "typeName": "subject",
                             "typeClass": "controlledVocabulary",
                             "multiple": True,
-                            "value": f.subject_value,
+                            "value": f.subject,
                         },
                         {
                             "typeName": "language",
@@ -149,7 +149,7 @@ def dv_json(f):
                             "typeName": "title",
                             "multiple": False,
                             "typeClass": "primitive",
-                            "value": f.title_value,
+                            "value": f.title,
                         },
                         {
                             "typeName": "dsDescription",
@@ -161,7 +161,7 @@ def dv_json(f):
                                         "typeName": "dsDescriptionValue",
                                         "multiple": False,
                                         "typeClass": "primitive",
-                                        "value": f.description_value,
+                                        "value": f.description,
                                     },
                                 }
                             ],
@@ -170,25 +170,25 @@ def dv_json(f):
                             "typeName": "contributor",
                             "typeClass": "compound",
                             "multiple": True,
-                            "value": f.contributor_values,
+                            "value": f.contributors,
                         },
                         {
                             "typeName": "datasetContact",
                             "multiple": True,
                             "typeClass": "compound",
-                            "value": f.contact_values,
+                            "value": f.contacts,
                         },
                         {
                             "typeName": "software",
                             "multiple": True,
                             "typeClass": "compound",
-                            "value": f.software_values,
+                            "value": f.software,
                         },
                         {
                             "typeName": "dateOfDeposit",
                             "typeClass": "primitive",
                             "multiple": False,
-                            "value": f.date_of_deposit_value,
+                            "value": f.date_of_deposit,
                         },
                         {
                             "typeName": "timePeriodCovered",
@@ -200,13 +200,13 @@ def dv_json(f):
                                         "typeName": "timePeriodCoveredStart",
                                         "multiple": False,
                                         "typeClass": "primitive",
-                                        "value": f.date_start_value,
+                                        "value": f.date_start,
                                     },
                                     "timePeriodCoveredEnd": {
                                         "typeName": "timePeriodCoveredEnd",
                                         "multiple": False,
                                         "typeClass": "primitive",
-                                        "value": f.date_end_value,
+                                        "value": f.date_end,
                                     },
                                 },
                             ],
@@ -215,13 +215,13 @@ def dv_json(f):
                             "typeName": "kindOfData",
                             "multiple": True,
                             "typeClass": "primitive",
-                            "value": f.data_type_values,
+                            "value": f.data_types,
                         },
                         {
                             "typeName": "depositor",
                             "multiple": False,
                             "typeClass": "primitive",
-                            "value": f.depositorName_value,
+                            "value": f.depositorName,
                         },
                     ],
                 },

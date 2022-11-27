@@ -12,6 +12,8 @@ from flask_api import status
 
 from uploader.Upload import job
 from uploader.Transfer import helpers
+from uploader.Navigator.views import perms
+from uploader.Metadata.views import form
 
 upload = Blueprint("upload", __name__, template_folder="templates")
 
@@ -71,7 +73,7 @@ def index():
             )
 
             u = job.CreateTransferJob()
-            u.params({"source": transfer_dir, "destination": destination_dir})
+            u.params({"source": transfer_dir, "destination": destination_dir, "permissions": perms, "form": form})
             u.start()
 
             flash("Copy to transfer source directory started.", "primary")

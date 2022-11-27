@@ -2,3 +2,4 @@ python-magic
 Flask
 Flask-API
 pysqlite3
+pyyaml

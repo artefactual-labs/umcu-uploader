@@ -6,7 +6,7 @@ from flask import Blueprint, render_template, request, session, flash, redirect,
 from flask_api import status
 from werkzeug.utils import secure_filename
 
-from uploader.Navigator import perms
+from uploader.Navigator.views import perms
 from uploader.Transfer import helpers
 
 transfer = Blueprint("transfer", __name__, template_folder="templates")
