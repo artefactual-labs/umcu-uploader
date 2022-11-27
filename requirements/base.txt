@@ -2,3 +2,4 @@ Flask
 Flask-API
 natsort
 pysqlite3
+pyyaml

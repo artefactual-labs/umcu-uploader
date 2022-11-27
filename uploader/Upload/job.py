@@ -6,7 +6,8 @@ import threading
 import sqlite3
 
 from uploader.Metadata import DATAVERSE_METADATA_FILENAME
-from uploader.Navigator import permissions
+from uploader.Metadata import arc_metadata
+from uploader.Metadata.arc_metadata import METADATA_FILENAME
 
 
 class Job(threading.Thread):
@@ -87,12 +88,13 @@ class Job(threading.Thread):
             res = cur.execute("DELETE FROM job WHERE user_id=?", (user_id,))
 
         self.conn.commit()
+        #TODO: find whether returning res makes sense, res is currently a unaccessible object
 
 
 class CreateTransferJob(Job):
+    #NOTE: instead of params object why not have self.form, self.permissions, self.path, self.destination?
     def run(self):
         super().begin("copy", self.params)
-
         # Copy transfer files to transfer source location
         shutil.copytree(self.params["source"], self.params["destination"])
 
@@ -109,22 +111,15 @@ class CreateTransferJob(Job):
             shutil.copy(main_metadata_filepath, metadata_directory)
             os.remove(main_metadata_filepath)
 
-        # Get file permission metadata, if it exists, and write it as a
-        # metadata.csv file to the metadata directory
-        # TODO: THis needs to be updated to use the permissions object
-        permission_file_path = os.path.join(self.params["destination"], permissions.PERMISSION_METADATA_FILENAME)
-
-        if os.path.isfile(permission_file_path):
-            # Load file permission metadata
-            csv_dest_filepath = os.path.join(metadata_directory, "metadata.csv")
-
-            perms = permissions.FilePermissions(permission_file_path)
-            perms.load()
-
-            # Write file permission metadata to metadata.csv in metadata directory
-            perms.write_permissions_to_csv(self.params["destination"], csv_dest_filepath)
-
-            # Remove old file permission metadata file
-            os.remove(permission_file_path)
-
+        # Get file archivematica metadata file, if it exists, to metadata directory
+        archivematica_metadata_filepath = os.path.join(self.params["destination"], METADATA_FILENAME)
+        
+        # create archivematica metadata file
+        arc_metadata.create_metadata(self.params["form"], self.params["permissions"])
+        # Move main metadata file, if it exists, to metadata directory
+        if os.path.isfile(archivematica_metadata_filepath):
+            shutil.copy(archivematica_metadata_filepath, metadata_directory)
+            os.remove(archivematica_metadata_filepath)
+        
+        # TODO: This needs to be updated to use the permissions object
         super().end()
