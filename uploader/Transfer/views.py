@@ -3,7 +3,6 @@
 import os
 
 from flask import Blueprint, render_template, request, session, flash, redirect, url_for
-from flask_api import status
 from werkzeug.utils import secure_filename
 
 from uploader.Navigator.views import perms
@@ -59,6 +58,7 @@ def upload():
     transfer_dir = helpers.potential_dir_name(
         os.path.join(data_dir, top_level_directory)
     )
+    # NOTE: application breaks here, file not found error; No such file or directory: '/tmp/test_folder_1/G_Output/1_Publication'
     os.mkdir(transfer_dir)
 
     # Cycle through file data, create necessary subdirectories, and save files
@@ -92,8 +92,9 @@ def upload():
             f.write(file.read())
 
     # Set default permissions
-    # TODO:  
-
+        for file in helpers.get_all_filepaths_in_directory(transfer_dir, False):
+            entry_path = os.path.join(transfer_dir, file)
+            perms[entry_path] = "private"
     # Change transfer directory
     session["transfer_directory"] = transfer_dir
     session["transfer_name"] = top_level_directory

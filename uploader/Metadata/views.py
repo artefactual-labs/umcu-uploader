@@ -6,6 +6,7 @@ from uploader.Metadata import helpers
 metadata = Blueprint("metadata", __name__, template_folder="rawlates")
 form = {}
 
+
 @metadata.route("/", methods=["GET", "POST"], defaults={"req_path": ""})
 def index(req_path):
     if request.method == "POST":
@@ -32,7 +33,7 @@ def index(req_path):
         software_values_raw = helpers.get_raw_data(form_data, "software")
         keyword_values_raw = helpers.get_raw_data(form_data, "keyword")
 
-        retention_value = helpers.get_retention(date_end_value,researchType_value)
+        retention_value = helpers.get_retention(date_end_value, researchType_value)
         # ------------------
         form = {
             "retention": retention_value,
