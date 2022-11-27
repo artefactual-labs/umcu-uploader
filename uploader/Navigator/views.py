@@ -10,11 +10,9 @@ from flask import (
     redirect,
     abort,
     render_template,
-    session,
     send_file,
     request,
     flash,
-    current_app,
     url_for,
 )
 import magic
@@ -65,9 +63,7 @@ def index(req_path):
             )
 
             if form_field_name in request.form:
-                permission = request.form[form_field_name]
-
-                perms[entry_path] = permission
+                perms[entry_path] = request.form[form_field_name]
 
         flash("Updated.", "primary")
         redirect(request.path)

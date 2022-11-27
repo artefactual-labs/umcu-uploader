@@ -5,13 +5,13 @@ from uploader.Metadata import DATAVERSE_METADATA_FILENAME
 from uploader.Transfer import helpers
 
 
-def create_values(values, template):
+def create_values(values: list, template: dict) -> list:
     "takes a list of values and a template and creates a list of dicts"
     dv_value = [template[template.keys()[0]].update({"value": v}) for v in values]
     return dv_value
 
 
-def parse_form_data(f):
+def parse_form_data(f: dict) -> list:
     author_values = create_values(
         f.author,
         {
@@ -106,7 +106,7 @@ def parse_form_data(f):
     ]
 
 
-def dv_json(f):
+def dv_json(f: dict) -> None:
     dv_metadata = {
         "datasetVersion": {
             "licence": f.licence,

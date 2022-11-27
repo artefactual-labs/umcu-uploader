@@ -1,17 +1,20 @@
 import os
 import json
 
-METADATA_FILENAME =  "metadata.json"
+METADATA_FILENAME = "metadata.json"
 
 
-def create_metadata(form, permissions):
+def create_metadata(form: dict, permissions: dict) -> None:
     """create archivematica metadata file"""
     server = "https://dataverse.nl/"
     if os.getenv("DEBUG") == "True":
         server = "https://demo.dataverse.nl/"
     if form is None | permissions is None:
         # TODO: better error here.
-        raise TypeError("Expected form and permissions to be set,\ngot form: %s \n\npermissions: %s" % (form, permissions))
+        raise TypeError(
+            "Expected form and permissions to be set,\ngot form: %s \n\npermissions: %s"
+            % (form, permissions)
+        )
     root: str = "objects/"
     metadata = {
         "filename": root,
@@ -22,8 +25,9 @@ def create_metadata(form, permissions):
         "dc.publisher": server + form.division,
         "dc.dateSubmitted": form.dateOfDeposit,
         "dc.language": "English",
-        "dc.coverage": form.daterangeStart + ", " + form.daterangeEnd,
-        f"dc.temporal": f"{form.retention[0]}, {form.retention[1]}",
+        "dc.temporal": form.daterangeStart,
+        "other.researchProjectEndDate": form.daterangeEnd,
+        "dc.coverage": f"start={form.daterangeEnd}, end={form.retention}",
         "dc.rights": form.license,
         "dc.type": form.kindOfData,
         "dc.isReferencedBy": form.publication,
