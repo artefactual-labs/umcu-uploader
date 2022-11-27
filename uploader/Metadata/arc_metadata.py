@@ -6,9 +6,9 @@ METADATA_FILENAME = "metadata.json"
 
 def create_metadata(form: dict, permissions: dict) -> None:
     """create archivematica metadata file"""
-    server = "https://dataverse.nl/"
+    server = "https://dataverse.nl/dataverse/"
     if os.getenv("DEBUG") == "True":
-        server = "https://demo.dataverse.nl/"
+        server = "https://demo.dataverse.nl/dataverse/"
     if form is None | permissions is None:
         # TODO: better error here.
         raise TypeError(
