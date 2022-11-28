@@ -3,7 +3,7 @@ from flask import Blueprint, request, render_template, url_for, redirect, flash
 from uploader.Metadata import dataverse_metadata
 from uploader.Metadata import helpers
 
-metadata = Blueprint("metadata", __name__, template_folder="rawlates")
+metadata = Blueprint("metadata", __name__, template_folder="templates")
 form = {}
 
 
