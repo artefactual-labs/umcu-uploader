@@ -32,7 +32,7 @@ def upload():
     files = request.files.getlist("files")
 
     # Parse top-level dircetory from first file uploaded
-    top_level_directory = os.path.split(files[0].filename)[0]
+    top_level_directory = files[0].filename.split(os.path.sep)[0]
 
     # Create unique directory
     data_dir = helpers.get_data_directory()
