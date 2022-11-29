@@ -1,6 +1,10 @@
 Flask
 Flask-API
+metsrw
 natsort
 pysqlite3
 pyaml
 black
+pyunpack
+pyDataverse
+requests
