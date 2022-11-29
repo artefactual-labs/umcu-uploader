@@ -79,14 +79,13 @@ def index(req_path):
         }
 
         # Apply rules for preventing permission setting
-        if req_path == "" and file == permissions.PERMISSION_METADATA_FILENAME:
-            entry['settable'] = False
-
-        if req_path == "" and file == DATAVERSE_METADATA_FILENAME:
-            entry['settable'] = False
-
-        if not entry["is_dir"]:
-            entry['settable'] = False
+        entry["settable"] = not (
+            req_path == ""
+            and (
+                file == DATAVERSE_METADATA_FILENAME
+                or file == permissions.PERMISSION_METADATA_FILENAME
+            )
+        )
 
         if perms.get(entry_path) is not None:
             entry["permission"] = perms.get(entry_path)
