@@ -90,19 +90,25 @@ Configuration is specified, using YAML, in `/etc/umcu-uploader.yaml`. The
 various configuration settings are detailed below:
 
 
-| Setting                   | Description                                                          | Default                              |
-| ------------------------- | -------------------------------------------------------------------- | ------------------------------------ |
-| host                      | Host to run app on                                                   | 0.0.0.0                              |
-| port                      | HTTP port to listen on                                               | 5000                                 |
-| debug                     | If `True`, run with built-in debugger                                | False                                |
-| secret_key                | Key used to sign cookies[1]                                          | you-shall-not-pass🧙<200d>♂️          |
-| data_directory            | Directory in which use files will be stored                          | *system temp directory*              |
-| transfer_source_directory | Archivematica transfer source directory                              | *none*                               |
-| dataverse_server          | Dataverse server to upload to                                        | https://dataverse.nl/dataverse/      |
-| dataverse_demo_server     | Demo Dataverse server to upload to                                   | https://demo.dataverse.nl/dataverse/ |
-| demo_mode                 | If `True`, run using demo Dataverse server                           | True                                 |
-| depositor_name            | Name of depositor                                                    | ANON                                 |
-| divisions                 | Division-specific Archivematica transfer source directories, etc.[2] | *none*                               |
+| Setting                            | Description                                                          | Default                              |
+| ---------------------------------- | -------------------------------------------------------------------- | ------------------------------------ |
+| host                               | Host to run app on                                                   | 0.0.0.0                              |
+| port                               | HTTP port to listen on                                               | 5000                                 |
+| debug                              | If `True`, run with built-in debugger                                | False                                |
+| secret_key                         | Key used to sign cookies[1]                                          | you-shall-not-pass🧙<200d>♂️          |
+| data_directory                     | Directory in which use files will be stored                          | *system temp directory*              |
+| transfer_source_directory          | Archivematica transfer source directory                              | *none*                               |
+| dataverse_server                   | Dataverse server to upload to                                        | https://dataverse.nl/dataverse/      |
+| dataverse_demo_server              | Demo Dataverse server to upload to                                   | https://demo.dataverse.nl/dataverse/ |
+| dataverse_api_key                  | Dataverse API key                                                    | *none*                               |
+| demo_mode                          | If `True`, run using demo Dataverse server                           | True                                 |
+| depositor_name                     | Name of depositor                                                    | ANON                                 |
+| divisions                          | Division-specific Archivematica transfer source directories, etc.[2] | *none*                               |
+| storage_server_url                 | Archivematica Storage Server URL                                     | *none*                               |
+| storage_server_user                | Archivematica Storage Server username                                | *none*                               |
+| storage_server_api_key             | Archivematica Storage Server API key                                 | *none*                               |
+| storage_server_basic_auth_user     | Archivematica Storage Server basic auth user                         | *none*                               |
+| storage_server_basic_auth_password | Archivematica Storage Server basic auth password                     | *none*                               |
 
 
 [1] Cookie signing details: https://stackoverflow.com/questions/22463939/demystify-flask-app-secret-key

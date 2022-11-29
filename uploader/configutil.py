@@ -15,3 +15,12 @@ def set_config_from_yaml(config, config_fields, config_filepath):
     for field_name in config_fields.keys():
         if field_name in settings_config:
             setattr(config, field_name.upper(), settings_config[field_name])
+
+
+def config_subset_dict(config, settings):
+    subset = {}
+
+    for setting in settings:
+        subset[setting] = config[setting]
+
+    return subset

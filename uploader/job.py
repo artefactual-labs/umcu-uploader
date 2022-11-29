@@ -41,6 +41,7 @@ class Job(threading.Thread):
                 job_type TEXT, \
                 params TEXT, \
                 error TEXT, \
+                error_code INTEGER, \
                 complete INT \
             )"
         )
@@ -56,13 +57,14 @@ class Job(threading.Thread):
 
         self.id = cur.lastrowid
 
-    def error(self, error):
+    def error(self, error, error_code=0):
         # Note error
         cur = self.__conn.cursor()
         cur.execute(
-            "UPDATE job SET error=?, complete=1 WHERE id=?",
+            "UPDATE job SET error=?, error_code=?, complete=1 WHERE id=?",
             (
                 error,
+                error_code,
                 self.id,
             ),
         )

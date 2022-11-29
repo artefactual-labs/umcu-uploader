@@ -1,0 +1,101 @@
+# -*- coding: utf-8 -*-
+
+import os
+import re
+import shutil
+import tempfile
+
+import metsrw
+import requests
+from requests.auth import HTTPBasicAuth
+
+
+def get_basic_auth_config(config):
+    auth = None
+
+    ss_http_user = config["STORAGE_SERVER_BASIC_AUTH_USER"]
+    ss_http_password = config["STORAGE_SERVER_BASIC_AUTH_PASSWORD"]
+
+    if ss_http_user is not None and ss_http_password is not None:
+        auth = HTTPBasicAuth(ss_http_user, ss_http_password)
+
+    return auth
+
+
+def download_aip(uuid, config):
+    # Required parameters for storage server access
+    url = f"{config['STORAGE_SERVER_URL']}/api/v2/file/{uuid}/download/"
+
+    params = {
+        "username": config["STORAGE_SERVER_USER"],
+        "api_key": config["STORAGE_SERVER_API_KEY"],
+    }
+
+    # Make request to storage server
+    response = requests.get(
+        url, params=params, auth=get_basic_auth_config(config), stream=True
+    )
+
+    if response.status_code == 200:
+        # Assemble filename
+        try:
+            local_filename = re.findall(
+                'filename="(.+)"', response.headers["content-disposition"]
+            )[0]
+        except KeyError:
+            # NOTE: assuming that packages are always stored as .7z
+            local_filename = "package-{}.7z".format(uuid)
+
+        local_filename = os.path.join(tempfile.gettempdir(), local_filename)
+
+        # Download AIP
+        with open(local_filename, "wb") as package:
+            for chunk in response.iter_content(chunk_size=1024):
+                if chunk:
+                    package.write(chunk)
+
+        return local_filename
+
+    return None
+
+
+def populate_dataverse_dir(uuid, aip_directory, dataverse_directory):
+    mets_filename = f"METS.{uuid}.xml"
+    mets_filepath = os.path.join(aip_directory, "data", mets_filename)
+
+    mets = metsrw.METSDocument.fromfile(mets_filepath)
+    files = mets.all_files()
+
+    # Copy files to Dataverse directory
+    for aipfile in files:
+        if aipfile.type == "Item":
+            file_subpath = aipfile.path[8:]
+
+            # Assemble destination subdirectory and path
+            source_path = os.path.join(aip_directory, "data", "objects", file_subpath)
+
+            dest_path = os.path.join(dataverse_directory, file_subpath)
+            dest_path_components = os.path.split(dest_path)
+
+            # Create subdir(s) if necessary
+            if not os.path.isdir(dest_path_components[0]):
+                os.makedirs(dest_path_components[0])
+
+            # Copy file
+            shutil.copy(source_path, dest_path_components[0])
+
+
+def find_dv_metadata_json_file(uuid, aip_directory):
+    mets_filename = f"METS.{uuid}.xml"
+    mets_filepath = os.path.join(aip_directory, "data", mets_filename)
+
+    mets = metsrw.METSDocument.fromfile(mets_filepath)
+    files = mets.all_files()
+
+    for aipfile in files:
+        if (
+            aipfile.type == "Item"
+            and aipfile.get_path()
+            and aipfile.get_path().endswith("/dv_metadata.json")
+        ):
+            return aipfile.get_path()
