@@ -20,6 +20,7 @@ def index():
     )
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     context = {
         "transfer_dir": transfer_dir,
         "transfer_file_count": transfer_file_count,
@@ -31,13 +32,18 @@ def index():
 
     return render_template('transfer.html', **context)
 =======
+=======
+>>>>>>> e7056435bb4934e0aec2d80dd3fe0e8abf9e999d
     return render_template(
         "transfer.html",
         transfer_directory=transfer_dir,
         transfer_file_count=transfer_file_count,
         transfer_total_file_size=transfer_total_file_size,
     )
+<<<<<<< HEAD
 >>>>>>> bcafe21 (doing the big rewrite)
+=======
+>>>>>>> e7056435bb4934e0aec2d80dd3fe0e8abf9e999d
 
 
 @transfer.route("/upload", methods=["POST"])
@@ -83,12 +89,17 @@ def upload():
         filepath = os.path.join(subdir, filename)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         # Write to file
         with open(filepath, 'wb') as f:
 =======
         # Write to file and set permissions
         with open(filepath, "wb") as f:
 >>>>>>> bcafe21 (doing the big rewrite)
+=======
+        # Write to file and set permissions
+        with open(filepath, "wb") as f:
+>>>>>>> e7056435bb4934e0aec2d80dd3fe0e8abf9e999d
             f.write(file.read())
 
     # Set default permissions

@@ -87,24 +87,14 @@ def index(req_path):
         ):
             entry["settable"] = False
 
-<<<<<<< HEAD
         if not entry["is_dir"]:
             entry['settable'] = False
-=======
-        if os.path.isdir(entry_path):
-            entry["settable"] = False
->>>>>>> bcafe21 (doing the big rewrite)
 
         if not entry["is_dir"]:
             entry["mimetype"] = magic.from_file(entry_path, mime=True)
 
-<<<<<<< HEAD
         if perms.get(entry_path) is not None:
             entry["permission"] = perms.get(entry_path)
-=======
-        if perms[entry_path] is not None:
-            entry["permission"] = perms[entry_path]
->>>>>>> bcafe21 (doing the big rewrite)
 
         entries.append(entry)
 
