@@ -13,7 +13,7 @@ if os.path.isfile(admin_config_filepath):
 class Config:
     # Be sure to set a secure secret key for production.
     SECRET_KEY = os.getenv("SECRET_KEY", "you-shall-not-pass🧙‍♂️")
-
+    DEPOSITOR_NAME = os.getenv("DEPOSITOR_NAME", "ANON")
     DATA_DIRECTORY = os.getenv("DATA_DIRECTORY")
     TRANSFER_SOURCE_DIRECTORY = os.getenv("TRANSFER_SOURCE_DIRECTORY")
     DIVISIONS = {} # Populated by admin configuration

@@ -25,4 +25,3 @@ def get_retention(date: str, researchType: str) -> str:
 def get_raw_data(data: dict, name: str) -> list:
     list = [y for x, y in data.items() if x.startswith(name)]
     return list
-

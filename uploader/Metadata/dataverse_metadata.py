@@ -237,4 +237,3 @@ def dv_json(f: dict) -> None:
     )
     with open(filepath, "w") as dv_metadata_file:
         json.dump(dv_metadata, dv_metadata_file, indent=4)
-

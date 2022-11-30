@@ -1,14 +1,14 @@
 import os
 import json
 from config import Config
+
 METADATA_FILENAME = "metadata.json"
 
-# TODO: create a publish dataset function to recieve a dataset id
+
 def create_metadata(form: dict, permissions: dict) -> None:
     """create archivematica metadata file"""
-    
+
     if form is None | permissions is None:
-        # TODO: better error here.
         raise TypeError(
             "Expected form and permissions to be set,\ngot form: %s \n\npermissions: %s"
             % (form, permissions)
@@ -25,7 +25,9 @@ def create_metadata(form: dict, permissions: dict) -> None:
         "dc.language": "English",
         "dc.temporal": form["daterangeStart"],
         "other.researchProjectEndDate": form["researchEndDate"],
-        "dc.coverage": f"start={form["researchEndDate"]}, end={form["retention"]}",
+        "dc.coverage": "start={}, end={}".format(
+            form["researchEndDate"], form["retention"]
+        ),
         "dc.rights": form["license"],
         "dc.type": form["kindOfData"],
         "dc.isReferencedBy": form["publication"],
@@ -44,4 +46,3 @@ def create_metadata(form: dict, permissions: dict) -> None:
     with open(METADATA_FILENAME, "w") as f:
         json.dump(metadata, f, indent=4)
     return None
-

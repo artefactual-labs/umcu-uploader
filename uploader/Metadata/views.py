@@ -2,6 +2,7 @@
 from flask import Blueprint, request, render_template, url_for, redirect, flash
 from uploader.Metadata import dataverse_metadata
 from uploader.Metadata import helpers
+from config import Config
 
 metadata = Blueprint("metadata", __name__, template_folder="templates")
 form = {}
@@ -13,14 +14,14 @@ def index(req_path):
         form_data = request.form
         # convert form data to dataverse json api format
         # https://guides.dataverse.org/en/latest/_downloads/4e04c8120d51efab20e480c6427f139c/dataset-create-new-all-default-fields.json
-        depositorName_value = "test"
+        depositorName_value = Config.DEPOSITOR_NAME
         subject_value = ["Medicine, Health and Life Sciences"]
         description_value = form_data["dsDescription"]
         title_value = form_data["title"]
         licence_value = form_data["licenceType"]
         researchType_value = form_data["researchType"]
         licence_description = "null"
-        
+
         date_of_deposit_value = form_data["depositDate"]
         date_start_value = form_data["dateRangeStart"]
         date_end_value = form_data["dateRangeEnd"]
@@ -35,7 +36,9 @@ def index(req_path):
         software_values_raw = helpers.get_raw_data(form_data, "software")
         keyword_values_raw = helpers.get_raw_data(form_data, "keyword")
 
-        retention_value = helpers.get_retention(researchEndDate_value, researchType_value)
+        retention_value = helpers.get_retention(
+            researchEndDate_value, researchType_value
+        )
         # ------------------
         form = {
             "retention": retention_value,
@@ -89,7 +92,6 @@ def index(req_path):
 
         dataverse_metadata.dv_json(dv_form)
 
-        # TODO: add error handling
         flash("Metadata saved.", "primary")
         return redirect(url_for("metadata.updated"))
 
@@ -98,6 +100,5 @@ def index(req_path):
 
 @metadata.route("/updated", methods=["GET"])
 def updated():
-    # TODO: this is a raworary solution to show the user that the metadata has been saved
     # This will be replaced with a proper success page or alternative that allows the user to change the metadata
     return render_template("done.html")
