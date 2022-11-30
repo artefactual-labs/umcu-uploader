@@ -20,10 +20,11 @@ def index(req_path):
         licence_value = form_data["licenceType"]
         researchType_value = form_data["researchType"]
         licence_description = "null"
-        date_of_deposit_value = form_data.get("depositDate")
-        date_start_value = form_data.get("dateRangeStart")
-        date_end_value = form_data.get("dateRangeEnd")
-        researchEndDate_value = form_data.get("researchEndDate")
+        
+        date_of_deposit_value = form_data["depositDate"]
+        date_start_value = form_data["dateRangeStart"]
+        date_end_value = form_data["dateRangeEnd"]
+        researchEndDate_value = form_data["researchEndDate"]
 
         data_type_values = helpers.get_raw_data(form_data, "dataType")
         author_values_raw = helpers.get_raw_data(form_data, "author")
