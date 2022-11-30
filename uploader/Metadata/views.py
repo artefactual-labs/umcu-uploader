@@ -72,7 +72,7 @@ def index(req_path):
             "datarangeEnd": date_end_value,
             "dataTypes": data_type_values,
             "dateOfDeposit": date_of_deposit_value,
-            "license": licence_value,
+            "licence": licence_value,
             "contributors": contributor_values,
             "depositor": depositorName_value,
             "authors": author_values,
