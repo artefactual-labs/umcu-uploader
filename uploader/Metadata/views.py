@@ -68,8 +68,8 @@ def index(req_path):
             software_values,
         ] = dv_parsed_formdata
         dv_form = {
-            "datarangeStart": date_start_value,
-            "datarangeEnd": date_end_value,
+            "daterangeStart": date_start_value,
+            "daterangeEnd": date_end_value,
             "dataTypes": data_type_values,
             "dateOfDeposit": date_of_deposit_value,
             "licence": licence_value,
