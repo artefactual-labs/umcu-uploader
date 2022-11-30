@@ -23,6 +23,7 @@ def index(req_path):
         date_of_deposit_value = form_data.get("depositDate")
         date_start_value = form_data.get("dateRangeStart")
         date_end_value = form_data.get("dateRangeEnd")
+        researchEndDate_value = form_data.get("researchEndDate")
 
         data_type_values = helpers.get_raw_data(form_data, "dataType")
         author_values_raw = helpers.get_raw_data(form_data, "author")
@@ -33,13 +34,14 @@ def index(req_path):
         software_values_raw = helpers.get_raw_data(form_data, "software")
         keyword_values_raw = helpers.get_raw_data(form_data, "keyword")
 
-        retention_value = helpers.get_retention(date_end_value, researchType_value)
+        retention_value = helpers.get_retention(researchEndDate_value, researchType_value)
         # ------------------
         form = {
             "retention": retention_value,
             "researchType": researchType_value,
             "daterangeStart": date_start_value,
             "daterangeEnd": date_end_value,
+            "researchEndDate": researchEndDate_value,
             "kindOfData": data_type_values,
             "dateOfDeposit": date_of_deposit_value,
             "license": licence_value,
