@@ -114,7 +114,7 @@ def dv_json(f: dict) -> None:
     dv_metadata = {
         "datasetVersion": {
             "licence": f["licence"],
-            "termsOfUse": f["licence_description"],
+            "termsOfUse": f["licenceDescription"],
             "metadataBlocks": {
                 "citation": {
                     "displayName": "Citation Metadata",
