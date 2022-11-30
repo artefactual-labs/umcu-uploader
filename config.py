@@ -12,13 +12,16 @@ if os.path.isfile(admin_config_filepath):
 
 class Config:
     # Be sure to set a secure secret key for production.
-    SECRET_KEY = os.getenv("SECRET_KEY", "you-will-never-guess")
+    SECRET_KEY = os.getenv("SECRET_KEY", "you-shall-not-pass🧙‍♂️")
 
     DATA_DIRECTORY = os.getenv("DATA_DIRECTORY")
     TRANSFER_SOURCE_DIRECTORY = os.getenv("TRANSFER_SOURCE_DIRECTORY")
     DIVISIONS = {} # Populated by admin configuration
-
     DEBUG = os.getenv("DEBUG") == "True"
+    if DEBUG:
+        SERVER = "https://demo.dataverse.nl/dataverse/"
+    else:
+        SERVER = "https://dataverse.nl/dataverse/"
     TESTING = False
 
 

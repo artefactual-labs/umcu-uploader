@@ -1,14 +1,12 @@
 import os
 import json
-
+from config import Config
 METADATA_FILENAME = "metadata.json"
 
 # TODO: create a publish dataset function to recieve a dataset id
 def create_metadata(form: dict, permissions: dict) -> None:
     """create archivematica metadata file"""
-    server = "https://dataverse.nl/dataverse/"
-    if os.getenv("DEBUG") == "True":
-        server = "https://demo.dataverse.nl/dataverse/"
+    
     if form is None | permissions is None:
         # TODO: better error here.
         raise TypeError(
@@ -22,7 +20,7 @@ def create_metadata(form: dict, permissions: dict) -> None:
         "dc.creator": form["author"],
         "dc.description": form["description"],
         "dc.subject": form["keywords"].append(form["subject"]),
-        "dc.publisher": server + form["division"],
+        "dc.publisher": Config.SERVER + form["division"],
         "dc.dateSubmitted": form["dateOfDeposit"],
         "dc.language": "English",
         "dc.temporal": form["daterangeStart"],
