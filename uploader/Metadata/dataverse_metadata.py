@@ -7,13 +7,17 @@ from uploader.Transfer import helpers
 
 def create_values(values: list, template: dict) -> list:
     "takes a list of values and a template and creates a list of dicts"
-    dv_value = [template[template.keys()[0]].update({"value": v}) for v in values]
-    return dv_value
+    key = list(template.keys())[0]
+    list_of_dicts = []
+    for value in values:
+        template[key]["value"] = value
+        list_of_dicts.append(template)
+    return list_of_dicts
 
 
 def parse_form_data(f: dict) -> list:
     author_values = create_values(
-        f.author,
+        f["author"],
         {
             "authorName": {
                 "typeName": "authorName",
@@ -24,7 +28,7 @@ def parse_form_data(f: dict) -> list:
         },
     )
     contactName_values = create_values(
-        f.contactName,
+        f["contactName"],
         {
             "datasetContactName": {
                 "typeName": "datasetContactName",
@@ -35,7 +39,7 @@ def parse_form_data(f: dict) -> list:
         },
     )
     contributor_values = create_values(
-        f.contributor,
+        f["contributor"],
         {
             "contributorName": {
                 "typeName": "contributorName",
@@ -46,7 +50,7 @@ def parse_form_data(f: dict) -> list:
         },
     )
     publication_values = create_values(
-        f.publication,
+        f["publication"],
         {
             "publicationCitation": {
                 "typeName": "publicationCitation",
@@ -57,7 +61,7 @@ def parse_form_data(f: dict) -> list:
         },
     )
     contactEmail_values = create_values(
-        f.contactEmail,
+        f["contactEmail"],
         {
             "datasetContactEmail": {
                 "typeName": "datasetContactEmail",
@@ -68,7 +72,7 @@ def parse_form_data(f: dict) -> list:
         },
     )
     software_values = create_values(
-        f.software,
+        f["software"],
         {
             "softwareName": {
                 "typeName": "softwareName",
@@ -79,7 +83,7 @@ def parse_form_data(f: dict) -> list:
         },
     )
     keyword_values = create_values(
-        f.keywords,
+        f["keywords"],
         {
             "keywordValue": {
                 "typeName": "keywordValue",
@@ -109,8 +113,8 @@ def parse_form_data(f: dict) -> list:
 def dv_json(f: dict) -> None:
     dv_metadata = {
         "datasetVersion": {
-            "licence": f.licence,
-            "termsOfUse": f.licence_description,
+            "licence": f["licence"],
+            "termsOfUse": f["licence_description"],
             "metadataBlocks": {
                 "citation": {
                     "displayName": "Citation Metadata",
@@ -119,25 +123,25 @@ def dv_json(f: dict) -> None:
                             "typeName": "publication",
                             "multiple": True,
                             "typeClass": "compound",
-                            "value": f.publications,
+                            "value": f["publications"],
                         },
                         {
                             "typeName": "author",
                             "typeClass": "compound",
                             "multiple": True,
-                            "value": f.authors,
+                            "value": f["authors"],
                         },
                         {
                             "typeName": "keyword",
                             "typeClass": "compound",
                             "multiple": True,
-                            "value": f.keywords,
+                            "value": f["keywords"],
                         },
                         {
                             "typeName": "subject",
                             "typeClass": "controlledVocabulary",
                             "multiple": True,
-                            "value": f.subject,
+                            "value": f["subject"],
                         },
                         {
                             "typeName": "language",
@@ -149,7 +153,7 @@ def dv_json(f: dict) -> None:
                             "typeName": "title",
                             "multiple": False,
                             "typeClass": "primitive",
-                            "value": f.title,
+                            "value": f["title"],
                         },
                         {
                             "typeName": "dsDescription",
@@ -161,7 +165,7 @@ def dv_json(f: dict) -> None:
                                         "typeName": "dsDescriptionValue",
                                         "multiple": False,
                                         "typeClass": "primitive",
-                                        "value": f.description,
+                                        "value": f["description"],
                                     },
                                 }
                             ],
@@ -170,25 +174,25 @@ def dv_json(f: dict) -> None:
                             "typeName": "contributor",
                             "typeClass": "compound",
                             "multiple": True,
-                            "value": f.contributors,
+                            "value": f["contributors"],
                         },
                         {
                             "typeName": "datasetContact",
                             "multiple": True,
                             "typeClass": "compound",
-                            "value": f.contacts,
+                            "value": f["contacts"],
                         },
                         {
                             "typeName": "software",
                             "multiple": True,
                             "typeClass": "compound",
-                            "value": f.software,
+                            "value": f["software"],
                         },
                         {
                             "typeName": "dateOfDeposit",
                             "typeClass": "primitive",
                             "multiple": False,
-                            "value": f.date_of_deposit,
+                            "value": f["date_of_deposit"],
                         },
                         {
                             "typeName": "timePeriodCovered",
@@ -200,13 +204,13 @@ def dv_json(f: dict) -> None:
                                         "typeName": "timePeriodCoveredStart",
                                         "multiple": False,
                                         "typeClass": "primitive",
-                                        "value": f.date_start,
+                                        "value": f["date_start"],
                                     },
                                     "timePeriodCoveredEnd": {
                                         "typeName": "timePeriodCoveredEnd",
                                         "multiple": False,
                                         "typeClass": "primitive",
-                                        "value": f.date_end,
+                                        "value": f["date_end"],
                                     },
                                 },
                             ],
@@ -215,13 +219,13 @@ def dv_json(f: dict) -> None:
                             "typeName": "kindOfData",
                             "multiple": True,
                             "typeClass": "primitive",
-                            "value": f.data_types,
+                            "value": f["data_types"],
                         },
                         {
                             "typeName": "depositor",
                             "multiple": False,
                             "typeClass": "primitive",
-                            "value": f.depositorName,
+                            "value": f["depositorName"],
                         },
                     ],
                 },
