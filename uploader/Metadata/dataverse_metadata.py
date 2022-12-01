@@ -110,7 +110,7 @@ def parse_form_data(form: dict) -> list:
     ]
 
 
-def dv_json(f: dict) -> None:
+def dv_json(form: dict) -> None:
     dv_metadata = {
         "datasetVersion": {
             "licence": f["licence"],
@@ -123,25 +123,25 @@ def dv_json(f: dict) -> None:
                             "typeName": "publication",
                             "multiple": True,
                             "typeClass": "compound",
-                            "value": f["publications"],
+                            "value": form["publications"],
                         },
                         {
                             "typeName": "author",
                             "typeClass": "compound",
                             "multiple": True,
-                            "value": f["authors"],
+                            "value": form["authors"],
                         },
                         {
                             "typeName": "keyword",
                             "typeClass": "compound",
                             "multiple": True,
-                            "value": f["keywords"],
+                            "value": form["keywords"],
                         },
                         {
                             "typeName": "subject",
                             "typeClass": "controlledVocabulary",
                             "multiple": True,
-                            "value": f["subject"],
+                            "value": form["subject"],
                         },
                         {
                             "typeName": "language",
@@ -153,7 +153,7 @@ def dv_json(f: dict) -> None:
                             "typeName": "title",
                             "multiple": False,
                             "typeClass": "primitive",
-                            "value": f["title"],
+                            "value": form["title"],
                         },
                         {
                             "typeName": "dsDescription",
@@ -165,7 +165,7 @@ def dv_json(f: dict) -> None:
                                         "typeName": "dsDescriptionValue",
                                         "multiple": False,
                                         "typeClass": "primitive",
-                                        "value": f["description"],
+                                        "value": form["description"],
                                     },
                                 }
                             ],
@@ -174,25 +174,25 @@ def dv_json(f: dict) -> None:
                             "typeName": "contributor",
                             "typeClass": "compound",
                             "multiple": True,
-                            "value": f["contributors"],
+                            "value": form["contributors"],
                         },
                         {
                             "typeName": "datasetContact",
                             "multiple": True,
                             "typeClass": "compound",
-                            "value": f["contacts"],
+                            "value": form["contacts"],
                         },
                         {
                             "typeName": "software",
                             "multiple": True,
                             "typeClass": "compound",
-                            "value": f["software"],
+                            "value": form["software"],
                         },
                         {
                             "typeName": "dateOfDeposit",
                             "typeClass": "primitive",
                             "multiple": False,
-                            "value": f["dateOfDeposit"],
+                            "value": form["dateOfDeposit"],
                         },
                         {
                             "typeName": "timePeriodCovered",
@@ -204,13 +204,13 @@ def dv_json(f: dict) -> None:
                                         "typeName": "timePeriodCoveredStart",
                                         "multiple": False,
                                         "typeClass": "primitive",
-                                        "value": f["daterangeStart"],
+                                        "value": form["daterangeStart"],
                                     },
                                     "timePeriodCoveredEnd": {
                                         "typeName": "timePeriodCoveredEnd",
                                         "multiple": False,
                                         "typeClass": "primitive",
-                                        "value": f["daterangeEnd"],
+                                        "value": form["daterangeEnd"],
                                     },
                                 },
                             ],
@@ -219,13 +219,13 @@ def dv_json(f: dict) -> None:
                             "typeName": "kindOfData",
                             "multiple": True,
                             "typeClass": "primitive",
-                            "value": f["dataTypes"],
+                            "value": form["dataTypes"],
                         },
                         {
                             "typeName": "depositor",
                             "multiple": False,
                             "typeClass": "primitive",
-                            "value": f["depositor"],
+                            "value": form["depositor"],
                         },
                     ],
                 },
