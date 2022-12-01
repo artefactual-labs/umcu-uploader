@@ -5,9 +5,9 @@ import threading
 
 import sqlite3
 
-from uploader.Metadata import DATAVERSE_METADATA_FILENAME
+from uploader.Metadata import DATAVERSE_METADATA_FILENAME, arc_metadata
 from uploader.Navigator import permissions
-
+from uploader.Metadata import ARCHIVEMATICA_METADATA_FILENAME
 
 class Job(threading.Thread):
     conn = None  # Connection for job management
@@ -120,8 +120,15 @@ class CreateTransferJob(Job):
             perms = permissions.FilePermissions(permission_file_path)
             perms.load()
 
-            # Write file permission metadata to metadata.csv in metadata directory
-            perms.write_permissions_to_csv(self.params["destination"], csv_dest_filepath)
+        # Get file archivematica metadata file, if it exists, to metadata directory
+        archivematica_metadata_filepath = os.path.join(self.params["destination"], ARCHIVEMATICA_METADATA_FILENAME)
+        
+        # Create archivematica metadata file
+        arc_metadata.create_metadata(self.params["form"], perms.permissions)
+        # Move main metadata file, if it exists, to metadata directory
+        if os.path.isfile(archivematica_metadata_filepath):
+            shutil.copy(archivematica_metadata_filepath, metadata_directory)
+            os.remove(archivematica_metadata_filepath)
 
             # Remove old file permission metadata file
             os.remove(permission_file_path)
