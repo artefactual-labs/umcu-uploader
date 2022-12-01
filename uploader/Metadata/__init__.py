@@ -1,1 +1,2 @@
 DATAVERSE_METADATA_FILENAME = "dv_metadata.json"
+ARCHIVEMATICA_METADATA_FILENAME = "metadata.json"

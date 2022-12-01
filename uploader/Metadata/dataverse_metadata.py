@@ -15,9 +15,9 @@ def create_values(values: list, template: dict) -> list:
     return list_of_dicts
 
 
-def parse_form_data(f: dict) -> list:
+def parse_form_data(form: dict) -> list:
     author_values = create_values(
-        f["author"],
+        form["author"],
         {
             "authorName": {
                 "typeName": "authorName",
@@ -28,7 +28,7 @@ def parse_form_data(f: dict) -> list:
         },
     )
     contactName_values = create_values(
-        f["contactName"],
+        form["contactName"],
         {
             "datasetContactName": {
                 "typeName": "datasetContactName",
@@ -39,7 +39,7 @@ def parse_form_data(f: dict) -> list:
         },
     )
     contributor_values = create_values(
-        f["contributor"],
+        form["contributor"],
         {
             "contributorName": {
                 "typeName": "contributorName",
@@ -50,7 +50,7 @@ def parse_form_data(f: dict) -> list:
         },
     )
     publication_values = create_values(
-        f["publication"],
+        form["publication"],
         {
             "publicationCitation": {
                 "typeName": "publicationCitation",
@@ -61,7 +61,7 @@ def parse_form_data(f: dict) -> list:
         },
     )
     contactEmail_values = create_values(
-        f["contactEmail"],
+        form["contactEmail"],
         {
             "datasetContactEmail": {
                 "typeName": "datasetContactEmail",
@@ -72,7 +72,7 @@ def parse_form_data(f: dict) -> list:
         },
     )
     software_values = create_values(
-        f["software"],
+        form["software"],
         {
             "softwareName": {
                 "typeName": "softwareName",
@@ -83,7 +83,7 @@ def parse_form_data(f: dict) -> list:
         },
     )
     keyword_values = create_values(
-        f["keywords"],
+        form["keywords"],
         {
             "keywordValue": {
                 "typeName": "keywordValue",

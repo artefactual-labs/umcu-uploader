@@ -14,10 +14,10 @@ def get_retention(date: str, researchType: str) -> str:
     match researchType:
         case "Basic":
             retention_num = 15
-        case "Therapeutic":
-            retention_num = 30
         case "Medication":
             retention_num = 25
+        case "Therapeutic":
+            retention_num = 30
     retention_value = add_year(date, research_end_year, retention_num)
     return retention_value
 

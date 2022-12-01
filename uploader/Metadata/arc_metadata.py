@@ -1,8 +1,7 @@
-import os
 import json
 from config import Config
 
-METADATA_FILENAME = "metadata.json"
+from uploader.Metadata import ARCHIVEMATICA_METADATA_FILENAME
 
 
 def create_metadata(form: dict, permissions: dict) -> None:
@@ -14,13 +13,20 @@ def create_metadata(form: dict, permissions: dict) -> None:
             % (form, permissions)
         )
     root: str = "objects/"
-    metadata = {
+    metadata_list = [
+        {
+            "filename": root + filename,
+            "dc.accesRights": permissions[filename],
+        }
+        for filename in permissions.keys()
+    ]
+    root_metadata = {
         "filename": root,
         "dc.title": form["title"],
         "dc.creator": form["author"],
         "dc.description": form["description"],
         "dc.subject": form["keywords"].append(form["subject"]),
-        "dc.publisher": Config.SERVER + form["division"],
+        "dc.publisher": Config.DATAVERSE_SERVER + form["division"],
         "dc.dateSubmitted": form["dateOfDeposit"],
         "dc.language": "English",
         "dc.temporal": form["daterangeStart"],
@@ -35,14 +41,8 @@ def create_metadata(form: dict, permissions: dict) -> None:
         "other.depositor": form["depositor"],
         "other.contributor": form["contributor"],
     }
-    permissions = [
-        {
-            "filename": root + filename,
-            "dc.accesRights": permissions[filename],
-        }
-        for filename in permissions.keys()
-    ]
 
-    with open(METADATA_FILENAME, "w") as f:
-        json.dump(metadata, f, indent=4)
+    metadata_list.append(root_metadata)
+    with open(ARCHIVEMATICA_METADATA_FILENAME, "w") as f:
+        json.dump(metadata_list, f, indent=4)
     return None

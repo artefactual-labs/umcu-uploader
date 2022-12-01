@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import Blueprint, request, render_template, url_for, redirect, flash
+from flask import Blueprint, Response, request, render_template, url_for, redirect, flash
 from uploader.Metadata import dataverse_metadata
 from uploader.Metadata import helpers
 from config import Config
@@ -9,7 +9,7 @@ form = {}
 
 
 @metadata.route("/", methods=["GET", "POST"], defaults={"req_path": ""})
-def index(req_path):
+def index(req_path: str) -> str/Response:
     if request.method == "POST":
         form_data = request.form
         # convert form data to dataverse json api format
@@ -20,7 +20,7 @@ def index(req_path):
         title_value = form_data["title"]
         licence_value = form_data["licenceType"]
         researchType_value = form_data["researchType"]
-        licence_description = "null"
+        licence_description = "This dataset is licensed. Please see the license for more information."
 
         date_of_deposit_value = form_data["depositDate"]
         date_start_value = form_data["dateRangeStart"]
@@ -99,6 +99,6 @@ def index(req_path):
 
 
 @metadata.route("/updated", methods=["GET"])
-def updated():
+def updated() -> str:
     # This will be replaced with a proper success page or alternative that allows the user to change the metadata
     return render_template("done.html")

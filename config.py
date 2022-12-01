@@ -19,7 +19,7 @@ class Config:
     DIVISIONS = {} # Populated by admin configuration
     DEBUG = os.getenv("DEBUG") == "True"
     if DEBUG:
-        SERVER = "https://demo.dataverse.nl/dataverse/"
+        DATAVERSE_SERVER = "https://demo.dataverse.nl/dataverse/"
     else:
         SERVER = "https://dataverse.nl/dataverse/"
     TESTING = False
