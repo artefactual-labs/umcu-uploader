@@ -11,12 +11,11 @@ def add_year(date: str, year_1: int, year_2: int) -> str:
 def get_retention(date: str, researchType: str) -> str:
     retention_value = None
     research_end_year = (int(date[-2]) * 10) + int(date[-1])
-    match researchType:
-        case "Basic":
+    if researchType is 'Basic':
             retention_num = 15
-        case "Medication":
+    elif researchType is "Medication":
             retention_num = 25
-        case "Therapeutic":
+    elif researchType is "Therapeutic":
             retention_num = 30
     retention_value = add_year(date, research_end_year, retention_num)
     return retention_value
