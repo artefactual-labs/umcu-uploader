@@ -5,24 +5,29 @@ def validate_metadata_form(form: dict) -> bool:
     Validate metadata form
     """
     # Check for required fields
-    required_fields = [
+    
+
+    all_fields = (
         "title",
         "author",
         "dsDescription",
         "licenseType",
+        "depositDate",
+        "datasetContactName",
+        "datasetContactEmail",
+        "researchType",
+        "researchEndDate",
+        "packageType",
         "keyword",
         "contributor",
         "software",
         "dataType",
         "relatedPublication",
-        "datasetContactName",
-        "datasetContactEmail",
-        "depositDate",
-        "researchType",
         "dateRangeStart",
         "dateRangeEnd",
-        "researchEndDate",
-    ]
+    )
+
+    required_fields = all_fields[:9]
     # Check for required fields
     
     for field in required_fields:
