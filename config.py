@@ -18,10 +18,8 @@ class Config:
     TRANSFER_SOURCE_DIRECTORY = os.getenv("TRANSFER_SOURCE_DIRECTORY")
     DIVISIONS = {} # Populated by admin configuration
     DEBUG = os.getenv("DEBUG") == "True"
-    if DEBUG:
-        DATAVERSE_SERVER = "https://demo.dataverse.nl/dataverse/"
-    else:
-        SERVER = "https://dataverse.nl/dataverse/"
+    DATAVERSE_DEMO_SERVER = os.getenv("DATAVERSE_DEMO_SERVER", "https://demo.dataverse.nl/dataverse/")
+    DATAVERSE_SERVER = os.getenv("DATAVERSE_SERVER", "https://dataverse.nl/dataverse/")
     TESTING = False
 
 

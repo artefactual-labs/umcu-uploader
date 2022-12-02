@@ -7,6 +7,11 @@ from uploader.Metadata import ARCHIVEMATICA_METADATA_FILENAME
 def create_metadata(form: dict, permissions: dict) -> None:
     """create archivematica metadata file"""
 
+    if not Config.DEBUG:
+        server = Config.DATAVERSE_SERVER
+    else:
+        server = Config.DATAVERSE_DEMO_SERVER
+
     if form is None | permissions is None:
         raise TypeError(
             "Expected form and permissions to be set,\ngot form: %s \n\npermissions: %s"
@@ -26,7 +31,7 @@ def create_metadata(form: dict, permissions: dict) -> None:
         "dc.creator": form["author"],
         "dc.description": form["description"],
         "dc.subject": form["keywords"].append(form["subject"]),
-        "dc.publisher": Config.DATAVERSE_SERVER + form["division"],
+        "dc.publisher": server + form["division"],
         "dc.dateSubmitted": form["dateOfDeposit"],
         "dc.language": "English",
         "dc.temporal": form["daterangeStart"],
