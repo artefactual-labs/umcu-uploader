@@ -7,7 +7,7 @@ from uploader.Metadata import ARCHIVEMATICA_METADATA_FILENAME
 def create_metadata(form: dict, permissions: dict) -> None:
     """create archivematica metadata file"""
 
-    if not Config.DEBUG:
+    if not Config.DEMO_MODE:
         server = Config.DATAVERSE_SERVER
     else:
         server = Config.DATAVERSE_DEMO_SERVER

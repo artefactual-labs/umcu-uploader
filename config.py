@@ -21,6 +21,7 @@ class Config:
     DATAVERSE_DEMO_SERVER = os.getenv("DATAVERSE_DEMO_SERVER", "https://demo.dataverse.nl/dataverse/")
     DATAVERSE_SERVER = os.getenv("DATAVERSE_SERVER", "https://dataverse.nl/dataverse/")
     TESTING = False
+    DEMO_MODE = os.getenv("DEMO_MODE") == "True"
 
 
 # Set division configuration, if available
