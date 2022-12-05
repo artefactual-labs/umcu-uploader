@@ -12,7 +12,7 @@ def create_metadata(form: dict, permissions: dict) -> None:
     else:
         server = Config.DATAVERSE_DEMO_SERVER
 
-    if form is None | permissions is None:
+    if form is None or permissions is None:
         raise TypeError(
             "Expected form and permissions to be set,\ngot form: %s \n\npermissions: %s"
             % (form, permissions)
