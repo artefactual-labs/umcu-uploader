@@ -9,7 +9,7 @@ form = {}
 
 
 @metadata.route("/", methods=["GET", "POST"], defaults={"req_path": ""})
-def index(req_path: str) -> str:
+def index(req_path: str):
     if request.method == "POST":
         form_data = request.form
         # convert form data to dataverse json api format
