@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
+import os
 from flask import Blueprint, Response, request, render_template, url_for, redirect, flash
 from uploader.Metadata import dataverse_metadata
 from uploader.Metadata import helpers
 from config import Config
+from uploader.Metadata.form import FormData
 
 metadata = Blueprint("metadata", __name__, template_folder="templates")
-form = {}
+
+FORM_FILEPATH = os.path.join('formstuff','form_place.json')
 
 
 @metadata.route("/", methods=["GET", "POST"], defaults={"req_path": ""})
@@ -61,6 +64,10 @@ def index(req_path: str):
             "software": software_values_raw,
             "description": description_value,
         }
+
+        metadataform = FormData(FORM_FILEPATH, form)
+        # save this
+        metadataform.save()
         # ------------------
         dv_parsed_formdata = dataverse_metadata.parse_form_data(form)
         [
