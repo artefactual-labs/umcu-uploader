@@ -74,7 +74,7 @@ def index():
         if not os.path.isdir(context["transfer_source_dir"]):
             context["transfer_source_dir"] = None
 
-            flash("Unable to transfer source directory as it doesn't exist.", "danger")
+            flash("Unable to copy to transfer source directory as it doesn't exist.", "danger")
         else:
             destination_dir = os.path.join(context["transfer_source_dir"], context["transfer_name"])
 
