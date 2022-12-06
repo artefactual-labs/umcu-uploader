@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 import os
-from flask import Blueprint, Response, request, render_template, url_for, redirect, flash
-from uploader.Metadata import dataverse_metadata
+from flask import Blueprint, request, render_template, url_for, redirect, flash
+from uploader.Metadata import DIVISIONS_FILE_PATH, dataverse_metadata
 from uploader.Metadata import helpers
 from config import Config
 from uploader.Metadata.form import FormData
+from uploader.Transfer.helpers import get_transfer_directory
 
 metadata = Blueprint("metadata", __name__, template_folder="templates")
-
-FORM_FILEPATH = os.path.join('formstuff','form_place.json')
+transfer_dir = get_transfer_directory()
+FORM_FILEPATH = os.path.join(transfer_dir, 'raw_form.json')
 
 
 @metadata.route("/", methods=["GET", "POST"], defaults={"req_path": ""})
@@ -63,11 +64,12 @@ def index(req_path: str):
             "contactEmail": contactEmail_values_raw,
             "software": software_values_raw,
             "description": description_value,
+            'divisionAcronym': helpers.get_division_acronym(DIVISIONS_FILE_PATH, form_data['umcuDivision']),
         }
 
-        metadataform = FormData(FORM_FILEPATH, form)
+        metadataform = FormData(FORM_FILEPATH)
         # save this
-        metadataform.save()
+        metadataform.save(form)
         # ------------------
         dv_parsed_formdata = dataverse_metadata.parse_form_data(form)
         [

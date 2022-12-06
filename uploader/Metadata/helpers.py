@@ -1,3 +1,6 @@
+import csv
+
+
 def add_year(date: str, year_1: int, year_2: int) -> str:
     """
     Adds a date to the date of deposit field
@@ -11,11 +14,11 @@ def add_year(date: str, year_1: int, year_2: int) -> str:
 def get_retention(date: str, researchType: str) -> str:
     retention_value = None
     research_end_year = (int(date[-2]) * 10) + int(date[-1])
-    if researchType is 'Basic':
+    if researchType == 'Basic':
             retention_num = 15
-    elif researchType is "Medication":
+    elif researchType == "Medication":
             retention_num = 25
-    elif researchType is "Therapeutic":
+    elif researchType == "Therapeutic":
             retention_num = 30
     retention_value = add_year(date, research_end_year, retention_num)
     return retention_value
@@ -24,3 +27,15 @@ def get_retention(date: str, researchType: str) -> str:
 def get_raw_data(data: dict, name: str) -> list:
     list = [y for x, y in data.items() if x.startswith(name)]
     return list
+
+def get_division_acronym(divisions_file_path: str, division: str) -> str: 
+        # loop through the divisions csv and match the division name with the acronym
+        # return the acronyms
+        acronym = None
+        with open(divisions_file_path, 'r') as divisions_file:
+                divisions_csv_reader = csv.reader(divisions_file, delimiter=';')
+                for row in divisions_csv_reader:
+                        if division ==  row[0]:
+                                acronym = row[1]
+                                return acronym
+                return 'No acroynm found'
