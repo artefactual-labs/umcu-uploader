@@ -8,6 +8,7 @@ import sqlite3
 from uploader.Metadata import DATAVERSE_METADATA_FILENAME, arc_metadata
 from uploader.Navigator import permissions
 from uploader.Metadata import ARCHIVEMATICA_METADATA_FILENAME
+from uploader.Transfer import helpers
 
 class Job(threading.Thread):
     conn = None  # Connection for job management
@@ -94,6 +95,7 @@ class CreateTransferJob(Job):
         super().begin("copy", self.params)
 
         # Copy transfer files to transfer source location
+        self.params["destination"] = helpers.potential_dir_name(self.params["destination"])
         shutil.copytree(self.params["source"], self.params["destination"])
 
         # Create metadata directory if need be
