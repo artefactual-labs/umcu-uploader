@@ -31,7 +31,7 @@ def create_metadata(form: dict, permissions: dict) -> None:
         "dc.creator": form["author"],
         "dc.description": form["description"],
         "dc.subject": form["keywords"].append(form["subject"]),
-        "dc.publisher": server + form["division"],
+        "dc.publisher": server+form['divisionAcronym'],
         "dc.dateSubmitted": form["dateOfDeposit"],
         "dc.language": "English",
         "dc.temporal": form["daterangeStart"],
