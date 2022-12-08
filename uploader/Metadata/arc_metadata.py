@@ -1,4 +1,5 @@
 import json
+import os
 from config import Config
 
 from uploader.Metadata import ARCHIVEMATICA_METADATA_FILENAME
@@ -17,20 +18,24 @@ def create_metadata(form: dict, permissions: dict) -> None:
             "Expected form and permissions to be set,\ngot form: %s \n\npermissions: %s"
             % (form, permissions)
         )
-    root: str = "objects/"
-    metadata_list = [
-        {
-            "filename": root + filename,
+    root: str = "objects"
+    metadata_list = [] 
+    for filename in permissions.keys():
+        relative_path = os.path.relpath(filename, 'data')
+        metadata_path = os.path.join(root, relative_path)
+        metadata_list.append({
+            "filename": metadata_path,
             "dc.accesRights": permissions[filename],
-        }
-        for filename in permissions.keys()
-    ]
+        })
+    
+    keyword_list = form["keywords"]
+    keyword_list.append(form["subject"])
     root_metadata = {
-        "filename": root,
+        "filename": 'objects/',
         "dc.title": form["title"],
         "dc.creator": form["author"],
         "dc.description": form["description"],
-        "dc.subject": form["keywords"].append(form["subject"]),
+        "dc.subject": keyword_list,
         "dc.publisher": server+form['divisionAcronym'],
         "dc.dateSubmitted": form["dateOfDeposit"],
         "dc.language": "English",
@@ -45,6 +50,7 @@ def create_metadata(form: dict, permissions: dict) -> None:
         "other.researchType": form["researchType"],
         "other.depositor": form["depositor"],
         "other.contributor": form["contributor"],
+        "other.contact": form["contactName"],
     }
 
     metadata_list.append(root_metadata)
