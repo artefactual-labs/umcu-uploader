@@ -15,7 +15,7 @@ from flask_api import status
 
 from uploader.Upload import job
 from uploader.Transfer import helpers
-from uploader.Metadata import views, form
+from uploader.Metadata import FORM_FILE_NAME, form
 
 upload = Blueprint("upload", __name__, template_folder="templates")
 
@@ -77,8 +77,8 @@ def index():
             flash("Unable to copy to transfer source directory as it doesn't exist.", "danger")
         else:
             destination_dir = os.path.join(context["transfer_source_dir"], context["transfer_name"])
-
-            f = form.FormData(views.FORM_FILEPATH)
+            form_filepath = os.path.join(transfer_dir, FORM_FILE_NAME)
+            f = form.FormData(form_filepath)
             f.load()
             u = job.CreateTransferJob()
             u.params({"source": transfer_dir, "destination": destination_dir, "form": f.form,})
