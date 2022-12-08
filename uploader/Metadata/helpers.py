@@ -1,26 +1,26 @@
 import csv
 
 
-def add_year(date: str, year_1: int, year_2: int) -> str:
-    """
-    Adds a date to the date of deposit field
-    """
-    rest_of_date = date[:-2]
-    sum_year = str(year_1 + year_2)
-    full_date = rest_of_date.join(sum_year)
-    return full_date
+def add_year(date: str, year: int) -> str:
+        """
+        Adds a date to the date of deposit field
+        """
+        year_from_date = int(date[:4])
+        rest_of_date = date[4:]
+        sum_year = str(year_from_date + year)
+        full_date = sum_year + rest_of_date
+        return full_date
 
 
 def get_retention(date: str, researchType: str) -> str:
     retention_value = None
-    research_end_year = (int(date[-2]) * 10) + int(date[-1])
     if researchType == 'Basic':
             retention_num = 15
     elif researchType == "Medication":
             retention_num = 25
     elif researchType == "Therapeutic":
             retention_num = 30
-    retention_value = add_year(date, research_end_year, retention_num)
+    retention_value = add_year(date, retention_num)
     return retention_value
 
 

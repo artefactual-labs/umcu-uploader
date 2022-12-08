@@ -2,14 +2,12 @@
 import os
 from flask import Blueprint, request, render_template, url_for, redirect, flash
 from uploader.Metadata import DIVISIONS_FILE_PATH, dataverse_metadata
-from uploader.Metadata import helpers
 from config import Config
 from uploader.Metadata.form import FormData
+from uploader.Metadata.helpers import get_division_acronym, get_raw_data, get_retention
 from uploader.Transfer.helpers import get_transfer_directory
 
 metadata = Blueprint("metadata", __name__, template_folder="templates")
-transfer_dir = get_transfer_directory()
-FORM_FILEPATH = os.path.join(transfer_dir, 'raw_form.json')
 
 
 @metadata.route("/", methods=["GET", "POST"], defaults={"req_path": ""})
@@ -31,16 +29,16 @@ def index(req_path: str):
         date_end_value = form_data["dateRangeEnd"]
         researchEndDate_value = form_data["researchEndDate"]
 
-        data_type_values = helpers.get_raw_data(form_data, "dataType")
-        author_values_raw = helpers.get_raw_data(form_data, "author")
-        contactName_values_raw = helpers.get_raw_data(form_data, "datasetContactName")
-        contributor_values_raw = helpers.get_raw_data(form_data, "contributor")
-        publication_values_raw = helpers.get_raw_data(form_data, "relatedPublication")
-        contactEmail_values_raw = helpers.get_raw_data(form_data, "datasetContactEmail")
-        software_values_raw = helpers.get_raw_data(form_data, "software")
-        keyword_values_raw = helpers.get_raw_data(form_data, "keyword")
+        data_type_values = get_raw_data(form_data, "dataType")
+        author_values_raw = get_raw_data(form_data, "author")
+        contactName_values_raw = get_raw_data(form_data, "datasetContactName")
+        contributor_values_raw = get_raw_data(form_data, "contributor")
+        publication_values_raw = get_raw_data(form_data, "relatedPublication")
+        contactEmail_values_raw = get_raw_data(form_data, "datasetContactEmail")
+        software_values_raw = get_raw_data(form_data, "software")
+        keyword_values_raw = get_raw_data(form_data, "keyword")
 
-        retention_value = helpers.get_retention(
+        retention_value = get_retention(
             researchEndDate_value, researchType_value
         )
         # ------------------
@@ -64,9 +62,11 @@ def index(req_path: str):
             "contactEmail": contactEmail_values_raw,
             "software": software_values_raw,
             "description": description_value,
-            'divisionAcronym': helpers.get_division_acronym(DIVISIONS_FILE_PATH, form_data['umcuDivision']),
+            'divisionAcronym': get_division_acronym(DIVISIONS_FILE_PATH, form_data['umcuDivision']),
         }
 
+        transfer_dir = get_transfer_directory()
+        FORM_FILEPATH = os.path.join(transfer_dir, 'raw_form.json')
         metadataform = FormData(FORM_FILEPATH)
         # save this
         metadataform.save(form)
