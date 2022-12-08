@@ -2,33 +2,46 @@ import os
 import yaml
 
 
-# Attempt to load admin configuration
-admin_config_filepath = "/etc/umcu-uploader.yaml"
+# Specifiy config fields and defaults
+config_fields = {
+    "host": "0.0.0.0",
+    "port": "5000",
+    "debug": False,
+    "secret_key": "you-shall-not-pass🧙<200d>♂️",
+    "data_directory": None,
+    "transfer_source_directory": None,
+    "dataverse_server": "https://dataverse.nl/dataverse/",
+    "dataverse_demo_server": "https://demo.dataverse.nl/dataverse/",
+    "demo_mode": True,
+    "depositor_name": "ANON",
+    "divisions": {},
+}
 
-if os.path.isfile(admin_config_filepath):
-    with open(admin_config_filepath, "r") as stream:
-        admin_config = yaml.safe_load(stream)
-
-
+# Initialize configuration
 class Config:
-    # Be sure to set a secure secret key for production.
-    SECRET_KEY = os.getenv("SECRET_KEY", "you-shall-not-pass🧙‍♂️")
-    DEPOSITOR_NAME = os.getenv("DEPOSITOR_NAME", "ANON")
-    DATA_DIRECTORY = os.getenv("DATA_DIRECTORY")
-    TRANSFER_SOURCE_DIRECTORY = os.getenv("TRANSFER_SOURCE_DIRECTORY")
-    DIVISIONS = {} # Populated by admin configuration
-    DEBUG = os.getenv("DEBUG") == "True"
-    DATAVERSE_DEMO_SERVER = os.getenv("DATAVERSE_DEMO_SERVER", "https://demo.dataverse.nl/dataverse/")
-    DATAVERSE_SERVER = os.getenv("DATAVERSE_SERVER", "https://dataverse.nl/dataverse/")
     TESTING = False
-    DEMO_MODE = os.getenv("DEMO_MODE") == "True"
 
 
-# Set division configuration, if available
-if "admin_config" in locals() and "divisions" in admin_config:
-    # Data structure is:
-    # {<division ID>: {"name": <division name>, "transfer_source_directory": <transfer source dir.>}}
-    Config.DIVISIONS = admin_config['divisions']
+# Set default config values
+for field_name in config_fields.keys():
+    setattr(Config, field_name.upper(), config_fields[field_name])
 
+# Populate config with values from YAML file, if available
+config_filepath = "/etc/umcu-uploader.yaml"
 
+try:
+    with open(config_filepath, "r") as stream:
+        settings_config = yaml.safe_load(stream)
+
+    # Overwrite defaults with values from config file, if they've been set
+    for field_name in config_fields.keys():
+        if field_name in settings_config:
+            setattr(Config, field_name.upper(), settings_config[field_name])
+
+except (FileNotFoundError, IOError):
+    print(
+        f"*** WARNING: {config_filepath} does not exist, using default configuration (see README.md). ***\n"
+    )
+
+# Expose configuration values as module constant
 CONFIGS = {"default": Config}
