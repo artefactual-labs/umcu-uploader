@@ -5,7 +5,7 @@ from config import Config
 from uploader.Metadata import ARCHIVEMATICA_METADATA_FILENAME
 
 
-def create_metadata(form: dict, permissions: dict, destination_dir: str) -> None:
+def create_metadata(form: dict, permissions: dict, transfer_dir: str, destination_dir: str) -> None:
     """create archivematica metadata file"""
 
     if not Config.DEMO_MODE:
@@ -21,13 +21,14 @@ def create_metadata(form: dict, permissions: dict, destination_dir: str) -> None
     root: str = "objects"
     metadata_list = [] 
     for filename in permissions.keys():
-        relative_path = os.path.relpath(filename, 'data')
-        metadata_path = os.path.join(root, relative_path)
+        # Remove transfer directory from filepath and prepend with "objects"
+        relative_path = os.path.join("objects", filename[len(transfer_dir) + 1:])
+
         metadata_list.append({
-            "filename": metadata_path,
+            "filename": relative_path,
             "dc.accesRights": permissions[filename],
         })
-    
+
     keyword_list = form["keywords"]
     keyword_list.append(form["subject"])
     root_metadata = {
