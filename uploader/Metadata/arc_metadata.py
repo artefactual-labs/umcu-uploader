@@ -5,7 +5,7 @@ from config import Config
 from uploader.Metadata import ARCHIVEMATICA_METADATA_FILENAME
 
 
-def create_metadata(form: dict, permissions: dict) -> None:
+def create_metadata(form: dict, permissions: dict, destination_dir: str) -> None:
     """create archivematica metadata file"""
 
     if not Config.DEMO_MODE:
@@ -54,6 +54,7 @@ def create_metadata(form: dict, permissions: dict) -> None:
     }
 
     metadata_list.append(root_metadata)
-    with open(ARCHIVEMATICA_METADATA_FILENAME, "w") as f:
+    metadata_filepath = os.path.join(destination_dir, ARCHIVEMATICA_METADATA_FILENAME)
+    with open(metadata_filepath, "w") as f:
         json.dump(metadata_list, f, indent=4)
     return None
