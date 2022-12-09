@@ -124,7 +124,9 @@ class CreateTransferJob(Job):
 
         # Create archivematica metadata file
         metadata_dest_dir = os.path.join(self.params["destination"], "metadata")
-        arc_metadata.create_metadata(self.params["form"], perms.permissions, metadata_dest_dir)
+        arc_metadata.create_metadata(
+            self.params["form"], perms.permissions, self.params["source"], metadata_dest_dir
+        )
 
         # Remove working data files
         os.remove(os.path.join(self.params["destination"], FORM_FILE_NAME))
