@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from flask import Blueprint, request, render_template, url_for, redirect, flash
-from uploader.Metadata import DIVISIONS_FILE_PATH, dataverse_metadata
+from uploader.Metadata import DIVISIONS_FILE_PATH, FORM_FILE_NAME, dataverse_metadata
 from config import Config
 from uploader.Metadata.form import FormData
 from uploader.Metadata.helpers import get_division_acronym, get_raw_data, get_retention
@@ -66,8 +66,8 @@ def index(req_path: str):
         }
 
         transfer_dir = get_transfer_directory()
-        FORM_FILEPATH = os.path.join(transfer_dir, 'raw_form.json')
-        metadataform = FormData(FORM_FILEPATH)
+        form_filepath = os.path.join(transfer_dir, FORM_FILE_NAME)
+        metadataform = FormData(form_filepath)
         # save this
         metadataform.save(form)
         # ------------------
