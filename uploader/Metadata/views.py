@@ -17,7 +17,7 @@ def index(req_path: str):
         # convert form data to dataverse json api format
         # https://guides.dataverse.org/en/latest/_downloads/4e04c8120d51efab20e480c6427f139c/dataset-create-new-all-default-fields.json
         depositorName_value = Config.DEPOSITOR_NAME
-        subject_value = ["Medicine, Health and Life Sciences"]
+        subject_value = "Medicine, Health and Life Sciences"
         description_value = form_data["dsDescription"]
         title_value = form_data["title"]
         licence_value = form_data["licenceType"]
