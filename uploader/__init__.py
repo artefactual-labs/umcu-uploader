@@ -28,7 +28,7 @@ def create_app(config_name="default"):
         navbar = NavBar()
         navbar.add("Upload Research Data", "transfer.index")
         navbar.add("Metadata", "metadata.index")
-        navbar.add("File Permissions", "navigator.index")
+        navbar.add("Access Rights", "navigator.index")
         navbar.add("Archivematica", "upload.index")
         navbar.add("Dataverse", "dataverse.index")
 

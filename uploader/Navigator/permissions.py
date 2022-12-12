@@ -52,25 +52,3 @@ class FilePermissions:
         for filepath in files:
             if filepath.startswith(entry_path + "/"):
                 self.set(filepath, permission)
-
-    # Write permissions to an Archivematica metadata CSV file
-    def write_permissions_to_csv(self, transfer_dir, destination_csv_file_path):
-        permission_filepath = os.path.join(transfer_dir, PERMISSION_METADATA_FILENAME)
-
-        with open(destination_csv_file_path, "w", newline="") as csvfile:
-            fieldnames = ["filename", "dc.rights"]
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
-            # Write header
-            writer.writeheader()
-
-            # Write rows in order
-            for filename in sorted(self.permissions.keys()):
-                if self.permissions[filename] != "":
-                    filename_fixed = filename.replace(transfer_dir, "objects")
-                    writer.writerow(
-                        {
-                            "filename": filename_fixed,
-                            "dc.rights": self.permissions[filename].capitalize(),
-                        }
-                    )

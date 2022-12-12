@@ -12,7 +12,7 @@
       {% endif %}
     </div>
 
-    <h2>File Permissions</h2> </br>
+    <h2>Access Rights</h2> </br>
 
     {%- if back_path|length -%}
       <a href="{{ back_path }}">
@@ -38,20 +38,18 @@
             {{ entry.size|filesizeformat }}
           </td>
           <td>
-            {% if entry.settable: %}
-              <select name="perm_{{ entry.path_md5 }}">
-                <option value="" {% if entry.permission == "" %}selected{% endif %}></option>
-                <option value="public" {% if entry.permission == "public" %}selected{% endif %}>Public</option>
-                <option value="restricted" {% if entry.permission == "restricted" %}selected{% endif %}>Restricted</option>
-                <option value="private" {% if entry.permission == "private" %}selected{% endif %}>Private</option>
-              </select>
-            {% endif %}
+            <select name="perm_{{ entry.path_md5 }}">
+              <option value="" {% if entry.permission == "" %}selected{% endif %}></option>
+              <option value="public" {% if entry.permission == "public" %}selected{% endif %}>Public</option>
+              <option value="restricted" {% if entry.permission == "restricted" %}selected{% endif %}>Restricted</option>
+              <option value="private" {% if entry.permission == "private" %}selected{% endif %}>Private</option>
+            </select>
           </td>
         </tr>
       {% endfor %}
     </table>
 
-    <input type="submit" class="btn btn-primary" value="Update Permissions"/>
+    <button type="submit" class="btn btn-primary">Update Access Rights</button>
     </form>
   </div>
 
