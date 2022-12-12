@@ -1,14 +1,8 @@
 import json
-import os
-import shutil
 import threading
 
 import sqlite3
 
-from uploader.Metadata import DATAVERSE_METADATA_FILENAME, FORM_FILE_NAME, arc_metadata
-from uploader.Navigator import permissions
-from uploader.Metadata import ARCHIVEMATICA_METADATA_FILENAME
-from uploader.Transfer import helpers
 
 class Job(threading.Thread):
     conn = None  # Connection for job management
@@ -46,6 +40,7 @@ class Job(threading.Thread):
                 user_id INTEGER, \
                 job_type TEXT, \
                 params TEXT, \
+                error TEXT, \
                 complete INT \
             )"
         )
@@ -60,6 +55,18 @@ class Job(threading.Thread):
         self.__conn.commit()
 
         self.id = cur.lastrowid
+
+    def error(self, error):
+        # Note error
+        cur = self.__conn.cursor()
+        cur.execute(
+            "UPDATE job SET error=?, complete=1 WHERE id=?",
+            (
+                error,
+                self.id,
+            ),
+        )
+        self.__conn.commit()
 
     def end(self):
         # Mark job as complete
@@ -88,48 +95,3 @@ class Job(threading.Thread):
             res = cur.execute("DELETE FROM job WHERE user_id=?", (user_id,))
 
         self.conn.commit()
-
-
-class CreateTransferJob(Job):
-    def run(self):
-        super().begin("copy", self.params)
-
-        # Copy transfer files to transfer source location
-        self.params["destination"] = helpers.potential_dir_name(self.params["destination"])
-        shutil.copytree(self.params["source"], self.params["destination"])
-
-        # Create metadata directory if need be
-        metadata_directory = os.path.join(self.params["destination"], "metadata")
-
-        if not os.path.isdir(metadata_directory):
-            os.mkdir(metadata_directory)
-
-        # Move main metadata file, if it exists, to metadata directory
-        main_metadata_filepath = os.path.join(self.params["destination"], DATAVERSE_METADATA_FILENAME)
-
-        if os.path.isfile(main_metadata_filepath):
-            shutil.copy(main_metadata_filepath, metadata_directory)
-            os.remove(main_metadata_filepath)
-
-        # Get file permission metadata, if it exists, and write it as a
-        # metadata.csv file to the metadata directory
-        permission_file_path = os.path.join(self.params["destination"], permissions.PERMISSION_METADATA_FILENAME)
-
-        if os.path.isfile(permission_file_path):
-            # Load file permission metadata
-            csv_dest_filepath = os.path.join(metadata_directory, "metadata.csv")
-
-            perms = permissions.FilePermissions(permission_file_path)
-            perms.load()
-
-        # Create archivematica metadata file
-        metadata_dest_dir = os.path.join(self.params["destination"], "metadata")
-        arc_metadata.create_metadata(
-            self.params["form"], perms.permissions, self.params["source"], metadata_dest_dir
-        )
-
-        # Remove working data files
-        os.remove(os.path.join(self.params["destination"], FORM_FILE_NAME))
-        os.remove(permission_file_path)
-
-        super().end()
