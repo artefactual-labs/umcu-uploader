@@ -13,7 +13,7 @@ from flask import (
 )
 from flask_api import status
 
-from uploader.Upload import job
+from uploader.Upload import jobs
 from uploader.Transfer import helpers
 from uploader.Metadata import FORM_FILE_NAME, form
 
@@ -80,7 +80,7 @@ def index():
             form_filepath = os.path.join(transfer_dir, FORM_FILE_NAME)
             f = form.FormData(form_filepath)
             f.load()
-            u = job.CreateTransferJob()
+            u = jobs.CreateTransferJob()
             u.params({"source": transfer_dir, "destination": destination_dir, "form": f.form,})
             u.start()
 
