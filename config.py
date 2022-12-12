@@ -1,5 +1,4 @@
-import os
-import yaml
+from uploader.configutil import set_config_from_yaml
 
 
 # Specifiy config fields and defaults
@@ -22,21 +21,11 @@ class Config:
     TESTING = False
 
 
-# Set default config values
-for field_name in config_fields.keys():
-    setattr(Config, field_name.upper(), config_fields[field_name])
-
 # Populate config with values from YAML file, if available
 config_filepath = "/etc/umcu-uploader.yaml"
 
 try:
-    with open(config_filepath, "r") as stream:
-        settings_config = yaml.safe_load(stream)
-
-    # Overwrite defaults with values from config file, if they've been set
-    for field_name in config_fields.keys():
-        if field_name in settings_config:
-            setattr(Config, field_name.upper(), settings_config[field_name])
+    set_config_from_yaml(Config, config_fields, config_filepath)
 
 except (FileNotFoundError, IOError):
     print(
