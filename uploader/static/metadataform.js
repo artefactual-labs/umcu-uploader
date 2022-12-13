@@ -1,3 +1,46 @@
+"use strict";
+
+class InputIncrementer {
+  constructor(
+    addButton,
+    removeButton,
+    inputGroup,
+    name,
+    title = name,
+    type = "text"
+  ) {
+    this.addButton = addButton;
+    this.removeButton = removeButton;
+    this.inputGroup = inputGroup;
+    this.name = name;
+    this.title = title;
+    this.type = type
+    this.#addMethod = "add" + name + "Input";
+    this.#removeMethod = "remove" + name + "Input";
+  }
+  [this.#addMethod] = () => {
+    const div = document.createElement("div");
+    div.className = "my-3";
+    const input = document.createElement("input");
+    input.title = this.title;
+    input.type = this.type;
+    input.className = "form-control";
+    input.name = title + "-" + (this.inputGroup.childElementCount - 1);
+    let inputCount = this.inputGroup.childElementCount;
+    if (inputCount > 1) this.removeButton.removeAttribute("hidden");
+  };
+  [this.#removeMethod] = () => {
+    inputGroup.removeChild(this.inputGroup.lastChild);
+    let inputCount = this.inputGroup.childElementCount;
+    if (inputCount > 1) {
+      this.removeButton.removeAttribute("hidden");
+    } else if (inputCount === 1) {
+      this.removeButton.hidden = true;
+    }
+  };
+}
+
+console.log(new InputIncrementer());
 //  add new  input field on button click
 const addAuthorNameButton = document.querySelector("#add-author");
 // select input group for author name
