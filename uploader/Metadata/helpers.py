@@ -1,4 +1,4 @@
-import csv
+import yaml
 
 
 def add_year(date: str, year: int) -> str:
@@ -29,15 +29,12 @@ def get_raw_data(data: dict, name: str) -> list:
     list = [y for x, y in data.items() if x.startswith(name)]
     return list
 
-
 def get_division_acronym(divisions_file_path: str, division: str) -> str:
-    # loop through the divisions csv and match the division name with the acronym
-    # return the acronyms
-    acronym = None
-    with open(divisions_file_path, "r") as divisions_file:
-        divisions_csv_reader = csv.reader(divisions_file, delimiter=";")
-        for row in divisions_csv_reader:
-            if division == row[0]:
-                acronym = row[1]
+        with open(divisions_file_path) as division_file:
+                divisions = yaml.load_all(division_file)
+        for division_dict in divisions:
+            if division_dict["name"] == division:
+                acronym = division_dict['acronym']
                 return acronym
         return "No acroynm found"
+                
