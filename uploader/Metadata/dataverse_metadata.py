@@ -141,7 +141,7 @@ def dv_json(form: dict) -> None:
                             "typeName": "subject",
                             "typeClass": "controlledVocabulary",
                             "multiple": True,
-                            "value": form["subject"],
+                            "value": [form["subject"]],
                         },
                         {
                             "typeName": "language",

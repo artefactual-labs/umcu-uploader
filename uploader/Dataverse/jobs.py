@@ -77,7 +77,7 @@ class CreateDataverseDatasetFromAipJob(Job):
         response_data = resp.json()
 
         if response_data["status"] != "OK":
-            self.error("Error creating Dataverse dataset", resp.status_code)
+            self.error(f"Error creating Dataverse dataset: {response_data['message']}", resp.status_code)
             return
 
         ds_pid = response_data["data"]["persistentId"]
