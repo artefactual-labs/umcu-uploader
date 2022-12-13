@@ -9,6 +9,8 @@ from pyunpack import Archive
 from pyDataverse.api import NativeApi
 from pyDataverse.models import Dataset, Datafile
 from pyDataverse.utils import read_file
+from uploader.Metadata import FORM_FILE_NAME
+from uploader.Metadata.form import FormData
 
 from uploader.job import Job
 from uploader.Dataverse.helpers import (
@@ -16,7 +18,7 @@ from uploader.Dataverse.helpers import (
     populate_dataverse_dir,
     find_dv_metadata_json_file,
 )
-from uploader.Transfer.helpers import potential_dir_name
+from uploader.Transfer.helpers import get_transfer_directory, potential_dir_name
 
 
 class CreateDataverseDatasetFromAipJob(Job):
@@ -78,8 +80,13 @@ class CreateDataverseDatasetFromAipJob(Job):
         ds = Dataset()
         ds.from_json(read_file(metadata_filepath))
 
-        # Note: dataverse alias is hardcoded for now
-        resp = api.create_dataset("umculab", ds.json())
+        transfer_dir = get_transfer_directory()
+        form_filepath = os.path.join(transfer_dir, FORM_FILE_NAME)
+        metadata_form = FormData(form_filepath)
+        
+        f = metadata_form.load()
+        division_acronym = f["divisionAcronym"]
+        resp = api.create_dataset(division_acronym, ds.json())
         response_data = resp.json()
 
         if response_data["status"] != "OK":
