@@ -113,8 +113,7 @@ def parse_form_data(form: dict) -> list:
 def dv_json(form: dict) -> None:
     dv_metadata = {
         "datasetVersion": {
-            "licence": form["licence"],
-            "termsOfUse": form["licenceDescription"],
+            "termsOfUse": f"license: {form['licence']}, {form['licenceDescription']}",
             "metadataBlocks": {
                 "citation": {
                     "displayName": "Citation Metadata",
