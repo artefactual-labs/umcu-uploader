@@ -4,12 +4,20 @@ import threading
 import sqlite3
 
 
+# From https://stackoverflow.com/questions/3300464/how-can-i-get-dict-from-sqlite-query
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
+
 class Job(threading.Thread):
     conn = None  # Connection for job management
     __conn = None  # Connection for thread
 
     params = {}
-    default_user_id = 1
+    default_user_id = "1"
     id = None
 
     def params(self, params):
@@ -26,7 +34,7 @@ class Job(threading.Thread):
     def begin(self, job_type, job_params):
         # Set user ID
         if "user_id" in job_params:
-            user_id = job_params["user_id"]
+            user_id = str(job_params["user_id"])
         else:
             user_id = self.default_user_id
 
@@ -37,12 +45,13 @@ class Job(threading.Thread):
         cur.execute(
             "CREATE TABLE IF NOT EXISTS job( \
                 id INTEGER PRIMARY KEY, \
-                user_id INTEGER, \
+                user_id TEXT, \
                 job_type TEXT, \
                 params TEXT, \
                 error TEXT, \
                 error_code INTEGER, \
-                complete INT \
+                complete INT, \
+                createdatetime TEXT DEFAULT (strftime('%Y-%m-%d %H:%M:%S:%s', 'now', 'localtime')) \
             )"
         )
 
@@ -76,14 +85,23 @@ class Job(threading.Thread):
         cur.execute("UPDATE job SET complete=1 WHERE id=?", (self.id,))
         self.__conn.commit()
 
-    def list(self, user_id=None):
-        # Return list of jobs
+    def list(self, user_id=None, limit=None):
+        # Make returned rows be dicts (with column name as key)
+        self.get_conn().row_factory = dict_factory
         cur = self.get_conn().cursor()
 
+        # Assemble limit clause
+        limit_clause = ""
+        if limit:
+            limit_clause = f"LIMIT {limit}"
+
         if user_id is None:
-            res = cur.execute("SELECT * FROM job")
+            res = cur.execute(f"SELECT * FROM job ORDER BY id DESC {limit_clause}")
         else:
-            res = cur.execute("SELECT * FROM job WHERE user_id=?", (user_id,))
+            res = cur.execute(
+                f"SELECT * FROM job WHERE user_id=? ORDER BY id DESC {limit_clause}",
+                (str(user_id),),
+            )
 
         return res.fetchall()
 
@@ -94,6 +112,6 @@ class Job(threading.Thread):
         if user_id is None:
             res = cur.execute("DELETE FROM job")
         else:
-            res = cur.execute("DELETE FROM job WHERE user_id=?", (user_id,))
+            res = cur.execute("DELETE FROM job WHERE user_id=?", (str(user_id),))
 
         self.conn.commit()

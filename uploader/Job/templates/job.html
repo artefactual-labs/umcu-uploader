@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <div class="container mt-5">
+
+    <h2>Last 10 Jobs</h2>
+
+    {% if jobs|length: %}
+      <div class="table-responsive">
+        <table class="table align-middle">
+          <thead>
+            <tr>
+              <td>Create Datetime</td>
+              <td>Type</td>
+              <td>Error Description</td>
+              <td>Error Code</td>
+              <td>Status</td>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for job in jobs: %}
+              <tr>
+                <td>{{ job.createdatetime }}</td>
+                <td>{{ job.job_type }}</td>
+                <td>{{ job.error }}</td>
+                <td>{{ job.error_code }}</td>
+                <td>
+                  {% if job.complete: %}
+                    {% if job.error or job.error_code %}
+                      Failed
+                    {% else: %}
+                      Done
+                    {% endif %}
+                  {% else: %}
+                    Running
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <form action="{{ url_for('job.clear') }}" method="POST">
+        <button type="submit" class="btn btn-primary">Clear</button>
+      </form>
+    {% else: %}
+      No jobs.
+    {% endif %}
+  </div>
+
+{% endblock %}

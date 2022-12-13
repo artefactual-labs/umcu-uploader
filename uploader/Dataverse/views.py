@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import (
-    Blueprint,
-    render_template,
-    request,
-    flash,
-    current_app,
-)
+from flask import Blueprint, render_template, request, flash, current_app, session
 
 from uploader.configutil import config_subset_dict
 from uploader.Dataverse import jobs
@@ -42,7 +36,7 @@ def index():
                 ],
             )
 
-            u.params({"uuid": uuid, "config": config})
+            u.params({"user_id": session["session_id"], "uuid": uuid, "config": config})
             u.start()
 
             flash("Started downloading AIP and importing into Dataverse", "info")
