@@ -42,9 +42,7 @@ def create_metadata(form: dict, permissions: dict, transfer_dir: str, destinatio
         "dc.language": "English",
         "dc.temporal": form["daterangeStart"],
         "other.researchProjectEndDate": form["researchEndDate"],
-        "dc.coverage": "start={}, end={}".format(
-            form["researchEndDate"], form["retention"]
-        ),
+        "dc.coverage": f"start={form['researchEndDate']}, end={form['retention']}",
         "dc.rights": form["license"],
         "dc.type": form["kindOfData"],
         "dc.isReferencedBy": form["publication"],
@@ -52,6 +50,7 @@ def create_metadata(form: dict, permissions: dict, transfer_dir: str, destinatio
         "other.depositor": form["depositor"],
         "other.contributor": form["contributor"],
         "other.contact": form["contactName"],
+        "other.division": form["division"],
     }
 
     metadata_list.append(root_metadata)

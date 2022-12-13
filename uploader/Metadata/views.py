@@ -63,6 +63,7 @@ def index(req_path: str):
             "software": software_values_raw,
             "description": description_value,
             'divisionAcronym': get_division_acronym(DIVISIONS_FILE_PATH, form_data['umcuDivision']),
+            'division': form_data['umcuDivision'],
         }
 
         transfer_dir = get_transfer_directory()

@@ -1,3 +1,4 @@
+import json
 import os
 import shutil
 import tempfile
@@ -15,10 +16,11 @@ from uploader.Metadata.form import FormData
 from uploader.job import Job
 from uploader.Dataverse.helpers import (
     download_aip,
+    find_metadata_json_file,
     populate_dataverse_dir,
     find_dv_metadata_json_file,
 )
-from uploader.Transfer.helpers import get_transfer_directory, potential_dir_name
+from uploader.Transfer.helpers import potential_dir_name
 
 
 class CreateDataverseDatasetFromAipJob(Job):
@@ -73,19 +75,18 @@ class CreateDataverseDatasetFromAipJob(Job):
             return
 
         metadata_filepath = os.path.join(
-            aip_directory, "data", find_dv_metadata_json_file(self.uuid, aip_directory)
+            aip_directory, "data", find_metadata_json_file(uuid, aip_directory, '/dv_metadata.json')
         )
 
         api = NativeApi(base_url, self.config["DATAVERSE_API_KEY"])
         ds = Dataset()
         ds.from_json(read_file(metadata_filepath))
-
-        transfer_dir = get_transfer_directory()
-        form_filepath = os.path.join(transfer_dir, FORM_FILE_NAME)
-        metadata_form = FormData(form_filepath)
         
-        f = metadata_form.load()
-        division_acronym = f["divisionAcronym"]
+        # Get the division acronym from the metadata in the AIP
+        arc_metadata_filepath = os.path.join(aip_directory, "data",
+        find_metadata_json_file(uuid, aip_directory, '/metadata.json'))
+        arc_metadata_dict = json.load(arc_metadata_filepath)
+        division = arc_metadata_dict["other.division"]
         resp = api.create_dataset(division_acronym, ds.json())
         response_data = resp.json()
 

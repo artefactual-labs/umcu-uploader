@@ -85,7 +85,7 @@ def populate_dataverse_dir(uuid, aip_directory, dataverse_directory):
             shutil.copy(source_path, dest_path_components[0])
 
 
-def find_dv_metadata_json_file(uuid, aip_directory):
+def find_metadata_json_file(uuid, aip_directory, file):
     mets_filename = f"METS.{uuid}.xml"
     mets_filepath = os.path.join(aip_directory, "data", mets_filename)
 
@@ -96,6 +96,6 @@ def find_dv_metadata_json_file(uuid, aip_directory):
         if (
             aipfile.type == "Item"
             and aipfile.get_path()
-            and aipfile.get_path().endswith("/dv_metadata.json")
+            and aipfile.get_path().endswith(file)
         ):
             return aipfile.get_path()
