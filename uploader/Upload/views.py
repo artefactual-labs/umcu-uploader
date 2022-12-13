@@ -7,9 +7,8 @@ from flask import (
     render_template,
     url_for,
     request,
-    redirect,
     flash,
-    session
+    session,
 )
 from flask_api import status
 
@@ -32,7 +31,7 @@ def index():
         "transfer_directory": transfer_dir,
         "transfer_file_count": transfer_file_count,
         "transfer_total_file_size": transfer_total_file_size,
-        "request": request
+        "request": request,
     }
 
     # Set transfer name from session, if available
@@ -41,8 +40,8 @@ def index():
 
     # Assemble division options and add to template context
     division_options = []
-    for division_id in current_app.config['DIVISIONS'].keys():
-        division = current_app.config['DIVISIONS'][division_id]
+    for division_id in current_app.config["DIVISIONS"].keys():
+        division = current_app.config["DIVISIONS"][division_id]
         division_options.append({"id": division_id, "name": division["name"]})
 
     context["division_options"] = division_options
@@ -50,7 +49,7 @@ def index():
     context["transfer_source_dir"] = current_app.config["TRANSFER_SOURCE_DIRECTORY"]
 
     # Handle form submission
-    if request.method == 'POST':
+    if request.method == "POST":
         context["transfer_name"] = request.form["transfer_name"]
 
         # Get division ID from form data, if available
@@ -69,24 +68,35 @@ def index():
 
         # Perform copy, asynchronously, to transfer source directory
         if not context["transfer_source_dir"]:
-            context["transfer_source_dir"] = current_app.config['DIVISIONS'][division_id]['transfer_source_directory']
+            context["transfer_source_dir"] = current_app.config["DIVISIONS"][
+                division_id
+            ]["transfer_source_directory"]
 
         if not os.path.isdir(context["transfer_source_dir"]):
             context["transfer_source_dir"] = None
 
-            flash("Unable to copy to transfer source directory as it doesn't exist.", "danger")
+            flash(
+                "Unable to copy to transfer source directory as it doesn't exist.",
+                "danger",
+            )
         else:
-            destination_dir = os.path.join(context["transfer_source_dir"], context["transfer_name"])
+            destination_dir = os.path.join(
+                context["transfer_source_dir"], context["transfer_name"]
+            )
             form_filepath = os.path.join(transfer_dir, FORM_FILE_NAME)
             f = form.FormData(form_filepath)
             f.load()
             u = jobs.CreateTransferJob()
-            u.params({"source": transfer_dir, "destination": destination_dir, "form": f.form,})
+            u.params(
+                {
+                    "user_id": session["session_id"],
+                    "source": transfer_dir,
+                    "destination": destination_dir,
+                    "form": f.form,
+                }
+            )
             u.start()
 
             flash("Copy to transfer source directory started.", "primary")
 
-    return render_template(
-        "upload.html",
-        **context
-    )
+    return render_template("upload.html", **context)
