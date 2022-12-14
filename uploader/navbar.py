@@ -4,8 +4,8 @@ from uploader.Transfer import helpers
 
 
 class NavBarItem:
-    label = "" # Navigation link text
-    route = "" # Route ("transfer.index" for example)
+    label = ""  # Navigation link text
+    route = ""  # Route ("transfer.index" for example)
 
     def __init__(self, label, route):
         self.label = label
@@ -16,7 +16,8 @@ class NavBarItem:
 
     def is_visible(self):
         transfer_directory = helpers.get_transfer_directory()
-        return self.route == "transfer.index" or transfer_directory
+        always_visible = ["transfer.index", "dataverse.index", "job.index"]
+        return self.route in always_visible or transfer_directory
 
 
 class NavBar:

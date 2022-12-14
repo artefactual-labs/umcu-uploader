@@ -4,10 +4,16 @@
 
   <div class="container mt-5">
 
-    <h2>Import Into Archivematica</h2>
+    <h2>Export Transfer To Archivematica</h2>
 
     {% if transfer_directory|length: %}
       <table>
+        {% if transfer_name: %}
+          <tr>
+            <td>Transfer name: </td>
+            <td><code>{{ transfer_name }}</code></td>
+          </tr>
+        {% endif %}
         <tr>
           <td>File count: </td>
           <td><code>{{ transfer_file_count }}</code> <span class="text-muted small">(including generated metadata)</span></td>
@@ -19,13 +25,11 @@
       </table>
       <br/>
 
-      <p><a href="/files/preview">Preview file permission metadata</a></p>
-
       {% if transfer_source_dir or division_options|length > 0: %}
-        <form action="{{ url_for('upload.index') }}" method="POST">
+        <form action="{{ url_for('archivematica.index') }}" method="POST">
           {% if not transfer_source_dir and division_options|length > 0: %}
             <div>
-              <select name="division_id">
+              <select name="division_id" required>
                 <option value="">[choose division]</option>
                 {% for division in division_options: %}
                   <option value="{{division["id"]}}" {{ "selected" if request.form['division_id'] == division["id"] }}>{{division["name"]}}</option>
@@ -34,8 +38,8 @@
             </div>
           {% endif %}
 
-          <input name="transfer_name" value="{{transfer_name}}" placeholder="Transfer name" />
-          <input type="submit" value="Import" class="btn btn-primary"/>
+          <input name="transfer_name" value="{{transfer_name}}" placeholder="Transfer name" required />
+          <button type="submit" class="btn btn-primary">Import</button>
         </form>
       {% else %}
         <b>No transfer source directory available.</b>

@@ -16,7 +16,7 @@ def create_app(config_name="default"):
     with app.app_context():
         from uploader.Transfer.views import transfer
         from uploader.Navigator.views import navigator
-        from uploader.Upload.views import upload
+        from uploader.Archivematica.views import archivematica
         from uploader.Dataverse.views import dataverse
         from uploader.Metadata.views import metadata
         from uploader.Job.views import job
@@ -24,7 +24,7 @@ def create_app(config_name="default"):
         app.register_blueprint(transfer)
         app.register_blueprint(navigator, url_prefix="/files")
         app.register_blueprint(metadata, url_prefix="/metadata")
-        app.register_blueprint(upload, url_prefix="/upload")
+        app.register_blueprint(archivematica, url_prefix="/archivematica")
         app.register_blueprint(dataverse, url_prefix="/dataverse")
         app.register_blueprint(job, url_prefix="/job")
 
@@ -33,7 +33,7 @@ def create_app(config_name="default"):
         navbar.add("Upload Research Data", "transfer.index")
         navbar.add("Metadata", "metadata.index")
         navbar.add("Access Rights", "navigator.index")
-        navbar.add("Archivematica", "upload.index")
+        navbar.add("Archivematica", "archivematica.index")
         navbar.add("Dataverse", "dataverse.index")
         navbar.add("Jobs", "job.index")
 
