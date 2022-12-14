@@ -17,11 +17,14 @@ def index():
         if "uuid" in request.form:
             uuid = request.form["uuid"]
 
-            u = jobs.CreateDataverseDatasetFromAipJob()
+            job = jobs.CreateDataverseDatasetFromAipJob()
+
+            job.user_id = session["session_id"]
+            job.uuid = uuid
 
             # Create subject of configuration because some config variables
             # aren't JSON serializable
-            config = config_subset_dict(
+            job.config = config_subset_dict(
                 current_app.config,
                 [
                     "STORAGE_SERVER_URL",
@@ -36,8 +39,7 @@ def index():
                 ],
             )
 
-            u.params({"user_id": session["session_id"], "uuid": uuid, "config": config})
-            u.start()
+            job.do()
 
             flash("Started downloading AIP and importing into Dataverse", "info")
 

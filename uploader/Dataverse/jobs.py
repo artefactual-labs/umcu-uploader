@@ -20,12 +20,13 @@ from uploader.Transfer.helpers import potential_dir_name
 
 
 class CreateDataverseDatasetFromAipJob(Job):
+    uuid: str = None
+    confg: dict = {}
+
     def run(self):
-        super().begin("dataverse", self.params)
+        self.begin()
 
-        uuid = self.params["uuid"]
-
-        local_filename = download_aip(uuid, self.params["config"])
+        local_filename = download_aip(self.uuid, self.config)
 
         if local_filename is None:
             self.error("Error downloading AIP")
@@ -33,7 +34,7 @@ class CreateDataverseDatasetFromAipJob(Job):
 
         # Extract AIP to working directory and delete compressed file
         extract_directory = potential_dir_name(
-            os.path.join(tempfile.gettempdir(), uuid)
+            os.path.join(tempfile.gettempdir(), self.uuid)
         )
         os.mkdir(extract_directory)
 
@@ -46,29 +47,29 @@ class CreateDataverseDatasetFromAipJob(Job):
         dataverse_directory = os.path.join(extract_directory, "dataverse")
         os.mkdir(dataverse_directory)
 
-        populate_dataverse_dir(uuid, aip_directory, dataverse_directory)
+        populate_dataverse_dir(self.uuid, aip_directory, dataverse_directory)
 
         # Assemble Dataverse base URL
-        if self.params["config"]["DEMO_MODE"]:
-            server_url = self.params["config"]["DATAVERSE_DEMO_SERVER"]
+        if self.config["DEMO_MODE"]:
+            server_url = self.config["DATAVERSE_DEMO_SERVER"]
         else:
-            server_url = self.params["config"]["DATAVERSE_SERVER"]
+            server_url = self.config["DATAVERSE_SERVER"]
 
         url_parts = urlparse(server_url)
         base_url = f"{url_parts.scheme}://{url_parts.hostname}"
 
         # Create Dataverse dataset
-        dv_metadata_filepath = find_dv_metadata_json_file(uuid, aip_directory)
+        dv_metadata_filepath = find_dv_metadata_json_file(self.uuid, aip_directory)
 
         if dv_metadata_filepath is None:
             self.error("AIP contains no Dataverse metadata")
             return
 
         metadata_filepath = os.path.join(
-            aip_directory, "data", find_dv_metadata_json_file(uuid, aip_directory)
+            aip_directory, "data", find_dv_metadata_json_file(self.uuid, aip_directory)
         )
 
-        api = NativeApi(base_url, self.params["config"]["DATAVERSE_API_KEY"])
+        api = NativeApi(base_url, self.config["DATAVERSE_API_KEY"])
         ds = Dataset()
         ds.from_json(read_file(metadata_filepath))
 
@@ -77,7 +78,10 @@ class CreateDataverseDatasetFromAipJob(Job):
         response_data = resp.json()
 
         if response_data["status"] != "OK":
-            self.error(f"Error creating Dataverse dataset: {response_data['message']}", resp.status_code)
+            self.error(
+                f"Error creating Dataverse dataset: {response_data['message']}",
+                resp.status_code,
+            )
             return
 
         ds_pid = response_data["data"]["persistentId"]
@@ -96,4 +100,4 @@ class CreateDataverseDatasetFromAipJob(Job):
 
                 time.sleep(1)
 
-        super().end()
+        self.end()

@@ -83,19 +83,20 @@ def index():
             destination_dir = os.path.join(
                 context["transfer_source_dir"], context["transfer_name"]
             )
+
             form_filepath = os.path.join(transfer_dir, FORM_FILE_NAME)
+
             f = form.FormData(form_filepath)
             f.load()
-            u = jobs.CreateTransferJob()
-            u.params(
-                {
-                    "user_id": session["session_id"],
-                    "source": transfer_dir,
-                    "destination": destination_dir,
-                    "form": f.form,
-                }
-            )
-            u.start()
+
+            job = jobs.CreateTransferJob()
+
+            job.user_id = session["session_id"]
+            job.source = transfer_dir
+            job.destination = destination_dir
+            job.form = f.form
+
+            job.do()
 
             flash("Copy to transfer source directory started.", "primary")
 
