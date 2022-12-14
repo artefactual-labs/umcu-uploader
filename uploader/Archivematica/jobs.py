@@ -15,6 +15,11 @@ class CopyTransferJob(Job):
     def run(self):
         self.begin("Copy transfer to Archivematica")
 
+        # Fail if metadata hasn't been filled in
+        if self.form is None:
+            self.error("Metadata not populated")
+            return
+
         # Copy transfer files to transfer source location
         self.destination = potential_dir_name(self.destination)
         shutil.copytree(self.source, self.destination)

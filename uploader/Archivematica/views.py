@@ -12,14 +12,14 @@ from flask import (
 )
 from flask_api import status
 
-from uploader.Upload import jobs
+from uploader.Archivematica import jobs
 from uploader.Transfer import helpers
 from uploader.Metadata import FORM_FILE_NAME, form
 
-upload = Blueprint("upload", __name__, template_folder="templates")
+archivematica = Blueprint("archivematica", __name__, template_folder="templates")
 
 
-@upload.route("/", methods=["GET", "POST"])
+@archivematica.route("/", methods=["GET", "POST"])
 def index():
     # Initialize template context
     transfer_dir = helpers.get_transfer_directory()
@@ -37,6 +37,18 @@ def index():
     # Set transfer name from session, if available
     if "transfer_name" in session:
         context["transfer_name"] = session["transfer_name"]
+
+    # Warn user if Dataverse metadata hasn't been set for current transfer
+    form_filepath = os.path.join(transfer_dir, FORM_FILE_NAME)
+
+    f = form.FormData(form_filepath)
+    f.load()
+
+    if f.form is None:
+        flash(
+            "Please specify metadata before exporting transfer to Archivematica.",
+            "danger",
+        )
 
     # Assemble division options and add to template context
     division_options = []
@@ -83,11 +95,6 @@ def index():
             destination_dir = os.path.join(
                 context["transfer_source_dir"], context["transfer_name"]
             )
-
-            form_filepath = os.path.join(transfer_dir, FORM_FILE_NAME)
-
-            f = form.FormData(form_filepath)
-            f.load()
 
             job = jobs.CopyTransferJob()
 
