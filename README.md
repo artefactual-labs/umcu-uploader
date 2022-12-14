@@ -1,4 +1,4 @@
-# umcu-uploader
+# UMCU Uploader
 
 The UMCU Uploader is an application for describing research data sets, preserving them in 
 [Archivematica](https://github.com/artefactual/archivematica/) and publishing them with [Dataverse]( 
@@ -44,48 +44,100 @@ tested using Python 3.6.9.
 
 ## Installation
 
-1. Clone files and cd to directory:
+### Installing without Poetry
+For versions of python older than 3.7 (And without installing Poetry), follow these instructions:
 
-```
+<ol>
+<li>
+Clone files and cd to directory:
+
+```bash 
 $ git clone https://github.com/artefactual-labs/umcu-uploader.git && cd umcu-uploader
 ```
+<li>
+Clone submodules:
 
-2. Clone submodules:
-
-```
+```bash
 $ git submodule update --init --recursive
 ```
+<li> 
+Set up virtualenv in the project root directory:
 
-3. Set up virtualenv in the project root directory:
-
-```
+```bash
 $ virtualenv -p python3 venv
 ```
 
-4. Activate virtualenv:
+<li> 
+Activate virtualenv:
 
-```
+```bash
 $ source venv/bin/activate
 ```
 
-5. Install requirements:
 
-```
+<li>Install requirements:
+
+```bash
 $ pip install -r requirements/base.txt
 ```
-
-6. In a terminal window, start the Flask server:
+<li>
+In a terminal window, start the Flask server:
 
 ```
 $ python run.py
 ```
+<li>
+The application runs on HTTP port 5000. Confirm that the Flask server and application are up and running at
 
-7. The application runs on HTTP port 5000. Confirm that the Flask server and application are up and running at
 `localhost:5000` in your browser.
+</ol>
 
+### Install with Poetry
+<ol>
+<li> Install Poetry
+
+Follow the instructions [here](https://python-poetry.org/docs/#installation).
+
+<li> Clone files and cd to directory:
+
+```bash
+$ git clone https://github.com/artefactual-labs/umcu-uploader.git && cd umcu-uploader
+```
+
+<li> Clone submodules:
+
+```bash
+$ git submodule update --init --recursive
+```
+
+<li> Activate virtualenv:
+
+```bash
+$ poetry shell
+```
+
+<li> Install requirements:
+
+```bash
+$ poetry install
+```
+
+<li> In a terminal window, start the Flask server:
+
+```
+$ poetry python run.py
+```
+
+<li> The application runs on HTTP port 5000. Confirm that the Flask server and application are up and running at
+
+`
+localhost:<Port>
+`
+in your browser.
+
+</ol>
 
 ## Configuration
-
 Configuration is specified, using YAML, in `/etc/umcu-uploader.yaml`. The
 various configuration settings are detailed below:
 
@@ -134,7 +186,8 @@ allows the app to be accessed via TLS/SSL, basic access authentication, etc.
 
 Instructions for deploying using uWSGI proxied through Nginx:
 
-1. Add, to the server block of an Nginx configuration, directives to proxy to WSGI:
+<ol>
+<li> Add, to the server block of an Nginx configuration, directives to proxy to WSGI:
 
 ```
 location = /uploader { rewrite ^ /uploader/; }
@@ -145,8 +198,9 @@ location @uploader {
 }
 ```
 
- 2. Run the app using the included config file:
+ <li> Run the app using the included config file:
 
 ```
 $ uwsgi uploader.ini
 ```
+</ol>
