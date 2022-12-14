@@ -1,11 +1,15 @@
 {% extends "base.html" %}
 
+{% block head %}
+   <script defer src="{{ url_for('static', filename='upload.js') }}"></script>
+{% endblock %}
+
 {% block content %}
 
   <div class="container mt-5">
 
     {% if transfer_dir: %}
-      <h2>Update Research Data</h2>
+      <h2>Upload Research Data</h2>
 
       <table>
         {% if transfer_name: %}
@@ -30,9 +34,15 @@
 
     </br>
     <form action="{{ url_for('transfer.upload') }}" method="POST" enctype="multipart/form-data">
-      <input name="files" type="file" webkitdirectory directory />
-      <input type=submit value="Upload" class="btn btn-primary"/>
+      <button id="chooserProxy" type="button">Choose directory</button>
+      <input id="chooser" name="files" type="file" webkitdirectory directory class="collapse" />
+
+      <button id="chooserSubmit" type="submit" class="btn btn-primary">Upload</button>
+      <div id="chooserSpinner" class="spinner-border text-primary invisible" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
     </form>
+    <span id="chooserFeedback"></span>
 
   </div>
 
