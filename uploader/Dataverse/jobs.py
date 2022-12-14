@@ -92,7 +92,7 @@ class CreateDataverseDatasetFromAipJob(Job):
         arc_metadata_array = json.load(arc_metadata_filepath)
         # Loop through the array
         for arc_metadata_dict in arc_metadata_array:
-            #    If the dictionary is objects then return the division acronym
+            # If the dictionary is objects then return the division acronym
             if arc_metadata_dict["name"] == "objects/":
                 division_acronym = arc_metadata_dict["other.division"]
         # Create the dataset with the acronym
