@@ -22,7 +22,9 @@ def index(req_path: str):
         title_value = form_data["title"]
         licence_value = form_data["licenceType"]
         researchType_value = form_data["researchType"]
-        licence_description = "This dataset is licensed. Please see the license for more information."
+        licence_description = (
+            "This dataset is licensed. Please see the license for more information."
+        )
 
         date_of_deposit_value = form_data["depositDate"]
         date_start_value = form_data["dateRangeStart"]
@@ -38,9 +40,7 @@ def index(req_path: str):
         software_values_raw = get_raw_data(form_data, "software")
         keyword_values_raw = get_raw_data(form_data, "keyword")
 
-        retention_value = get_retention(
-            researchEndDate_value, researchType_value
-        )
+        retention_value = get_retention(researchEndDate_value, researchType_value)
         # ------------------
         form = {
             "retention": retention_value,
@@ -62,8 +62,10 @@ def index(req_path: str):
             "contactEmail": contactEmail_values_raw,
             "software": software_values_raw,
             "description": description_value,
-            'divisionAcronym': get_division_acronym(DIVISIONS_FILE_PATH, form_data['umcuDivision']),
-            'division': form_data['umcuDivision'],
+            "divisionAcronym": get_division_acronym(
+                DIVISIONS_FILE_PATH, form_data["umcuDivision"]
+            ),
+            "division": form_data["umcuDivision"],
         }
 
         transfer_dir = get_transfer_directory()

@@ -5,7 +5,9 @@ from config import Config
 from uploader.Metadata import ARCHIVEMATICA_METADATA_FILENAME
 
 
-def create_metadata(form: dict, permissions: dict, transfer_dir: str, destination_dir: str) -> None:
+def create_metadata(
+    form: dict, permissions: dict, transfer_dir: str, destination_dir: str
+) -> None:
     """create archivematica metadata file"""
 
     if not Config.DEMO_MODE:
@@ -19,25 +21,27 @@ def create_metadata(form: dict, permissions: dict, transfer_dir: str, destinatio
             % (form, permissions)
         )
     root: str = "objects"
-    metadata_list = [] 
+    metadata_list = []
     for filename in permissions.keys():
         # Remove transfer directory from filepath and prepend with "objects"
-        relative_path = os.path.join("objects", filename[len(transfer_dir) + 1:])
+        relative_path = os.path.join("objects", filename[len(transfer_dir) + 1 :])
 
-        metadata_list.append({
-            "filename": relative_path,
-            "dc.accesRights": permissions[filename],
-        })
+        metadata_list.append(
+            {
+                "filename": relative_path,
+                "dc.accesRights": permissions[filename],
+            }
+        )
 
     keyword_list = form["keywords"]
     keyword_list.append(form["subject"])
     root_metadata = {
-        "filename": 'objects/',
+        "filename": "objects/",
         "dc.title": form["title"],
         "dc.creator": form["author"],
         "dc.description": form["description"],
         "dc.subject": keyword_list,
-        "dc.publisher": server+form['divisionAcronym'],
+        "dc.publisher": server + form["divisionAcronym"],
         "dc.dateSubmitted": form["dateOfDeposit"],
         "dc.language": "English",
         "dc.temporal": form["daterangeStart"],

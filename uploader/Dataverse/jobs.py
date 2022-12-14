@@ -18,7 +18,7 @@ from uploader.Dataverse.helpers import (
     download_aip,
     find_metadata_json_file,
     populate_dataverse_dir,
-    find_dv_metadata_json_file,
+    find_metadata_json_file,
 )
 from uploader.Transfer.helpers import potential_dir_name
 
@@ -68,28 +68,35 @@ class CreateDataverseDatasetFromAipJob(Job):
         base_url = f"{url_parts.scheme}://{url_parts.hostname}"
 
         # Create Dataverse dataset
-        dv_metadata_filepath = find_dv_metadata_json_file(self.uuid, aip_directory)
+        dv_metadata_filepath = find_metadata_json_file(
+            uuid, aip_directory, "/dv_metadata.json"
+        )
 
         if dv_metadata_filepath is None:
             self.error("AIP contains no Dataverse metadata")
             return
 
         metadata_filepath = os.path.join(
-            aip_directory, "data", find_metadata_json_file(uuid, aip_directory, '/dv_metadata.json')
+            aip_directory,
+            "data",
+            find_metadata_json_file(uuid, aip_directory, "/dv_metadata.json"),
         )
 
         api = NativeApi(base_url, self.config["DATAVERSE_API_KEY"])
         ds = Dataset()
         ds.from_json(read_file(metadata_filepath))
-        
+
         # Get the division acronym from the metadata in the AIP
-        arc_metadata_filepath = os.path.join(aip_directory, "data",
-        find_metadata_json_file(uuid, aip_directory, '/metadata.json'))
+        arc_metadata_filepath = os.path.join(
+            aip_directory,
+            "data",
+            find_metadata_json_file(uuid, aip_directory, "/metadata.json"),
+        )
         # Load the json into an array of metadata
         arc_metadata_array = json.load(arc_metadata_filepath)
         # Loop through the array
         for arc_metadata_dict in arc_metadata_array:
-        #    If the dictionary is objects then return the division acronym
+            #    If the dictionary is objects then return the division acronym
             if arc_metadata_dict["name"] == "objects/":
                 division_acronym = arc_metadata_dict["other.division"]
         # Create the dataset with the acronym
