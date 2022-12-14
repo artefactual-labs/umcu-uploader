@@ -1,3 +1,4 @@
+import inspect
 import json
 import threading
 
@@ -20,8 +21,32 @@ class Job(threading.Thread):
     default_user_id = "1"
     id = None
 
-    def params(self, params):
-        self.params = params
+    def child_properties(self):
+        # Get all attributes
+        all_attributes = inspect.getmembers(
+            self.__class__, lambda a: not (inspect.isroutine(a))
+        )
+
+        # Filter out private attributes
+        class_properties = [
+            a
+            for a in all_attributes
+            if not (a[0].startswith("__") and a[0].endswith("__"))
+        ]
+
+        # Create dict of remaining attributes and their values
+        child_properties = {}
+
+        for class_property in class_properties:
+            property_name = class_property[0]
+
+            # Filter out properties from base classes
+            if not hasattr(threading.Thread, property_name) and not hasattr(
+                Job, property_name
+            ):
+                child_properties[property_name] = getattr(self, property_name)
+
+        return child_properties
 
     def new_conn(self):
         return sqlite3.connect("jobs.db")
@@ -31,10 +56,10 @@ class Job(threading.Thread):
             self.conn = self.new_conn()
         return self.conn
 
-    def begin(self, job_type, job_params):
+    def begin(self):
         # Set user ID
-        if "user_id" in job_params:
-            user_id = str(job_params["user_id"])
+        if self.user_id:
+            user_id = str(self.user_id)
         else:
             user_id = self.default_user_id
 
@@ -60,7 +85,7 @@ class Job(threading.Thread):
             "INSERT INTO job \
                 (user_id, job_type, params, complete) \
                 VALUES (?, ?, ?, ?)",
-            (user_id, job_type, json.dumps(job_params), 0),
+            (user_id, self.__class__.__name__, json.dumps(self.params), 0),
         )
         self.__conn.commit()
 
@@ -115,3 +140,7 @@ class Job(threading.Thread):
             res = cur.execute("DELETE FROM job WHERE user_id=?", (str(user_id),))
 
         self.conn.commit()
+
+    def do(self):
+        self.params = self.child_properties()
+        self.start()

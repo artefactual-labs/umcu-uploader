@@ -8,22 +8,26 @@ from uploader.Transfer.helpers import potential_dir_name
 
 
 class CreateTransferJob(Job):
+    source: str = None
+    destination: str = None
+    form: dict = {}
+
     def run(self):
-        super().begin("copy", self.params)
+        self.begin()
 
         # Copy transfer files to transfer source location
-        self.params["destination"] = potential_dir_name(self.params["destination"])
-        shutil.copytree(self.params["source"], self.params["destination"])
+        self.destination = potential_dir_name(self.destination)
+        shutil.copytree(self.source, self.destination)
 
         # Create metadata directory if need be
-        metadata_directory = os.path.join(self.params["destination"], "metadata")
+        metadata_directory = os.path.join(self.destination, "metadata")
 
         if not os.path.isdir(metadata_directory):
             os.mkdir(metadata_directory)
 
         # Move main metadata file, if it exists, to metadata directory
         main_metadata_filepath = os.path.join(
-            self.params["destination"], DATAVERSE_METADATA_FILENAME
+            self.destination, DATAVERSE_METADATA_FILENAME
         )
 
         if os.path.isfile(main_metadata_filepath):
@@ -32,7 +36,7 @@ class CreateTransferJob(Job):
 
         # Get file permission metadata, if it exists
         permission_file_path = os.path.join(
-            self.params["destination"], permissions.PERMISSION_METADATA_FILENAME
+            self.destination, permissions.PERMISSION_METADATA_FILENAME
         )
 
         if os.path.isfile(permission_file_path):
@@ -41,16 +45,16 @@ class CreateTransferJob(Job):
             perms.load()
 
         # Create archivematica metadata file
-        metadata_dest_dir = os.path.join(self.params["destination"], "metadata")
+        metadata_dest_dir = os.path.join(self.destination, "metadata")
         arc_metadata.create_metadata(
-            self.params["form"],
+            self.form,
             perms.permissions,
-            self.params["source"],
+            self.source,
             metadata_dest_dir,
         )
 
         # Remove working data files
-        os.remove(os.path.join(self.params["destination"], FORM_FILE_NAME))
+        os.remove(os.path.join(self.destination, FORM_FILE_NAME))
         os.remove(permission_file_path)
 
-        super().end()
+        self.end()
