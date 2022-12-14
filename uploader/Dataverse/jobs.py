@@ -24,7 +24,8 @@ class CreateDataverseDatasetFromAipJob(Job):
     confg: dict = {}
 
     def run(self):
-        self.begin()
+        self.begin("Exporting AIP to Dataverse")
+        self.current_operation("Downloading AIP")
 
         local_filename = download_aip(self.uuid, self.config)
 
@@ -33,6 +34,8 @@ class CreateDataverseDatasetFromAipJob(Job):
             return
 
         # Extract AIP to working directory and delete compressed file
+        self.current_operation("Extracting AIP")
+
         extract_directory = potential_dir_name(
             os.path.join(tempfile.gettempdir(), self.uuid)
         )
@@ -50,6 +53,8 @@ class CreateDataverseDatasetFromAipJob(Job):
         populate_dataverse_dir(self.uuid, aip_directory, dataverse_directory)
 
         # Assemble Dataverse base URL
+        self.current_operation("Creating Dataverse dataset")
+
         if self.config["DEMO_MODE"]:
             server_url = self.config["DATAVERSE_DEMO_SERVER"]
         else:
@@ -87,6 +92,8 @@ class CreateDataverseDatasetFromAipJob(Job):
         ds_pid = response_data["data"]["persistentId"]
 
         # Upload each file
+        self.current_operation("Uploading files to Dataverse")
+
         for root, dirs, files in os.walk(dataverse_directory, topdown=False):
             for name in files:
                 subdir = root[len(dataverse_directory) + 1 :]

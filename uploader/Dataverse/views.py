@@ -41,6 +41,6 @@ def index():
 
             job.do()
 
-            flash("Started downloading AIP and importing into Dataverse", "info")
+            flash("Started downloading AIP and exporting to Dataverse", "info")
 
     return render_template("dataverse.html", **context)

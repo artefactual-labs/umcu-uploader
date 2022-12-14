@@ -89,7 +89,7 @@ def index():
             f = form.FormData(form_filepath)
             f.load()
 
-            job = jobs.CreateTransferJob()
+            job = jobs.CopyTransferJob()
 
             job.user_id = session["session_id"]
             job.source = transfer_dir

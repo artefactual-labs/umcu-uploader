@@ -15,6 +15,7 @@
               <td>Type</td>
               <td>Error Description</td>
               <td>Error Code</td>
+              <td>Current Operation</td>
               <td>Status</td>
             </tr>
           </thead>
@@ -26,6 +27,7 @@
                 <td>{{ job.job_type }}</td>
                 <td>{{ job.error }}</td>
                 <td>{{ job.error_code }}</td>
+                <td>{{ job.current_operation }}</td>
                 <td>
                   {% if job.complete: %}
                     {% if job.error or job.error_code %}

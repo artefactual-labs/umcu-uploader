@@ -56,7 +56,7 @@ class Job(threading.Thread):
             self.conn = self.new_conn()
         return self.conn
 
-    def begin(self):
+    def begin(self, description):
         # Set user ID
         if self.user_id:
             user_id = str(self.user_id)
@@ -73,6 +73,7 @@ class Job(threading.Thread):
                 user_id TEXT, \
                 job_type TEXT, \
                 params TEXT, \
+                current_operation TEXT, \
                 error TEXT, \
                 error_code INTEGER, \
                 complete INT, \
@@ -83,9 +84,9 @@ class Job(threading.Thread):
         # Note that job has started
         cur.execute(
             "INSERT INTO job \
-                (user_id, job_type, params, complete) \
-                VALUES (?, ?, ?, ?)",
-            (user_id, self.__class__.__name__, json.dumps(self.params), 0),
+                (user_id, job_type, params, current_operation, complete) \
+                VALUES (?, ?, ?, ?, ?)",
+            (user_id, description, json.dumps(self.params), "Working", 0),
         )
         self.__conn.commit()
 
@@ -95,7 +96,7 @@ class Job(threading.Thread):
         # Note error
         cur = self.__conn.cursor()
         cur.execute(
-            "UPDATE job SET error=?, error_code=?, complete=1 WHERE id=?",
+            "UPDATE job SET error=?, error_code=?, current_operation='', complete=1 WHERE id=?",
             (
                 error,
                 error_code,
@@ -104,10 +105,23 @@ class Job(threading.Thread):
         )
         self.__conn.commit()
 
+    def current_operation(self, operation):
+        cur = self.__conn.cursor()
+        cur.execute(
+            "UPDATE job SET current_operation=? WHERE id=?",
+            (
+                operation,
+                self.id,
+            ),
+        )
+        self.__conn.commit()
+
     def end(self):
         # Mark job as complete
         cur = self.__conn.cursor()
-        cur.execute("UPDATE job SET complete=1 WHERE id=?", (self.id,))
+        cur.execute(
+            "UPDATE job SET current_operation='', complete=1 WHERE id=?", (self.id,)
+        )
         self.__conn.commit()
 
     def list(self, user_id=None, limit=None):

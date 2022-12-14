@@ -7,13 +7,13 @@ from uploader.Navigator import permissions
 from uploader.Transfer.helpers import potential_dir_name
 
 
-class CreateTransferJob(Job):
+class CopyTransferJob(Job):
     source: str = None
     destination: str = None
     form: dict = {}
 
     def run(self):
-        self.begin()
+        self.begin("Copy transfer to Archivematica")
 
         # Copy transfer files to transfer source location
         self.destination = potential_dir_name(self.destination)
