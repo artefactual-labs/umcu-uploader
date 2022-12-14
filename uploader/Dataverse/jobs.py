@@ -1,17 +1,13 @@
 import json
 import os
-import shutil
 import tempfile
 import time
 from urllib.parse import urlparse
 
-import metsrw
 from pyunpack import Archive
 from pyDataverse.api import NativeApi
 from pyDataverse.models import Dataset, Datafile
 from pyDataverse.utils import read_file
-from uploader.Metadata import FORM_FILE_NAME
-from uploader.Metadata.form import FormData
 
 from uploader.job import Job
 from uploader.Dataverse.helpers import (
