@@ -59,23 +59,45 @@ def download_aip(uuid, config):
     return None
 
 
-def populate_dataverse_dir(uuid, aip_directory, dataverse_directory):
+def get_dmdsubsec_for_access(dmdsec):
+    for dmdsubsec in dmdsec.subsections:
+        if dmdsubsec.label == "access_condition":
+            return dmdsubsec.value
+
+    return None
+
+
+
+def create_dips(aipfile, dip_directory, aip_directory, file_subpath):
+        source_path = os.path.join(aip_directory, "data", "objects", file_subpath)
+        dest_path = os.path.join(dip_directory, file_subpath)
+        dest_path_components = os.path.split(dest_path)
+        # Create subdir(s) if necessary
+        if not os.path.isdir(dest_path_components[0]):
+            os.makedirs(dest_path_components[0])
+        # Copy the aipfile if it does not have private access
+        for dmdsec in aipfile.dmdsecs:
+            dmdsec.access_condition = get_dmdsubsec_for_access(dmdsec)
+            if dmdsec.access_condition in ["public", "restricted"]:
+                shutil.copy(source_path, dest_path_components[0])
+
+        return dest_path_components
+
+def populate_dataverse_dir(uuid, aip_directory, dataverse_directory, dip_directory):
     mets_filename = f"METS.{uuid}.xml"
     mets_filepath = os.path.join(aip_directory, "data", mets_filename)
 
     mets = metsrw.METSDocument.fromfile(mets_filepath)
     files = mets.all_files()
-
     # Copy files to Dataverse directory
     for aipfile in files:
         if aipfile.type == "Item":
             file_subpath = aipfile.path[8:]
-
+            
             # Assemble destination subdirectory and path
-            source_path = os.path.join(aip_directory, "data", "objects", file_subpath)
 
-            dest_path = os.path.join(dataverse_directory, file_subpath)
-            dest_path_components = os.path.split(dest_path)
+            source_path = os.path.join(dip_directory, "data", "objects", file_subpath)
+            dest_path_components = create_dips(aipfile, dip_directory, aip_directory, file_subpath)
 
             # Create subdir(s) if necessary
             if not os.path.isdir(dest_path_components[0]):
