@@ -14,23 +14,23 @@ class InputIncrementer {
     this.inputGroup = inputGroup;
     this.name = name;
     this.title = title;
-    this.type = type
-    this.#addMethod = "add" + name + "Input";
-    this.#removeMethod = "remove" + name + "Input";
+    this.type = type;
   }
-  [this.#addMethod] = () => {
+  addInput = () => {
     const div = document.createElement("div");
     div.className = "my-3";
     const input = document.createElement("input");
     input.title = this.title;
     input.type = this.type;
     input.className = "form-control";
+    div.append(input);
+    this.inputGroup.append(div);
     input.name = title + "-" + (this.inputGroup.childElementCount - 1);
     let inputCount = this.inputGroup.childElementCount;
     if (inputCount > 1) this.removeButton.removeAttribute("hidden");
   };
-  [this.#removeMethod] = () => {
-    inputGroup.removeChild(this.inputGroup.lastChild);
+  removeInput = () => {
+    this.inputGroup.removeChild(this.inputGroup.lastChild);
     let inputCount = this.inputGroup.childElementCount;
     if (inputCount > 1) {
       this.removeButton.removeAttribute("hidden");
@@ -39,8 +39,6 @@ class InputIncrementer {
     }
   };
 }
-
-console.log(new InputIncrementer());
 //  add new  input field on button click
 const addAuthorNameButton = document.querySelector("#add-author");
 // select input group for author name
@@ -48,41 +46,23 @@ const authorNameInputGroup = document.querySelector(".author-name-group");
 // select the remove author name button
 const removeAuthorNameButton = document.querySelector("#remove-author");
 //  the number of input fields for author name
+const authorIncrementer = new InputIncrementer(
+  addAuthorNameButton,
+  removeAuthorNameButton,
+  authorNameInputGroup,
+  "author",
+);
 
-const addAuthorNameInput = () => {
-  const authorDiv = document.createElement("div");
-  authorDiv.className = "my-3";
-  const authorNameInput = document.createElement("input");
-  authorNameInput.title = "author";
-  authorNameInput.type = "text";
-  authorNameInput.className = "form-control";
-  authorDiv.append(authorNameInput);
-  authorNameInputGroup.append(authorDiv);
-  authorNameInput.name =
-    "author" + "-" + (authorNameInputGroup.childElementCount - 1);
-  let authorNameInputCount = authorNameInputGroup.childElementCount;
-  // add this behavior as a listener to the input group for author name
-  if (authorNameInputCount > 1) {
-    removeAuthorNameButton.removeAttribute("hidden");
-  }
-};
+// const addAuthorNameInput = () =>
+//   authorIncrementer.addInput();
 // this function removes the last input field for author name
-const removeAuthorNameInput = () => {
-  authorNameInputGroup.removeChild(authorNameInputGroup.lastChild);
-  let authorNameInputCount = authorNameInputGroup.childElementCount;
-  if (authorNameInputCount > 1) {
-    removeAuthorNameButton.removeAttribute("hidden");
-  } else if (authorNameInputCount === 1) {
-    removeAuthorNameButton.hidden = true;
-  }
-};
+// const removeAuthorNameInput = () => authorIncrementer.removeInput();
 // add event listener to add author name button
 
-addAuthorNameButton.addEventListener("click", addAuthorNameInput);
+addAuthorNameButton.addEventListener("click", authorIncrementer.removeInput());
 
 // add event listener to remove author name button
-removeAuthorNameButton.addEventListener("click", removeAuthorNameInput);
-
+removeAuthorNameButton.addEventListener("click", authorIncrementer.addInput());
 // --------------------------------------------
 
 //  add new input field on button click for keywords
@@ -92,41 +72,21 @@ const keywordInputGroup = document.querySelector(".keyword-name-group");
 // select the remove keyword button
 const removeKeywordButton = document.querySelector("#remove-keyword");
 //  the number of input fields for keywords
-
-const addKeywordInput = () => {
-  const keywordDiv = document.createElement("div");
-  keywordDiv.className = "my-3";
-  const keywordInput = document.createElement("input");
-  keywordInput.title = "keyword";
-  keywordInput.type = "text";
-  keywordInput.className = "form-control";
-  keywordDiv.append(keywordInput);
-  keywordInputGroup.append(keywordDiv);
-  keywordInput.name =
-    "keyword" + "-" + (keywordInputGroup.childElementCount - 1);
-
-  let keywordInputCount = keywordInputGroup.childElementCount;
-  // add this behavior as a listener to the input group for keywords
-  if (keywordInputCount > 1) {
-    removeKeywordButton.removeAttribute("hidden");
-  }
-};
+const keywordIncrementer = new InputIncrementer(
+  addKeywordButton,
+  removeKeywordButton,
+  keywordInputGroup,
+  "keyword",
+);
+// const addKeywordInput = () => keywordIncrementer.addInput;
 // this function removes the last input field for keywords
-const removeKeywordInput = () => {
-  keywordInputGroup.removeChild(keywordInputGroup.lastChild);
-  let keywordInputCount = keywordInputGroup.childElementCount;
-  if (keywordInputCount > 1) {
-    removeKeywordButton.removeAttribute("hidden");
-  } else if (keywordInputCount === 1) {
-    removeKeywordButton.hidden = true;
-  }
-};
+// const removeKeywordInput = () => keywordIncrementer.removeInput;
 // add event listener to add keyword button
 
-addKeywordButton.addEventListener("click", addKeywordInput);
+addKeywordButton.addEventListener("click",  keywordIncrementer.addInput);
 
 // add event listener to remove keyword button
-removeKeywordButton.addEventListener("click", removeKeywordInput);
+// removeKeywordButton.addEventListener("click", removeKeywordInput);
 
 // --------------------------------------------
 //  add new input field on button click contact
@@ -136,6 +96,7 @@ const contactInputGroup = document.querySelector(".contact-group");
 // select the remove contact button
 const removeContactButton = document.querySelector("#remove-contact");
 //  the number of input fields for contact
+
 
 const addContactInput = () => {
   const contactDiv = document.createElement("div");
@@ -192,7 +153,7 @@ removeContactButton.addEventListener("click", removeContactInput);
 // ---------------------
 // set current date as the value of the data deposit date
 const depositDateInput = document.querySelector("#deposit-datename");
-currentDate = new Date(Date.now());
+let currentDate = new Date(Date.now());
 
 depositDateInput.setAttribute("value", currentDate.toISOString().slice(0, 10));
 
@@ -208,6 +169,7 @@ const removeRelatedPublicationButton = document.querySelector(
   "#remove-related-publication"
 );
 
+// this function adds a new input field for related publication
 const addRelatedPublicationInput = () => {
   const relatedPublicationDiv = document.createElement("div");
   relatedPublicationDiv.className = "my-3";
@@ -329,41 +291,3 @@ const removeSoftwareInput = () => {
 addSoftwareButton.addEventListener("click", addSoftwareInput);
 
 removeSoftwareButton.addEventListener("click", removeSoftwareInput);
-// ---------------------
-// add new input field on button click for related publication
-const addLanguageButton = document.querySelector("#add-language");
-const LanguageInputGroup = document.querySelector(".language-group");
-const removeLanguageButton = document.querySelector("#remove-language");
-
-const addLanguageInput = () => {
-  const LanguageDiv = document.createElement("div");
-  LanguageDiv.className = "my-3";
-  const LanguageInput = document.createElement("input");
-  LanguageInput.title = "Language";
-  LanguageInput.type = "text";
-  LanguageInput.className = "form-control";
-  LanguageDiv.append(LanguageInput);
-  LanguageInputGroup.append(LanguageDiv);
-  LanguageInput.name =
-    "language" + "-" + (LanguageInputGroup.childElementCount - 1);
-
-  let LanguageInputCount = LanguageInputGroup.childElementCount;
-  // add this behavior as a listener to the input group for related publication
-  if (LanguageInputCount > 1) {
-    removeLanguageButton.removeAttribute("hidden");
-  }
-};
-
-const removeLanguageInput = () => {
-  LanguageInputGroup.removeChild(LanguageInputGroup.lastChild);
-  let LanguageInputCount = LanguageInputGroup.childElementCount;
-  if (LanguageInputCount > 1) {
-    removeLanguageButton.removeAttribute("hidden");
-  } else if (LanguageInputCount === 1) {
-    removeLanguageButton.hidden = true;
-  }
-};
-
-addLanguageButton.addEventListener("click", addLanguageInput);
-
-removeLanguageButton.addEventListener("click", removeLanguageInput);
