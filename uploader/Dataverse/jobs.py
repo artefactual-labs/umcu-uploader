@@ -16,6 +16,8 @@ from uploader.Dataverse.helpers import (
     populate_dataverse_dir,
     find_metadata_json_file,
 )
+from uploader.Metadata import DIVISIONS_FILE_PATH
+from uploader.Metadata.helpers import get_division_acronym
 from uploader.Transfer.helpers import potential_dir_name
 
 
@@ -65,7 +67,7 @@ class CreateDataverseDatasetFromAipJob(Job):
 
         # Create Dataverse dataset
         dv_metadata_filepath = find_metadata_json_file(
-            uuid, aip_directory, "/dv_metadata.json"
+            self.uuid, aip_directory, "/dv_metadata.json"
         )
 
         if dv_metadata_filepath is None:
@@ -75,28 +77,45 @@ class CreateDataverseDatasetFromAipJob(Job):
         metadata_filepath = os.path.join(
             aip_directory,
             "data",
-            find_metadata_json_file(uuid, aip_directory, "/dv_metadata.json"),
+            dv_metadata_filepath,
         )
 
         api = NativeApi(base_url, self.config["DATAVERSE_API_KEY"])
         ds = Dataset()
-        ds.from_json(read_file(metadata_filepath))
+        ds.from_json(read_file(metadata_filepath), validate=False)
 
         # Get the division acronym from the metadata in the AIP
         arc_metadata_filepath = os.path.join(
             aip_directory,
             "data",
-            find_metadata_json_file(uuid, aip_directory, "/metadata.json"),
+            find_metadata_json_file(self.uuid, aip_directory, "/metadata.json"),
         )
-        # Load the json into an array of metadata
-        arc_metadata_array = json.load(arc_metadata_filepath)
-        # Loop through the array
+
+        # Load the JSON into an array of metadata
+        with open(arc_metadata_filepath) as file:
+            arc_metadata_array = json.load(file)
+
+        # Loop through the array to find division
+        division = None
+
         for arc_metadata_dict in arc_metadata_array:
-            # If the dictionary is objects then return the division acronym
-            if arc_metadata_dict["name"] == "objects/":
-                division_acronym = arc_metadata_dict["other.division"]
+            # If the dictionary is objects then take note of the division acronym
+            if arc_metadata_dict["filename"] == "objects/":
+                division = arc_metadata_dict["other.division"]
+
+        if division is None:
+            self.error("Unable to find division in metadata")
+            return
+
+        # Find division acronym
+        division_acronym = get_division_acronym(DIVISIONS_FILE_PATH, division)
+
+        if division_acronym == "No acroynm found":
+            self.error("Unable to find acronym for division")
+            return
+
         # Create the dataset with the acronym
-        resp = api.create_dataset(division_acronym, ds.json())
+        resp = api.create_dataset(division_acronym, ds.json(validate=False))
         response_data = resp.json()
 
         if response_data["status"] != "OK":
