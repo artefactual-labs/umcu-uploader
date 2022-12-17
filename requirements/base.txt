@@ -5,6 +5,6 @@ natsort
 pysqlite3
 pyaml
 black
-pyunpack
+py7zr
 pyDataverse
 requests
