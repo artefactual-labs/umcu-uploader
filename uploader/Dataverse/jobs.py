@@ -4,7 +4,7 @@ import tempfile
 import time
 from urllib.parse import urlparse
 
-from pyunpack import Archive
+import py7zr
 from pyDataverse.api import NativeApi
 from pyDataverse.models import Dataset, Datafile
 from pyDataverse.utils import read_file
@@ -43,7 +43,10 @@ class CreateDataverseDatasetFromAipJob(Job):
         )
         os.mkdir(extract_directory)
 
-        Archive(local_filename).extractall(extract_directory)
+        archive = py7zr.SevenZipFile(local_filename, mode="r")
+        archive.extractall(path=extract_directory)
+        archive.close()
+
         os.unlink(local_filename)
 
         # Create and populate Dataverse package directory
