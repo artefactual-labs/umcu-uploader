@@ -15,7 +15,7 @@ def index():
     # Handle form submission
     if request.method == "POST":
         if "uuid" in request.form:
-            uuid = request.form["uuid"]
+            uuid = request.form["uuid"].strip()
 
             job = jobs.CreateDataverseDatasetFromAipJob()
 
