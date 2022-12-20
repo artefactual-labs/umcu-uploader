@@ -144,6 +144,24 @@ class Job(threading.Thread):
 
         return res.fetchall()
 
+    def get(self, job_id, user_id=None):
+        # Make returned rows be dicts (with column name as key)
+        self.get_conn().row_factory = dict_factory
+        cur = self.get_conn().cursor()
+
+        if user_id is None:
+            res = cur.execute(f"SELECT * FROM job WHERE id=?", (str(job_id),))
+        else:
+            res = cur.execute(
+                f"SELECT * FROM job WHERE user_id=? AND id=?",
+                (
+                    str(user_id),
+                    str(job_id),
+                ),
+            )
+
+        return res.fetchone()
+
     def clear(self, user_id=None):
         # Clear jobs
         cur = self.get_conn().cursor()

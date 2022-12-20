@@ -23,7 +23,9 @@
           <tbody>
             {% for job in jobs: %}
               <tr>
-                <td>{{ job.createdatetime }}</td>
+                <td>
+                  <a href="{{ url_for('job.detail', id=job.id) }}" class="text-decoration-none">{{ job.createdatetime[:19] }}</a>
+                </td>
                 <td>{{ job.job_type }}</td>
                 <td>{{ job.error }}</td>
                 <td>{{ job.error_code }}</td>
@@ -31,12 +33,12 @@
                 <td>
                   {% if job.complete: %}
                     {% if job.error or job.error_code %}
-                      Failed
+                      <span class="text-danger">Failed</span>
                     {% else: %}
-                      Done
+                      <span class="text-success">Done</span>
                     {% endif %}
                   {% else: %}
-                    Running
+                    <span class="text-warning">Running</span>
                   {% endif %}
                 </td>
               </tr>

@@ -23,7 +23,7 @@ from uploader.Transfer.helpers import potential_dir_name
 
 class CreateDataverseDatasetFromAipJob(Job):
     uuid: str = None
-    confg: dict = {}
+    config: dict = {}
 
     def run(self):
         self.begin("Exporting AIP to Dataverse")

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <div class="container mt-5">
+
+    <h2>Job Detail</h2>
+
+    <div class="table-responsive">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <td>Create Datetime</td>
+            <td>Type</td>
+            <td>Error Description</td>
+            <td>Error Code</td>
+            <td>Current Operation</td>
+            <td>Status</td>
+          </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+              <td>{{ job.createdatetime[:19] }}</td>
+              <td>{{ job.job_type }}</td>
+              <td>{{ job.error }}</td>
+              <td>{{ job.error_code }}</td>
+              <td>{{ job.current_operation }}</td>
+              <td>
+                {% if job.complete: %}
+                  {% if job.error or job.error_code %}
+                    <span class="text-danger">Failed</span>
+                  {% else: %}
+                    <span class="text-success">Done</span>
+                  {% endif %}
+                {% else: %}
+                  <span class="text-warning">Running</span>
+                {% endif %}
+              </td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="m-4">
+      <h3>Parameters</h3>
+
+      <pre class="m-4">{{ params }}</pre>
+    </div>
+
+{% endblock %}
