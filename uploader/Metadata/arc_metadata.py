@@ -29,7 +29,7 @@ def create_metadata(
         metadata_list.append(
             {
                 "filename": relative_path,
-                "dc.accesRights": permissions[filename],
+                "dc.accessRights": permissions[filename],
             }
         )
 

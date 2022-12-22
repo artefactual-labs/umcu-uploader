@@ -59,29 +59,27 @@ def download_aip(uuid, config):
     return None
 
 
-def get_dmdsubsec_for_access(dmdsec):
-    for dmdsubsec in dmdsec.subsections:
-        if dmdsubsec.label == "access_condition":
-            return dmdsubsec.value
+def dmdtext_access_rights(dmdsec) -> str:
+    dmdele = dmdsec.serialize()
+    dmdele = dmdele.find(".//dc:accessRights", namespaces=metsrw.utils.NAMESPACES)
+    if dmdele is not None:
+        return dmdele.text
+    return "No access condition found"
 
-    return None
 
+def create_dips(aipfile, dip_directory, dataverse_directory, file_subpath):
+    source_path = os.path.join(dataverse_directory, "data", "objects", file_subpath)
+    dest_path = os.path.join(dip_directory, file_subpath)
+    dest_path_components = os.path.split(dest_path)
+    # Create subdir(s) if necessary
+    if not os.path.isdir(dest_path_components[0]):
+        os.makedirs(dest_path_components[0])
+    # Copy the aipfile if it does not have private access
+    for dmdsec in aipfile.dmdsecs:
+        dmdsec.access_condition = dmdtext_access_rights(dmdsec)
+        if dmdsec.access_condition in ["public", "restricted"]:
+            shutil.copy(source_path, dest_path_components[0])
 
-
-def create_dips(aipfile, dip_directory, aip_directory, file_subpath):
-        source_path = os.path.join(aip_directory, "data", "objects", file_subpath)
-        dest_path = os.path.join(dip_directory, file_subpath)
-        dest_path_components = os.path.split(dest_path)
-        # Create subdir(s) if necessary
-        if not os.path.isdir(dest_path_components[0]):
-            os.makedirs(dest_path_components[0])
-        # Copy the aipfile if it does not have private access
-        for dmdsec in aipfile.dmdsecs:
-            dmdsec.access_condition = get_dmdsubsec_for_access(dmdsec)
-            if dmdsec.access_condition in ["public", "restricted"]:
-                shutil.copy(source_path, dest_path_components[0])
-
-        return dest_path_components
 
 def populate_dataverse_dir(uuid, aip_directory, dataverse_directory, dip_directory):
     mets_filename = f"METS.{uuid}.xml"
@@ -93,11 +91,12 @@ def populate_dataverse_dir(uuid, aip_directory, dataverse_directory, dip_directo
     for aipfile in files:
         if aipfile.type == "Item":
             file_subpath = aipfile.path[8:]
-            
-            # Assemble destination subdirectory and path
 
-            source_path = os.path.join(dip_directory, "data", "objects", file_subpath)
-            dest_path_components = create_dips(aipfile, dip_directory, aip_directory, file_subpath)
+            # Assemble destination subdirectory and path
+            source_path = os.path.join(aip_directory, "data", "objects", file_subpath)
+
+            dest_path = os.path.join(dip_directory, file_subpath)
+            dest_path_components = os.path.split(dest_path)
 
             # Create subdir(s) if necessary
             if not os.path.isdir(dest_path_components[0]):
@@ -105,6 +104,8 @@ def populate_dataverse_dir(uuid, aip_directory, dataverse_directory, dip_directo
 
             # Copy file
             shutil.copy(source_path, dest_path_components[0])
+
+            create_dips(aipfile, dataverse_directory, aip_directory, file_subpath)
 
 
 def find_metadata_json_file(uuid, aip_directory, file):

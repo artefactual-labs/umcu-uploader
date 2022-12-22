@@ -6,3 +6,9 @@ uploader/Navigator/__pycache__/
 config.pyc
 *.pyc
 .config.yaml
+jobs.db
+umcu-uploader.yaml
+NOTES.md
+divisions.csv
+.gitignore
+.vscode/settings.json

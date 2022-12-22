@@ -57,7 +57,9 @@ class CreateDataverseDatasetFromAipJob(Job):
         os.mkdir(dip_directory)
         os.mkdir(dataverse_directory)
 
-        populate_dataverse_dir(self.uuid, aip_directory, dataverse_directory)
+        populate_dataverse_dir(
+            self.uuid, aip_directory, dataverse_directory, dip_directory
+        )
 
         # Assemble Dataverse base URL
         self.current_operation("Creating Dataverse dataset")
