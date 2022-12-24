@@ -5,3 +5,4 @@ uploader/__pycache__/
 uploader/Navigator/__pycache__/
 config.pyc
 *.pyc
+.config.yaml

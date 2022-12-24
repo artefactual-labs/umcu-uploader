@@ -138,8 +138,9 @@ in your browser.
 </ol>
 
 ## Configuration
-Configuration is specified, using YAML, in `/etc/umcu-uploader.yaml`. The
-various configuration settings are detailed below:
+Configuration is specified, using YAML, either in `.config.yaml` in the
+application directory or in `/etc/umcu-uploader.yaml`. The various
+configuration settings are detailed below:
 
 
 | Setting                            | Description                                                          | Default                              |

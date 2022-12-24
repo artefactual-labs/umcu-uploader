@@ -1,4 +1,4 @@
-from uploader.configutil import set_config_from_yaml
+from uploader.configutil import get_config_file, set_config_from_yaml
 
 
 # Specifiy config fields and defaults
@@ -28,9 +28,11 @@ class Config:
 
 
 # Populate config with values from YAML file, if available
-config_filepath = "/etc/umcu-uploader.yaml"
+config_filepath = get_config_file()
 
 try:
+    print(f"Attempting to read config file {config_filepath}...\n")
+
     set_config_from_yaml(Config, config_fields, config_filepath)
 
 except (FileNotFoundError, IOError):

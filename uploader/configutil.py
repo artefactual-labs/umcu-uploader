@@ -1,6 +1,18 @@
 import os
 import yaml
 
+CONFIG_FILE_LOCATIONS = [".config.yaml", "/etc/umcu-uploader.yaml"]
+
+
+def get_config_file():
+    # Return first file found in possible config file locations
+    for config_file in CONFIG_FILE_LOCATIONS:
+        if os.path.isfile(config_file):
+            return config_file
+
+    # Return first possible config file in list as suggestion
+    return config_file[0]
+
 
 def set_config_from_yaml(config, config_fields, config_filepath):
     # Set default config values
