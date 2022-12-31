@@ -4,7 +4,7 @@ import shutil
 from uploader.job import Job
 from uploader.Metadata import DATAVERSE_METADATA_FILENAME, FORM_FILE_NAME, arc_metadata
 from uploader.Navigator import permissions
-from uploader.Transfer.helpers import potential_dir_name
+from uploader.Transfer.helpers import create_unique_dir_name
 
 
 class CopyTransferJob(Job):
@@ -21,7 +21,7 @@ class CopyTransferJob(Job):
             return
 
         # Copy transfer files to transfer source location
-        self.destination = potential_dir_name(self.destination)
+        self.destination = create_unique_dir_name(self.destination)
         shutil.copytree(self.source, self.destination)
 
         # Create metadata directory if need be

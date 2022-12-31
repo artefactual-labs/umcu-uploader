@@ -11,7 +11,8 @@ from uploader.Transfer import helpers
 
 transfer = Blueprint("transfer", __name__, template_folder="templates")
 
-@transfer.route('/')
+
+@transfer.route("/")
 def index():
     transfer_dir = helpers.get_transfer_directory()
 
@@ -22,20 +23,21 @@ def index():
     context = {
         "transfer_dir": transfer_dir,
         "transfer_file_count": transfer_file_count,
-        "transfer_total_file_size": transfer_total_file_size
+        "transfer_total_file_size": transfer_total_file_size,
     }
 
     if "transfer_name" in session:
         context["transfer_name"] = session["transfer_name"]
 
-    return render_template('transfer.html', **context)
+    return render_template("transfer.html", **context)
 
-@transfer.route('/upload', methods=['POST'])
+
+@transfer.route("/upload", methods=["POST"])
 def upload():
     # Check if the post request has the file part
-    if 'files' not in request.files:
+    if "files" not in request.files:
         flash("No file part", "danger")
-        return redirect(url_for('transfer.index'))
+        return redirect(url_for("transfer.index"))
 
     # Abort if no file have been uploaded
     files = request.files.getlist("files")
@@ -45,7 +47,9 @@ def upload():
 
     # Create unique directory
     data_dir = helpers.get_data_directory()
-    transfer_dir = helpers.potential_dir_name(os.path.join(data_dir, top_level_directory))
+    transfer_dir = helpers.create_unique_dir_name(
+        os.path.join(data_dir, top_level_directory)
+    )
     os.mkdir(transfer_dir)
 
     # Cycle through file data, create necessary subdirectories, and save files
@@ -56,10 +60,10 @@ def upload():
         # An empty directory sent won't have a filename
         if filename == "":
             flash("No files were uploaded", "danger")
-            return redirect(url_for('transfer.index'))
+            return redirect(url_for("transfer.index"))
 
         # Create subdirectory (or subdirectories if need be) and set permissions
-        rel_subdir = os.path.dirname(file.filename)[len(top_level_directory) + 1:]
+        rel_subdir = os.path.dirname(file.filename)[len(top_level_directory) + 1 :]
         subdir = os.path.join(transfer_dir, rel_subdir)
 
         if not os.path.isdir(subdir):
@@ -70,11 +74,13 @@ def upload():
         filepath = os.path.join(subdir, filename)
 
         # Write to file
-        with open(filepath, 'wb') as f:
+        with open(filepath, "wb") as f:
             f.write(file.read())
 
     # Set default permissions
-    permission_file_path = os.path.join(transfer_dir, permissions.PERMISSION_METADATA_FILENAME)
+    permission_file_path = os.path.join(
+        transfer_dir, permissions.PERMISSION_METADATA_FILENAME
+    )
     perms = permissions.FilePermissions(permission_file_path)
 
     for file in helpers.get_all_filepaths_in_directory(transfer_dir, False):
@@ -89,4 +95,4 @@ def upload():
     session.modified = True
 
     flash("Files have been uploaded", "primary")
-    return redirect(url_for('transfer.index'))
+    return redirect(url_for("transfer.index"))

@@ -18,7 +18,7 @@ from uploader.Dataverse.helpers import (
 )
 from uploader.Metadata import DIVISIONS_FILE_PATH
 from uploader.Metadata.helpers import get_division_acronym
-from uploader.Transfer.helpers import potential_dir_name
+from uploader.Transfer.helpers import create_unique_dir_name
 
 
 class CreateDataverseDatasetFromAipJob(Job):
@@ -38,7 +38,7 @@ class CreateDataverseDatasetFromAipJob(Job):
         # Extract AIP to working directory and delete compressed file
         self.current_operation("Extracting AIP")
 
-        extract_directory = potential_dir_name(
+        extract_directory = create_unique_dir_name(
             os.path.join(tempfile.gettempdir(), self.uuid)
         )
         os.mkdir(extract_directory)

@@ -3,6 +3,7 @@ import tempfile
 
 from flask import current_app, flash, session
 
+
 def directory_count_and_size(directory):
     count = 0
     size = 0
@@ -19,11 +20,13 @@ def directory_count_and_size(directory):
 
     return count, size
 
+
 def get_data_directory():
     if data_directory_set_in_config():
         return current_app.config["DATA_DIRECTORY"]
 
     return tempfile.gettempdir()
+
 
 def get_transfer_directory():
     transfer_dir = ""
@@ -33,8 +36,13 @@ def get_transfer_directory():
 
     return transfer_dir
 
+
 def data_directory_set_in_config():
-    return "DATA_DIRECTORY" in current_app.config and current_app.config["DATA_DIRECTORY"] is not None
+    return (
+        "DATA_DIRECTORY" in current_app.config
+        and current_app.config["DATA_DIRECTORY"] is not None
+    )
+
 
 def get_all_filepaths_in_directory(directory, trim_root=True):
     files = []
@@ -42,18 +50,19 @@ def get_all_filepaths_in_directory(directory, trim_root=True):
     for root, _, dir_files in os.walk(directory, topdown=False):
         for name in dir_files:
             if trim_root:
-                files.append(os.path.join(root.replace(directory, ''), name))
+                files.append(os.path.join(root.replace(directory, ""), name))
             else:
                 files.append(os.path.join(root, name))
 
     return files
 
-def potential_dir_name(directory_path):
+
+def create_unique_dir_name(directory_path):
     potential_path = directory_path
     padding_counter = 1
 
     while os.path.exists(potential_path):
-        potential_path = directory_path + '_' + str(padding_counter)
+        potential_path = directory_path + "_" + str(padding_counter)
 
         padding_counter += 1
 
