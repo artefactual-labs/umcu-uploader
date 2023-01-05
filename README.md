@@ -124,7 +124,7 @@ $ poetry install
 
 <li> In a terminal window, start the Flask server:
 
-```
+```bash
 $ poetry python run.py
 ```
 
@@ -170,7 +170,7 @@ configuration settings are detailed below:
 
 Example value of the `divisions` setting:
 
-```
+```yaml
 ---
 divisions:
   ed:
@@ -204,7 +204,7 @@ Instructions for deploying using uWSGI proxied through Nginx:
 <ol>
 <li> Add, to the server block of an Nginx configuration, directives to proxy to WSGI:
 
-```
+```wsgi
 location = /uploader { rewrite ^ /uploader/; }
 location /uploader { try_files $uri @uploader; }
 location @uploader {
@@ -215,13 +215,13 @@ location @uploader {
 
 <li> Run the app using the included config file:
 
-```
+```bash
 $ uwsgi uploader.ini
 ```
 
 If deploying in Ubuntu you'll likely want to run it using the www-data user:
 
-```
+```bash
 $ sudo -u www-data uwsgi uploader.ini
 ```
 
@@ -234,7 +234,7 @@ owned by the same user running the app so the app can write data to it.
 
 Example:
 
-```
+```bash
 $ sudo mkdir /var/umc-uploader
 $ sudo chown www-data:www-data /var/umc-uploader
 ```
