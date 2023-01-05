@@ -182,6 +182,20 @@ divisions:
 
 ## Deployment
 
+### Disk space requirements
+
+The application itself, as opposed to application data, should be given 1 GB,
+or so, of disk space (providing room for the source code and the application's
+SQLite database).
+
+Application data will likely require more disk space. Application data needs to
+be manually deleted currently. In order to estimate disk space requirements
+this equation can be used: estimated average size of dataset * 3 * estimated
+number of datasets (for whatever period of time passes before old application
+data is cleaned up).
+
+### Deployment instructions
+
 A fairly simple way of deploying the app is to proxy it through Nginx. This
 allows the app to be accessed via TLS/SSL, basic access authentication, etc.
 
@@ -199,9 +213,79 @@ location @uploader {
 }
 ```
 
- <li> Run the app using the included config file:
+<li> Run the app using the included config file:
 
 ```
 $ uwsgi uploader.ini
 ```
+
+If deploying in Ubuntu you'll likely want to run it using the www-data user:
+
+```
+$ sudo -u www-data uwsgi uploader.ini
+```
+
+<li> Create an application data directory somewhere on your filesystem. This is
+where research data uploaded to the app will be put.
+
+If deploying in Ubuntu this directory could be put somewhere like, for
+example, `/var/uploader`. You'll want to make this directory
+owned by the same user running the app so the app can write data to it.
+
+Example:
+
+```
+$ sudo mkdir /var/umc-uploader
+$ sudo chown www-data:www-data /var/umc-uploader
+```
+
+Make sure to set the `data_directory` configuration setting to your chosen
+application directory. 
 </ol>
+
+### Archivematica integration
+
+The UMC uploader needs to copy research data to Archivematica so that AIPs can
+be created from them.
+
+For the UMC uploader to be able to copy to Archivematica transfer source
+directories, however, requires that the file permissions on these directories
+allow the user that the UMC uploader is running under (likely `www-data` if
+running in Ubuntu) to write to them.
+
+If only one Archivematica transfer source directory exists it can be specified
+using the `transfer_source_directory` configuration setting. To allow
+per-department transfer source directories to be specified then the `divisions`
+configuration setting must be populated (see example in `Configuration`
+section of this document). 
+
+### Archivematica Storage Service integration
+
+For the UMC uploader to be able to download created AIPs afterwards, before
+exporting to Dataverse, requires that Archivematica Storage Service access be
+configured.
+
+The following configuration settings must be specified:
+
+* `storage_server_url` (Archivematica Storage Server URL)
+* `storage_server_user` (Archivematica Storage Server username)
+* `storage_server_api_key` (Archivematica Storage Server API key)
+
+If Archivematica Storage Service is running behind HTTP basic authentication
+then the configuration settings must also be specified:
+
+* `storage_server_basic_auth_user` (Archivematica Storage Server basic auth user)
+* `storage_server_basic_auth_password` (Archivematica Storage Server basic auth password)
+
+### Dataverse integration
+
+Exporting downloaded AIPs to Dataverse requires the following configuration
+options be specified:
+
+* `dataverse_server` (Dataverse server to upload to)
+* `dataverse_demo_server` (Demo Dataverse server to upload to)
+* `dataverse_api_key` (Dataverse API key)
+* `demo_mode` (If `True`, run using demo Dataverse server)
+
+A `divisions.csv` file must also be present in the application directory for
+exports to Dataverse to export properly.
