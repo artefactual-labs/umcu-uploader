@@ -17,6 +17,12 @@
         </p>
         <form action="{{ url_for('metadata.index') }}" method="post">
             <div class="mb-3">
+                <label for="depositor" class="form-label">Depositor</label>
+                    <div class="input-group mb-3">
+                        <input class="form-control" aria-describedby="depositor" type="text" title="depositor" placeholder="Please put the Depositor's name here"  name="depositor" required>
+                    </div>
+            </div>
+            <div class="mb-3">
                 <label for="umcu-division" class="form-label">UMCU Division</label>
                 <select required name="umcuDivision" class="form-select" aria-label="select division">
                     <option selected>Please select the division</option>
