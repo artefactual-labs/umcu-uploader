@@ -48,7 +48,6 @@ def create_metadata(
         "other.researchProjectEndDate": form["researchEndDate"],
         "dc.coverage": f"start={form['researchEndDate']}, end={form['retention']}",
         "dc.rights": form["license"],
-        "dc.type": form["kindOfData"],
         "dc.isReferencedBy": form["publication"],
         "other.researchType": form["researchType"],
         "other.depositor": form["depositor"],

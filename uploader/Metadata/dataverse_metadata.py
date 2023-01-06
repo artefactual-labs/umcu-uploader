@@ -218,12 +218,6 @@ def dv_json(form: dict) -> None:
                             ],
                         },
                         {
-                            "typeName": "kindOfData",
-                            "multiple": True,
-                            "typeClass": "primitive",
-                            "value": form["dataTypes"],
-                        },
-                        {
                             "typeName": "depositor",
                             "multiple": False,
                             "typeClass": "primitive",

@@ -31,7 +31,6 @@ def index(req_path: str):
         date_end_value = form_data["dateRangeEnd"]
         researchEndDate_value = form_data["researchEndDate"]
 
-        data_type_values = get_raw_data(form_data, "dataType")
         author_values_raw = get_raw_data(form_data, "author")
         contactName_values_raw = get_raw_data(form_data, "datasetContactName")
         contributor_values_raw = get_raw_data(form_data, "contributor")
@@ -48,7 +47,6 @@ def index(req_path: str):
             "daterangeStart": date_start_value,
             "daterangeEnd": date_end_value,
             "researchEndDate": researchEndDate_value,
-            "kindOfData": data_type_values,
             "dateOfDeposit": date_of_deposit_value,
             "license": licence_value,
             "contributor": contributor_values_raw,
@@ -86,7 +84,6 @@ def index(req_path: str):
         dv_form = {
             "daterangeStart": date_start_value,
             "daterangeEnd": date_end_value,
-            "dataTypes": data_type_values,
             "dateOfDeposit": date_of_deposit_value,
             "licence": licence_value,
             "contributors": contributor_values,
