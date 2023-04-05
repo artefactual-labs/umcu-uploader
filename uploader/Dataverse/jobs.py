@@ -12,9 +12,9 @@ from pyDataverse.utils import read_file
 from uploader.job import Job
 from uploader.Dataverse.helpers import (
     download_aip,
+    find_file_metadata,
     find_metadata_json_file,
     populate_dataverse_dir,
-    find_metadata_json_file,
 )
 from uploader.Metadata import DIVISIONS_FILE_PATH
 from uploader.Metadata.helpers import get_division_acronym
@@ -81,11 +81,7 @@ class CreateDataverseDatasetFromAipJob(Job):
             self.error("AIP contains no Dataverse metadata")
             return
 
-        metadata_filepath = os.path.join(
-            aip_directory,
-            "data",
-            dv_metadata_filepath,
-        )
+        metadata_filepath = os.path.join(aip_directory, "data", dv_metadata_filepath)
 
         api = NativeApi(base_url, self.config["DATAVERSE_API_KEY"])
         ds = Dataset()
@@ -121,7 +117,7 @@ class CreateDataverseDatasetFromAipJob(Job):
             self.error("Unable to find acronym for division")
             return
 
-        # Create the dataset with the acronym
+        # Create the Dataverse dataset using the acronym
         resp = api.create_dataset(division_acronym, ds.json(validate=False))
         response_data = resp.json()
 
@@ -134,7 +130,19 @@ class CreateDataverseDatasetFromAipJob(Job):
 
         ds_pid = response_data["data"]["persistentId"]
 
-        # Upload each file
+        # Get file metadata stored with AIP
+        aip_metadata_relative_path = find_metadata_json_file(
+            self.uuid, aip_directory, "/metadata.json"
+        )
+
+        aip_metadata_filepath = os.path.join(
+            aip_directory, "data", aip_metadata_relative_path
+        )
+
+        with open(aip_metadata_filepath) as file:
+            aip_metadata_array = json.load(file)
+
+        # Upload each file to Dataverse
         self.current_operation("Uploading files to Dataverse")
 
         for root, dirs, files in os.walk(dataverse_directory, topdown=False):
@@ -143,9 +151,26 @@ class CreateDataverseDatasetFromAipJob(Job):
 
                 df = Datafile()
                 df_filename = os.path.join(root, name)
-                df.set(
-                    {"pid": ds_pid, "filename": df_filename, "directoryLabel": subdir}
+
+                # Default file metadata
+                dv_file_metadata = {
+                    "pid": ds_pid,
+                    "filename": df_filename,
+                    "directoryLabel": subdir,
+                }
+
+                # Set restriction status, if applicable
+                relative_filepath = os.path.join(subdir, os.path.basename(df_filename))
+                file_metadata = find_file_metadata(
+                    aip_metadata_array, relative_filepath
                 )
+
+                dv_file_metadata["restrict"] = (
+                    file_metadata is not None
+                    and file_metadata["dc.accessRights"] == "restricted"
+                )
+
+                df.set(dv_file_metadata)
                 resp = api.upload_datafile(ds_pid, df_filename, df.json())
 
                 time.sleep(1)
