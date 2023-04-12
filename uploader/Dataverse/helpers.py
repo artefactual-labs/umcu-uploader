@@ -122,3 +122,9 @@ def find_metadata_json_file(uuid, aip_directory, file):
             and aipfile.get_path().endswith(file)
         ):
             return aipfile.get_path()
+
+
+def find_file_metadata(metadata, file_rel_path):
+    for item in metadata:
+        if file_rel_path == item["filename"][8:]:
+            return item
