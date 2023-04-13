@@ -9,11 +9,9 @@ PERMISSION_METADATA_FILENAME = "permissions.json"
 
 
 class FilePermissions:
-    filepath = ""  # Path to permissions JSON file
-    permissions = {}  # Permissions data
-
     def __init__(self, filepath=None):
-        self.filepath = filepath
+        self.filepath = filepath  # Path to permissions JSON file
+        self.permissions = {}  # Permissions data
 
     def load(self):
         # Read permissions from JSON if applicable
