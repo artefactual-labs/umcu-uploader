@@ -16,7 +16,11 @@ from uploader.Dataverse.helpers import (
     find_metadata_json_file,
     populate_dataverse_dir,
 )
-from uploader.Metadata import DIVISIONS_FILE_PATH
+from uploader.Metadata import (
+    DIVISIONS_FILE_PATH,
+    DATAVERSE_METADATA_FILENAME,
+    ARCHIVEMATICA_METADATA_FILENAME,
+)
 from uploader.Metadata.helpers import get_division_acronym
 from uploader.Transfer.helpers import create_unique_dir_name
 
@@ -74,7 +78,7 @@ class CreateDataverseDatasetFromAipJob(Job):
 
         # Create Dataverse dataset
         dv_metadata_filepath = find_metadata_json_file(
-            self.uuid, aip_directory, "/dv_metadata.json"
+            self.uuid, aip_directory, f"/{DATAVERSE_METADATA_FILENAME}"
         )
 
         if dv_metadata_filepath is None:
@@ -91,7 +95,9 @@ class CreateDataverseDatasetFromAipJob(Job):
         arc_metadata_filepath = os.path.join(
             aip_directory,
             "data",
-            find_metadata_json_file(self.uuid, aip_directory, "/metadata.json"),
+            find_metadata_json_file(
+                self.uuid, aip_directory, f"/{ARCHIVEMATICA_METADATA_FILENAME}"
+            ),
         )
 
         # Load the JSON into an array of metadata
@@ -132,7 +138,7 @@ class CreateDataverseDatasetFromAipJob(Job):
 
         # Get file metadata stored with AIP
         aip_metadata_relative_path = find_metadata_json_file(
-            self.uuid, aip_directory, "/metadata.json"
+            self.uuid, aip_directory, f"/{ARCHIVEMATICA_METADATA_FILENAME}"
         )
 
         aip_metadata_filepath = os.path.join(
