@@ -5,6 +5,8 @@ import time
 from urllib.parse import urlparse
 
 import py7zr
+import tarfile
+import zipfile
 from pyDataverse.api import NativeApi
 from pyDataverse.models import Dataset, Datafile
 from pyDataverse.utils import read_file
@@ -46,10 +48,18 @@ class CreateDataverseDatasetFromAipJob(Job):
             os.path.join(tempfile.gettempdir(), self.uuid)
         )
         os.mkdir(extract_directory)
-
-        archive = py7zr.SevenZipFile(local_filename, mode="r")
-        archive.extractall(path=extract_directory)
-        archive.close()
+        # Determine based on the file type how to open a file.
+        if py7zr.is_7zfile(local_filename):
+            archive = py7zr.SevenZipFile(local_filename)
+        elif tarfile.is_tarfile(local_filename):
+            archive = tarfile.open(local_filename)
+        elif zipfile.is_zipfile(local_filename):
+            archive = zipfile.open(local_filename)
+        try:
+            archive.extractall(path=extract_directory)
+            archive.close()
+        except (AttributeError, NameError) as E:
+            self.error(f"{local_filename} is not a tar, 7zip or zip file.")
 
         os.unlink(local_filename)
 
