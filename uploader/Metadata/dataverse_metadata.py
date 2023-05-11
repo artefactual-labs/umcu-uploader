@@ -278,7 +278,7 @@ def dv_json(form: dict) -> None:
 
     # Check the licence value and update the metadata with the appropriate terms
     if form["licence"] in terms:
-        dv_metadata.update(terms["licence"])
+        dv_metadata.update(terms[form["licence"]])
     filepath = os.path.join(
         helpers.get_transfer_directory(), DATAVERSE_METADATA_FILENAME
     )
