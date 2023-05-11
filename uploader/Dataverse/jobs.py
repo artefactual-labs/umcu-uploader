@@ -67,13 +67,9 @@ class CreateDataverseDatasetFromAipJob(Job):
         aip_subdir = os.listdir(extract_directory)[0]
         aip_directory = os.path.join(extract_directory, aip_subdir)
         dataverse_directory = os.path.join(extract_directory, "dataverse")
-        dip_directory = os.path.join(extract_directory, "dips")
-        os.mkdir(dip_directory)
         os.mkdir(dataverse_directory)
 
-        populate_dataverse_dir(
-            self.uuid, aip_directory, dataverse_directory, dip_directory
-        )
+        populate_dataverse_dir(self.uuid, aip_directory, dataverse_directory)
 
         # Assemble Dataverse base URL
         self.current_operation("Creating Dataverse dataset")
