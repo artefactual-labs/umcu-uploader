@@ -67,21 +67,7 @@ def dmdtext_access_rights(dmdsec) -> str:
     return "No access condition found"
 
 
-def create_dips(aipfile, dip_directory, dataverse_directory, file_subpath):
-    source_path = os.path.join(dataverse_directory, "data", "objects", file_subpath)
-    dest_path = os.path.join(dip_directory, file_subpath)
-    dest_path_components = os.path.split(dest_path)
-    # Create subdir(s) if necessary
-    if not os.path.isdir(dest_path_components[0]):
-        os.makedirs(dest_path_components[0])
-    # Copy the aipfile if it does not have private access
-    for dmdsec in aipfile.dmdsecs:
-        dmdsec.access_condition = dmdtext_access_rights(dmdsec)
-        if dmdsec.access_condition in ["public", "restricted"]:
-            shutil.copy(source_path, dest_path_components[0])
-
-
-def populate_dataverse_dir(uuid, aip_directory, dataverse_directory, dip_directory):
+def populate_dataverse_dir(uuid, aip_directory, dataverse_directory):
     mets_filename = f"METS.{uuid}.xml"
     mets_filepath = os.path.join(aip_directory, "data", mets_filename)
 
@@ -95,17 +81,18 @@ def populate_dataverse_dir(uuid, aip_directory, dataverse_directory, dip_directo
             # Assemble destination subdirectory and path
             source_path = os.path.join(aip_directory, "data", "objects", file_subpath)
 
-            dest_path = os.path.join(dip_directory, file_subpath)
+            dest_path = os.path.join(dataverse_directory, file_subpath)
             dest_path_components = os.path.split(dest_path)
 
             # Create subdir(s) if necessary
             if not os.path.isdir(dest_path_components[0]):
                 os.makedirs(dest_path_components[0])
 
-            # Copy file
-            shutil.copy(source_path, dest_path_components[0])
-
-            create_dips(aipfile, dataverse_directory, aip_directory, file_subpath)
+            # Copy the aipfile if it does not have private access
+            for dmdsec in aipfile.dmdsecs:
+                dmdsec.access_condition = dmdtext_access_rights(dmdsec)
+                if dmdsec.access_condition in ["public", "restricted"]:
+                    shutil.copy(source_path, dest_path_components[0])
 
 
 def find_metadata_json_file(uuid, aip_directory, file):
