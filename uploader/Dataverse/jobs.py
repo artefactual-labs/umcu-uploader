@@ -95,14 +95,13 @@ class CreateDataverseDatasetFromAipJob(Job):
 
         api = NativeApi(base_url, self.config["DATAVERSE_API_KEY"])
         ds = Dataset()
-        ds.from_json(read_file(metadata_filepath), validate=False)
         # Add in the the aip uuid to the dataverse metadata
-        with open(metadata_filepath, "w") as dv_json_file:
+        with open(metadata_filepath, "r+") as dv_json_file:
             dv_json = json.load(dv_json_file)
-            dv_json["metadataBlocks"]["citation"]["fields"].append(
+            dv_json["datasetVersion"]["metadataBlocks"]["citation"]["fields"].append(
                 {
                     "typeName": "dataSources",
-                    "multiple": true,
+                    "multiple": True,
                     "typeClass": "primitive",
                     "value": [
                         self.uuid,
@@ -110,6 +109,7 @@ class CreateDataverseDatasetFromAipJob(Job):
                 }
             )
             json.dump(dv_json, dv_json_file)
+            ds.from_json(dv_json, validate=False)
 
         # Get the division acronym from the metadata in the AIP
         arc_metadata_filepath = os.path.join(
