@@ -109,7 +109,7 @@ class CreateDataverseDatasetFromAipJob(Job):
                 }
             )
             json.dump(dv_json, dv_json_file)
-            ds.from_json(dv_json, validate=False)
+            ds.from_json(json.dumps(dv_json), validate=False)
 
         # Get the division acronym from the metadata in the AIP
         arc_metadata_filepath = os.path.join(
