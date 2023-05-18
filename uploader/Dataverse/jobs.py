@@ -1,5 +1,6 @@
 import json
 import os
+import shutil
 import tempfile
 import time
 from urllib.parse import urlparse
@@ -200,5 +201,9 @@ class CreateDataverseDatasetFromAipJob(Job):
                 resp = api.upload_datafile(ds_pid, df_filename, df.json())
 
                 time.sleep(1)
+
+        # Remove working files
+        self.current_operation("Deleting working files")
+        shutil.rmtree(extract_directory)
 
         self.end()
