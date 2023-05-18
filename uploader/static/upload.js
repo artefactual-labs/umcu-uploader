@@ -13,6 +13,8 @@ $chooserProxy.addEventListener("click", function() {
 $chooser.addEventListener("change", function() {
   const message = ($chooser.files.length) + " files selected";
   $chooserFeedback.textContent = message;
+  $chooserSubmit.removeAttribute("disabled");
+  $chooserSubmit.classList.remove("opacity-25");
 });
 
 // Hide directory picker, etc., and show spinner when starting upload
