@@ -109,8 +109,13 @@ class CreateDataverseDatasetFromAipJob(Job):
                     ],
                 }
             )
-            json.dump(dv_json, dv_json_file)
-            ds.from_json(json.dumps(dv_json), validate=False)
+
+            # Make slight metadata change to accord with pyDataverse client
+            dv_json["datasetVersion"]["license"] = dv_json["datasetVersion"]["license"][
+                "name"
+            ]
+
+            ds.from_json(json.dumps(dv_json))
 
         # Get the division acronym from the metadata in the AIP
         arc_metadata_filepath = os.path.join(
