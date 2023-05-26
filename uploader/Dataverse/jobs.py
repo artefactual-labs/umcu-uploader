@@ -111,9 +111,10 @@ class CreateDataverseDatasetFromAipJob(Job):
             )
 
             # Make slight metadata change to accord with pyDataverse client
-            dv_json["datasetVersion"]["license"] = dv_json["datasetVersion"]["license"][
-                "name"
-            ]
+            if "license" in dv_json["datasetVersion"]:
+                dv_json["datasetVersion"]["license"] = dv_json["datasetVersion"][
+                    "license"
+                ]["name"]
 
             ds.from_json(json.dumps(dv_json))
 
