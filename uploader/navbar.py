@@ -19,6 +19,12 @@ class NavBarItem:
         always_visible = ["transfer.index", "dataverse.index", "job.index"]
         return self.route in always_visible or transfer_directory
 
+    def is_active(self, request):
+        # Determine which Blueprint this navigation item is part of
+        route_blueprint = self.route.split(".")[0]
+
+        return route_blueprint == request.blueprint
+
 
 class NavBar:
     items = []
