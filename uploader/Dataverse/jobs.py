@@ -1,5 +1,6 @@
 import json
 import os
+import requests
 import shutil
 import tempfile
 import time
@@ -49,6 +50,7 @@ class CreateDataverseDatasetFromAipJob(Job):
             os.path.join(tempfile.gettempdir(), self.uuid)
         )
         os.mkdir(extract_directory)
+
         # Determine based on the file type how to open a file.
         if py7zr.is_7zfile(local_filename):
             archive = py7zr.SevenZipFile(local_filename)
@@ -94,8 +96,6 @@ class CreateDataverseDatasetFromAipJob(Job):
 
         metadata_filepath = os.path.join(aip_directory, "data", dv_metadata_filepath)
 
-        api = NativeApi(base_url, self.config["DATAVERSE_API_KEY"])
-        ds = Dataset()
         # Add in the the aip uuid to the dataverse metadata
         with open(metadata_filepath, "r+") as dv_json_file:
             dv_json = json.load(dv_json_file)
@@ -104,19 +104,13 @@ class CreateDataverseDatasetFromAipJob(Job):
                     "typeName": "dataSources",
                     "multiple": True,
                     "typeClass": "primitive",
-                    "value": [
-                        self.uuid,
-                    ],
+                    "value": [self.uuid],
                 }
             )
 
-            # Make slight metadata change to accord with pyDataverse client
-            if "license" in dv_json["datasetVersion"]:
-                dv_json["datasetVersion"]["license"] = dv_json["datasetVersion"][
-                    "license"
-                ]["name"]
-
-            ds.from_json(json.dumps(dv_json))
+        # Write modifications to dataverse metadata file
+        with open(metadata_filepath, "r+") as dv_json_file:
+            dv_json_file.write(json.dumps(dv_json))
 
         # Get the division acronym from the metadata in the AIP
         arc_metadata_filepath = os.path.join(
@@ -151,7 +145,12 @@ class CreateDataverseDatasetFromAipJob(Job):
             return
 
         # Create the Dataverse dataset using the acronym
-        resp = api.create_dataset(division_acronym, ds.json(validate=False))
+        url = f"{base_url}/api/dataverses/{division_acronym}/datasets"
+        headers = {"X-Dataverse-key": self.config["DATAVERSE_API_KEY"]}
+        files = {"files": open(metadata_filepath, "r")}
+
+        resp = requests.post(url, headers=headers, json=dv_json)
+
         response_data = resp.json()
 
         if response_data["status"] != "OK":
@@ -177,6 +176,8 @@ class CreateDataverseDatasetFromAipJob(Job):
 
         # Upload each file to Dataverse
         self.current_operation("Uploading files to Dataverse")
+
+        api = NativeApi(base_url, self.config["DATAVERSE_API_KEY"])
 
         for root, dirs, files in os.walk(dataverse_directory, topdown=False):
             for name in files:
