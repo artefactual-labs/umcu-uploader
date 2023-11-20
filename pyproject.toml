@@ -8,7 +8,7 @@ authors = [
 "Keith Noel <knoel@artefactual.com>",
 ]
 readme = "README.md"
-packages = [{include = "umcu_uploader"}]
+packages = [{include = "uploader"}]
 repository = "https://github.com/artefactual-labs/umcu-uploader"
 
 [tool.poetry.dependencies]
