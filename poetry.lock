@@ -454,18 +454,22 @@ async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
 
 [[package]]
-name = "flask-api"
+name = "Flask-API"
 version = "3.1"
 description = "Browsable web APIs for Flask."
 optional = false
 python-versions = "*"
-files = [
-    {file = "Flask-API-3.1.tar.gz", hash = "sha256:cb079845f5573eac55c6800a9a142bd7b54fd1227019a21cb2f75dfe5311d44f"},
-    {file = "Flask_API-3.1-py3-none-any.whl", hash = "sha256:08cb377412ff1b6bea47e8a5ffefc592a149f8686045038df6e116d12ab5d4e9"},
-]
+files = []
+develop = false
 
 [package.dependencies]
 Flask = ">=2.0.0"
+
+[package.source]
+type = "git"
+url = "https://github.com/flask-api/flask-api/"
+reference = "c1f99c6c7621c2605a79767536c151729ffa7711"
+resolved_reference = "c1f99c6c7621c2605a79767536c151729ffa7711"
 
 [[package]]
 name = "idna"
@@ -1648,4 +1652,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "8655a1b38e3afd226dff58b89ee495c28f2239dc6303d1fa62875f0e57dabb8c"
+content-hash = "d2d340ce2b250c6952a1c63067c4ce9d9db144278367516367d89e18d1ade9cc"
