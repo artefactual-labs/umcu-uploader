@@ -1,14 +1,31 @@
-venv/
-.DS_Store
+# Byte-compiled / optimized / DLL files
 __pycache__/
-uploader/__pycache__/
-uploader/Navigator/__pycache__/
-config.pyc
-*.pyc
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+env/
+venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Misc
 .config.yaml
 jobs.db
 umcu-uploader.yaml
 NOTES.md
 divisions.csv
-.gitignore
 .vscode/settings.json
