@@ -22,6 +22,7 @@ config_fields = {
     "divisions": {},
 }
 
+
 # Initialize configuration
 class Config:
     TESTING = False
