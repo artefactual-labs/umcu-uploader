@@ -54,10 +54,6 @@ The UMCU Uploader is a web-based application that is built using the Python
 
 ## Installation
 
-### Installation without Poetry
-
-### Installing without Poetry
-
 1. Clone repository:
 
    ```bash
@@ -97,46 +93,6 @@ The UMCU Uploader is a web-based application that is built using the Python
 
 7. The application runs on HTTP port 5000. Confirm that the Flask server and
    application are up and running at `localhost:5000` in your browser.
-
-### Installation with Poetry
-
-1. Install Poetry
-
-   Follow the instructions [here](https://python-poetry.org/docs/#installation).
-
-2. Clone files and cd to directory:
-
-   ```bash
-   git clone https://github.com/artefactual-labs/umcu-uploader.git
-   cd umcu-uploader
-   ```
-
-3. Clone submodules:
-
-   ```bash
-   git submodule update --init --recursive
-   ```
-
-4. Activate virtualenv:
-
-   ```bash
-   poetry shell
-   ```
-
-5. Install requirements:
-
-   ```bash
-   poetry install
-   ```
-
-6. In a terminal window, start the Flask server:
-
-   ```bash
-   poetry python run.py
-   ```
-
-7. The application runs on HTTP port 5000. Confirm that the Flask server and
-   application are up and running at `localhost:<Port> in your browser.
 
 ## Configuration
 
